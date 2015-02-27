@@ -26,7 +26,7 @@ Download, review, then execute the script:
 ```sh
 curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/mac
 less mac
-sh mac 2>&1 | tee ~/laptop.log && source ~/.rvm/scripts/rvm
+bash mac 2>&1 | tee ~/laptop.log && source ~/.rvm/scripts/rvm
 ```
 
 Debugging
@@ -37,6 +37,12 @@ you can debug the issue yourself. If not, copy the lines where the script
 failed into a [new GitHub
 Issue](https://github.com/18F/laptop/issues/new) for us. Or, attach the
 whole log file as an attachment.
+
+If you're not running the script on a clean OS X installation, and if the
+script stops with `failed`, run the script with `sh` instead of `bash`:
+```sh
+sh mac 2>&1 | tee ~/laptop.log && source ~/.rvm/scripts/rvm
+```
 
 What it sets up
 ---------------
