@@ -1,0 +1,213 @@
+#!/bin/sh
+
+# Welcome to the thoughtbot laptop script!
+# Be prepared to turn your laptop (or desktop, no haters here)
+# into an awesome development machine.
+
+fancy_echo() {
+  local fmt="$1"; shift
+
+  # shellcheck disable=SC2059
+  printf "\n$fmt\n" "$@"
+}
+
+append_to_zshrc() {
+  local text="$1" zshrc
+  local skip_new_line="${2:-0}"
+
+  if [ -w "$HOME/.zshrc.local" ]; then
+    zshrc="$HOME/.zshrc.local"
+  else
+    zshrc="$HOME/.zshrc"
+  fi
+
+  if ! grep -Fqs "$text" "$zshrc"; then
+    if [ "$skip_new_line" -eq 1 ]; then
+      printf "%s\n" "$text" >> "$zshrc"
+    else
+      printf "\n%s\n" "$text" >> "$zshrc"
+    fi
+  fi
+}
+
+trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+
+set -e
+
+if [ ! -d "$HOME/.bin/" ]; then
+  mkdir "$HOME/.bin"
+fi
+
+if [ ! -f "$HOME/.zshrc" ]; then
+  touch "$HOME/.zshrc"
+fi
+
+# shellcheck disable=SC2016
+append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
+
+case "$SHELL" in
+  */zsh) : ;;
+  *)
+    fancy_echo "Changing your shell to zsh ..."
+      chsh -s "$(which zsh)"
+    ;;
+esac
+
+brew_install_or_upgrade() {
+  if brew_is_installed "$1"; then
+    if brew_is_upgradable "$1"; then
+      fancy_echo "Upgrading %s ..." "$1"
+      brew upgrade "$@"
+    else
+      fancy_echo "Already using the latest version of %s. Skipping ..." "$1"
+    fi
+  else
+    fancy_echo "Installing %s ..." "$1"
+    brew install "$@"
+  fi
+}
+
+brew_is_installed() {
+  brew list -1 | grep -Fqx "$1"
+}
+
+brew_is_upgradable() {
+  ! brew outdated --quiet "$1" >/dev/null
+}
+
+brew_tap_is_installed() {
+  brew tap | ag "$1" > /dev/null
+}
+
+brew_tap() {
+  if ! brew_tap_is_installed "$1"; then
+    fancy_echo "Tapping $1..."
+    brew tap "$1" 2> /dev/null
+  fi
+}
+
+gem_install_or_update() {
+  if gem list "$1" --installed > /dev/null; then
+    fancy_echo "Updating %s ..." "$1"
+    gem update "$@"
+  else
+    fancy_echo "Installing %s ..." "$1"
+    gem install "$@"
+  fi
+}
+
+brew_cask_expand_alias() {
+  brew cask info "$1" 2>/dev/null | head -1 | awk '{gsub(/:/, ""); print $1}'
+}
+
+brew_cask_is_installed() {
+  local NAME=$(brew_cask_expand_alias "$1")
+  brew cask list -1 | grep -Fqx "$NAME"
+}
+
+app_is_installed() {
+  local app_name=$(echo "$1" | cut -d'-' -f1)
+  find /Applications -iname "$app_name*" -maxdepth 1 | egrep '.*' > /dev/null
+}
+
+brew_cask_install() {
+  if app_is_installed "$1" || brew_cask_is_installed "$1"; then
+    fancy_echo "$1 is already installed. Skipping..."
+  else
+    fancy_echo "Installing $1..."
+    brew cask install "$@"
+  fi
+}
+
+if ! command -v brew >/dev/null; then
+  fancy_echo "Installing Homebrew ..."
+    curl -fsS \
+      'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
+
+    append_to_zshrc '# recommended by brew doctor'
+
+    # shellcheck disable=SC2016
+    append_to_zshrc 'export PATH="/usr/local/bin:$PATH"' 1
+
+    export PATH="/usr/local/bin:$PATH"
+else
+  fancy_echo "Homebrew already installed. Skipping ..."
+fi
+
+fancy_echo "Updating Homebrew formulas ..."
+brew update
+
+brew_install_or_upgrade 'git'
+
+brew_install_or_upgrade 'the_silver_searcher'
+
+brew_tap 'gapple/services'
+
+brew_install_or_upgrade 'postgresql'
+fancy_echo 'Restarting postgres...'
+brew services restart postgresql
+
+brew_install_or_upgrade 'redis'
+fancy_echo 'Restarting redis...'
+brew services restart redis
+
+brew_install_or_upgrade 'imagemagick'
+brew_install_or_upgrade 'qt'
+
+brew_install_or_upgrade 'hub'
+# shellcheck disable=SC2016
+append_to_zshrc 'eval "$(hub alias -s)"'
+
+brew_install_or_upgrade 'node'
+brew_install_or_upgrade 'python'
+
+if [ -z "$(which virtualenv)" ]; then
+  fancy_echo 'Installing Virtualenv...'
+  pip install virtualenv
+fi
+
+echo "gem: --no-document" >> ~/.gemrc
+
+if ! command -v rvm >/dev/null; then
+  fancy_echo 'Installing RVM and the latest Ruby...'
+  curl -L https://get.rvm.io | bash -s stable --ruby --auto-dotfiles --autolibs=enable
+else
+  local_version="$(rvm -v 2> /dev/null | awk '$2 != ""{print $2}')"
+  latest_version="$(curl -s https://raw.githubusercontent.com/wayneeseguin/rvm/stable/VERSION)"
+  if [ "$local_version" != "$latest_version" ]; then
+    rvm get stable --auto-dotfiles --autolibs=enable
+  else
+    fancy_echo "Already using the latest version of RVM. Skipping..."
+  fi
+fi
+
+. ~/.rvm/scripts/rvm
+
+fancy_echo 'Updating Rubygems...'
+gem update --system
+
+gem_install_or_update 'bundler'
+
+fancy_echo "Configuring Bundler ..."
+  number_of_cores=$(sysctl -n hw.ncpu)
+  bundle config --global jobs $((number_of_cores - 1))
+
+brew_tap 'caskroom/cask'
+
+brew_install_or_upgrade 'brew-cask'
+
+brew_tap 'caskroom/versions'
+
+brew_cask_install 'cloud'
+brew_cask_install 'flux'
+brew_cask_install 'github'
+brew_cask_install 'slack'
+brew_cask_install 'sublime-text3'
+
+if [ -f "$HOME/.laptop.local" ]; then
+  . "$HOME/.laptop.local"
+fi
+
+if [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
+  open ~/Applications/GitHub.app
+fi
