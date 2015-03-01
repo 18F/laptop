@@ -29,6 +29,10 @@ cat mac
 bash mac 2>&1 | tee ~/laptop.log && source ~/.rvm/scripts/rvm
 ```
 
+We also have more [detailed instructions with a video][video] in the Wiki.
+
+[video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
+
 Debugging
 ---------
 
