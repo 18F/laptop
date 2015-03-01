@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Welcome to the thoughtbot laptop script!
-# Be prepared to turn your laptop (or desktop, no haters here)
+# Welcome to the 18F laptop script!
+# Be prepared to turn your laptop (or desktop)
 # into an awesome development machine.
 
 fancy_echo() {
