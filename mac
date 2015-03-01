@@ -162,8 +162,6 @@ fi
 
 append_to_file "$HOME/.gemrc" 'gem: --no-document'
 
-append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
-
 if ! command -v rvm >/dev/null; then
   fancy_echo 'Installing RVM and the latest Ruby...'
   curl -L https://get.rvm.io | bash -s stable --ruby --auto-dotfiles --autolibs=enable
@@ -202,6 +200,8 @@ brew_cask_install 'sublime-text3'
 if [ -f "$HOME/.laptop.local" ]; then
   . "$HOME/.laptop.local"
 fi
+
+append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
 
 if [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub.app
