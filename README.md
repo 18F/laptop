@@ -37,7 +37,6 @@ you can debug the issue yourself. If not, copy the lines where the script
 failed into a [new GitHub
 Issue](https://github.com/18F/laptop/issues/new) for us. Or, attach the
 whole log file as an attachment.
-```
 
 What it sets up
 ---------------
