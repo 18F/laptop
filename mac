@@ -11,22 +11,20 @@ fancy_echo() {
   printf "\n$fmt\n" "$@"
 }
 
-append_to_zshrc() {
-  local text="$1" zshrc
-  local skip_new_line="${2:-0}"
+append_to_file() {
+  local file="$1"
+  local text="$2"
 
-  if [ -w "$HOME/.zshrc.local" ]; then
-    zshrc="$HOME/.zshrc.local"
-  else
-    zshrc="$HOME/.zshrc"
+  if [ "$file" = "$HOME/.zshrc" ]; then
+    if [ -w "$HOME/.zshrc.local" ]; then
+      file="$HOME/.zshrc.local"
+    else
+      file="$HOME/.zshrc"
+    fi
   fi
 
-  if ! grep -Fqs "$text" "$zshrc"; then
-    if [ "$skip_new_line" -eq 1 ]; then
-      printf "%s\n" "$text" >> "$zshrc"
-    else
-      printf "\n%s\n" "$text" >> "$zshrc"
-    fi
+  if ! grep -Fqs "$text" "$file"; then
+    printf "\n%s\n" "$text" >> "$file"
   fi
 }
 
@@ -43,7 +41,7 @@ if [ ! -f "$HOME/.zshrc" ]; then
 fi
 
 # shellcheck disable=SC2016
-append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
+append_to_file "$HOME/.zshrc" 'export PATH="$HOME/.bin:$PATH"'
 
 case "$SHELL" in
   */zsh) : ;;
@@ -124,12 +122,8 @@ if ! command -v brew >/dev/null; then
     curl -fsS \
       'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
 
-    append_to_zshrc '# recommended by brew doctor'
-
     # shellcheck disable=SC2016
-    append_to_zshrc 'export PATH="/usr/local/bin:$PATH"' 1
-
-    export PATH="/usr/local/bin:$PATH"
+    append_to_file "$HOME/.zshrc" 'export PATH="/usr/local/bin:$PATH"'
 else
   fancy_echo "Homebrew already installed. Skipping ..."
 fi
@@ -156,7 +150,7 @@ brew_install_or_upgrade 'qt'
 
 brew_install_or_upgrade 'hub'
 # shellcheck disable=SC2016
-append_to_zshrc 'eval "$(hub alias -s)"'
+append_to_file "$HOME/.zshrc" 'eval "$(hub alias -s)"'
 
 brew_install_or_upgrade 'node'
 brew_install_or_upgrade 'python'
@@ -166,11 +160,14 @@ if [ -z "$(which virtualenv)" ]; then
   pip install virtualenv
 fi
 
-echo "gem: --no-document" >> ~/.gemrc
+append_to_file "$HOME/.gemrc" 'gem: --no-document'
+
+append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
 
 if ! command -v rvm >/dev/null; then
   fancy_echo 'Installing RVM and the latest Ruby...'
   curl -L https://get.rvm.io | bash -s stable --ruby --auto-dotfiles --autolibs=enable
+  . ~/.rvm/scripts/rvm
 else
   local_version="$(rvm -v 2> /dev/null | awk '$2 != ""{print $2}')"
   latest_version="$(curl -s https://raw.githubusercontent.com/wayneeseguin/rvm/stable/VERSION)"
@@ -180,8 +177,6 @@ else
     fancy_echo "Already using the latest version of RVM. Skipping..."
   fi
 fi
-
-. ~/.rvm/scripts/rvm
 
 fancy_echo 'Updating Rubygems...'
 gem update --system
