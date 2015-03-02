@@ -1,5 +1,6 @@
 Laptop
 ======
+[![Build Status](https://travis-ci.org/18F/laptop.svg)](https://travis-ci.org/18F/laptop)
 
 Laptop is a script to set up an OS X computer for web development.
 
@@ -13,7 +14,7 @@ Requirements
 We support:
 
 * [OS X Yosemite (10.10)](https://www.apple.com/osx/)
-* [OS X Mavericks (10.9)](https://itunes.apple.com/us/app/os-x-mavericks/id675248567)
+* OS X Mavericks (10.9)
 
 Older versions may work but aren't regularly tested. Bug reports for older
 versions are welcome.
