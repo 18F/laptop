@@ -68,7 +68,7 @@ What it sets up
 * [ImageMagick] for cropping and resizing images
 * [Node.js] and [NPM], for running apps and installing JavaScript packages
 * [Postgres] for storing relational data
-* [Python] for programming software and data analysis
+* [Python 3] for programming software and data analysis
 * [Qt] for headless JavaScript testing via Capybara Webkit
 * [Redis] for storing key-value data
 * [RVM] for managing Ruby versions (includes [Bundler] and the latest [Ruby])
@@ -76,6 +76,7 @@ What it sets up
 * [Sublime Text 3] for coding all the things
 * [The Silver Searcher] for finding things in files
 * [Virtualenv] for creating isolated Python environments
+* [Virtualenvwrapper] for extending Virtualenv
 * [Zsh] as your shell
 
 [Bundler]: http://bundler.io/
@@ -99,6 +100,7 @@ What it sets up
 [Sublime Text 3]: http://www.sublimetext.com/3
 [The Silver Searcher]: https://github.com/ggreer/the_silver_searcher
 [Virtualenv]: https://virtualenv.pypa.io/en/latest/
+[Virtualenvwrapper]: http://virtualenvwrapper.readthedocs.org/en/latest/#
 [Zsh]: http://www.zsh.org/
 
 It should take less than 15 minutes to install (depends on your machine and
