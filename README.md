@@ -22,17 +22,29 @@ versions are welcome.
 Install
 -------
 
-Download, review, then execute the script:
+Begin by opening the Terminal application on your Mac. The easiest way to open
+an application in OS X is to search for it via [Spotlight]. The default
+keyboard shortcut for invoking Spotlight is `command-Space`. Once Spotlight
+is up, just start typing the first few letters of the app you are looking for,
+and once it appears, press `return` to launch it.
+
+In your Terminal window, copy and paste each of these three commands one at a
+time, then press `return` after each one to download, review, and execute the
+script respectively:
 
 ```sh
 curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/mac
 cat mac
-bash mac 2>&1 | tee ~/laptop.log && source ~/.rvm/scripts/rvm
+bash mac 2>&1 | tee ~/laptop.log
 ```
+
+The first time you run the script, make sure to quit and relaunch Terminal
+at the end.
 
 We also have more [detailed instructions with a video][video] in the Wiki.
 
 [video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
+[Spotlight]: https://support.apple.com/en-us/HT204014
 
 Debugging
 ---------
@@ -56,7 +68,7 @@ What it sets up
 * [ImageMagick] for cropping and resizing images
 * [Node.js] and [NPM], for running apps and installing JavaScript packages
 * [Postgres] for storing relational data
-* [Python] for programming software and data analysis
+* [Python 3] for programming software and data analysis
 * [Qt] for headless JavaScript testing via Capybara Webkit
 * [Redis] for storing key-value data
 * [RVM] for managing Ruby versions (includes [Bundler] and the latest [Ruby])
@@ -64,6 +76,7 @@ What it sets up
 * [Sublime Text 3] for coding all the things
 * [The Silver Searcher] for finding things in files
 * [Virtualenv] for creating isolated Python environments
+* [Virtualenvwrapper] for extending Virtualenv
 * [Zsh] as your shell
 
 [Bundler]: http://bundler.io/
@@ -87,6 +100,7 @@ What it sets up
 [Sublime Text 3]: http://www.sublimetext.com/3
 [The Silver Searcher]: https://github.com/ggreer/the_silver_searcher
 [Virtualenv]: https://virtualenv.pypa.io/en/latest/
+[Virtualenvwrapper]: http://virtualenvwrapper.readthedocs.org/en/latest/#
 [Zsh]: http://www.zsh.org/
 
 It should take less than 15 minutes to install (depends on your machine and
