@@ -22,17 +22,29 @@ versions are welcome.
 Install
 -------
 
-Download, review, then execute the script:
+Begin by opening the Terminal application on your Mac. The easiest way to open
+an application in OS X is to search for it via [Spotlight]. The default
+keyboard shortcut for invoking Spotlight is `command-Space`. Once Spotlight
+is up, just start typing the first few letters of the app you are looking for,
+and once it appears, press `return` to launch it.
+
+In your Terminal window, copy and paste each of these three commands one at a
+time, then press `return` after each one to download, review, and execute the
+script respectively:
 
 ```sh
 curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/mac
 cat mac
-bash mac 2>&1 | tee ~/laptop.log && source ~/.rvm/scripts/rvm
+bash mac 2>&1 | tee ~/laptop.log
 ```
+
+The first time you run the script, make sure to quit and relaunch Terminal
+at the end.
 
 We also have more [detailed instructions with a video][video] in the Wiki.
 
 [video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
+[Spotlight]: https://support.apple.com/en-us/HT204014
 
 Debugging
 ---------

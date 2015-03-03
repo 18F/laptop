@@ -154,10 +154,17 @@ append_to_file "$HOME/.zshrc" 'eval "$(hub alias -s)"'
 
 brew_install_or_upgrade 'node'
 brew_install_or_upgrade 'python'
+brew_install_or_upgrade 'python3'
 
 if [ -z "$(which virtualenv)" ]; then
   fancy_echo 'Installing Virtualenv...'
   pip install virtualenv
+fi
+
+if ! pip list | ag "virtualenvwrapper" > /dev/null; then
+  fancy_echo 'Installing virtualenvwrapper...'
+  pip install virtualenvwrapper
+  append_to_file "$HOME/.zshrc" 'source /usr/local/bin/virtualenvwrapper.sh'
 fi
 
 append_to_file "$HOME/.gemrc" 'gem: --no-document'
