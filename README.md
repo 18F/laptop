@@ -91,7 +91,7 @@ What it sets up
 [Node.js]: http://nodejs.org/
 [NPM]: https://www.npmjs.org/
 [Postgres]: http://www.postgresql.org/
-[Python]: https://www.python.org/
+[Python 3]: https://www.python.org/
 [Qt]: http://qt-project.org/
 [Redis]: http://redis.io/
 [Ruby]: https://www.ruby-lang.org/en/
