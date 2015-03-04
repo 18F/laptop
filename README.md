@@ -164,7 +164,7 @@ Credits
 -------
 
 The 18F laptop script is based on and inspired by
-[Thoughbot's laptop](https://github.com/thoughtbot/laptop) script.
+[thoughtbot's laptop](https://github.com/thoughtbot/laptop) script.
 
 ### Public domain
 
