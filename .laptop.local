@@ -8,3 +8,4 @@
 # brew_install_or_upgrade 'ctags'
 # brew_install_or_upgrade 'tmux'
 # brew_install_or_upgrade 'reattach-to-user-namespace'
+# brew_install_or_upgrade 'go'
