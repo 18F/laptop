@@ -8,4 +8,5 @@
 # brew_install_or_upgrade 'ctags'
 # brew_install_or_upgrade 'tmux'
 # brew_install_or_upgrade 'reattach-to-user-namespace'
-# brew_install_or_upgrade 'go'
+
+# brew_install_or_upgrade 'go' && append_to_file "$HOME/.zshrc" 'export PATH="$PATH:/usr/local/opt/go/libexec/bin"'
