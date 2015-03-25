@@ -1,9 +1,9 @@
 language: sh
-
 before_script:
-  - sudo add-apt-repository -y "deb http://mirrors.kernel.org/ubuntu utopic main universe"
-  - sudo apt-get -y update
-  - sudo apt-get -y install shellcheck
-
+- sudo add-apt-repository -y "deb http://mirrors.kernel.org/ubuntu utopic main universe"
+- sudo apt-get -y update
+- sudo apt-get -y install shellcheck
 script:
-  - shellcheck mac
+- shellcheck mac
+notifications:
+  webhooks: http://project-monitor.cf.18f.us/projects/laptop/status
