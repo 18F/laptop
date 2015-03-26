@@ -66,6 +66,7 @@ What it sets up
 * [Homebrew Services] so you can easily stop, start, and restart services
 * [hub] for interacting with the GitHub API
 * [ImageMagick] for cropping and resizing images
+* [MySQL] for storing relational data
 * [Node.js] and [NPM], for running apps and installing JavaScript packages
 * [Postgres] for storing relational data
 * [Python 3] for programming software and data analysis
@@ -88,6 +89,7 @@ What it sets up
 [Homebrew Services]: https://github.com/gapple/homebrew-services
 [hub]: https://github.com/github/hub
 [ImageMagick]: http://www.imagemagick.org/
+[MySQL]: https://www.mysql.com/
 [Node.js]: http://nodejs.org/
 [NPM]: https://www.npmjs.org/
 [Postgres]: http://www.postgresql.org/
