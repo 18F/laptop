@@ -220,5 +220,5 @@ fi
 append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
 
 if [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
-  open ~/Applications/GitHub.app
+  open ~/Applications/GitHub.app || open /Applications/GitHub.app
 fi
