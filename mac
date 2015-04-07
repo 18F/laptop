@@ -28,6 +28,7 @@ append_to_file() {
   fi
 }
 
+# shellcheck disable=SC2154
 trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
 
 set -e
@@ -85,7 +86,7 @@ brew_tap() {
 }
 
 gem_install_or_update() {
-  if gem list "$1" --installed > /dev/null; then
+  if gem list "$1" | grep "^$1 ("; then
     fancy_echo "Updating %s ..." "$1"
     gem update "$@"
   else
@@ -99,12 +100,14 @@ brew_cask_expand_alias() {
 }
 
 brew_cask_is_installed() {
-  local NAME=$(brew_cask_expand_alias "$1")
+  local NAME
+  NAME=$(brew_cask_expand_alias "$1")
   brew cask list -1 | grep -Fqx "$NAME"
 }
 
 app_is_installed() {
-  local app_name=$(echo "$1" | cut -d'-' -f1)
+  local app_name
+  app_name=$(echo "$1" | cut -d'-' -f1)
   find /Applications -iname "$app_name*" -maxdepth 1 | egrep '.*' > /dev/null
 }
 
