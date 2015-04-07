@@ -219,6 +219,9 @@ fi
 
 append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
 
+brew_tap 'pivotal/tap'
+brew_install_or_upgrade 'cloudfoundry-cli'
+
 if [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub.app
 fi

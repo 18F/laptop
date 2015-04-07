@@ -59,6 +59,7 @@ What it sets up
 ---------------
 
 * [CloudApp] for sharing screenshots and making an animated GIF from a video
+* [Cloud Foundry CLI] for command line access to 18F's Cloud Foundry-based application platform
 * [Flux] for adjusting your Mac's display color so you can sleep better
 * [GitHub for Mac] for setting up your SSH keys automatically
 * [Homebrew] for managing operating system libraries
@@ -82,6 +83,7 @@ What it sets up
 
 [Bundler]: http://bundler.io/
 [CloudApp]: http://getcloudapp.com/
+[Cloud Foundry CLI]: https://github.com/cloudfoundry/cli
 [Flux]: https://justgetflux.com/
 [GitHub for Mac]: https://mac.github.com/
 [Homebrew]: http://brew.sh/
