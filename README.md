@@ -28,23 +28,30 @@ keyboard shortcut for invoking Spotlight is `command-Space`. Once Spotlight
 is up, just start typing the first few letters of the app you are looking for,
 and once it appears, press `return` to launch it.
 
-In your Terminal window, copy and paste each of these three commands one at a
-time, then press `return` after each one to download, review, and execute the
-script respectively:
+In your Terminal window, copy and paste each of these two commands one at a
+time, then press `return` after each one to download and execute the
+script, respectively:
 
 ```sh
 curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/mac
-cat mac
 bash mac 2>&1 | tee ~/laptop.log
 ```
+The [script](https://github.com/18F/laptop/blob/master/mac) itself is
+available in this repo for you to review if you want to see what it does
+and how it works.
 
-The first time you run the script, make sure to quit and relaunch Terminal
-at the end.
+Note that the script will ask you to enter your OS X password at various
+points. This is the same password that you use to log in to your Mac.
+If you don't already have it installed, GitHub for Mac will launch
+automatically at the end of the script so you can set up everything you'll
+need to push code to GitHub.
 
-We also have more [detailed instructions with a video][video] in the Wiki.
+Once the script is done, make sure to quit and relaunch Terminal.
 
-[video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
+More [detailed instructions with a video][video] are available in the Wiki.
+
 [Spotlight]: https://support.apple.com/en-us/HT204014
+[video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
 
 Debugging
 ---------
