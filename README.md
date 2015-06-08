@@ -1,6 +1,5 @@
 Laptop
 ======
-[![Build Status](https://travis-ci.org/stackng/laptop.svg)](https://travis-ci.org/stackng/laptop)
 
 Laptop is a script to set up an OS X computer for web development.
 
