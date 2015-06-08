@@ -1,6 +1,6 @@
 Laptop
 ======
-[![Build Status](https://travis-ci.org/18F/laptop.svg)](https://travis-ci.org/18F/laptop)
+[![Build Status](https://travis-ci.org/stackng/laptop.svg)](https://travis-ci.org/stackng/laptop)
 
 Laptop is a script to set up an OS X computer for web development.
 
@@ -33,10 +33,10 @@ time, then press `return` after each one to download and execute the
 script, respectively:
 
 ```sh
-curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/mac
+curl --remote-name https://raw.githubusercontent.com/stackng/laptop/master/mac
 bash mac 2>&1 | tee ~/laptop.log
 ```
-The [script](https://github.com/18F/laptop/blob/master/mac) itself is
+The [script](https://github.com/stackng/laptop/blob/master/mac) itself is
 available in this repo for you to review if you want to see what it does
 and how it works.
 
@@ -48,10 +48,7 @@ need to push code to GitHub.
 
 Once the script is done, make sure to quit and relaunch Terminal.
 
-More [detailed instructions with a video][video] are available in the Wiki.
-
 [Spotlight]: https://support.apple.com/en-us/HT204014
-[video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
 
 Debugging
 ---------
@@ -59,40 +56,36 @@ Debugging
 Your last Laptop run will be saved to `~/laptop.log`. Read through it to see if
 you can debug the issue yourself. If not, copy the lines where the script
 failed into a [new GitHub
-Issue](https://github.com/18F/laptop/issues/new) for us. Or, attach the
+Issue](https://github.com/stackng/laptop/issues/new) for us. Or, attach the
 whole log file as an attachment.
 
 What it sets up
 ---------------
 
-* [CloudApp] for sharing screenshots and making an animated GIF from a video
-* [Cloud Foundry CLI] for command line access to 18F's Cloud Foundry-based application platform
-* [Flux] for adjusting your Mac's display color so you can sleep better
-* [GitHub for Mac] for setting up your SSH keys automatically
 * [Homebrew] for managing operating system libraries
 * [Homebrew Cask] for quickly installing Mac apps from the command line
 * [Homebrew Services] so you can easily stop, start, and restart services
-* [hub] for interacting with the GitHub API
-* [ImageMagick] for cropping and resizing images
 * [MySQL] for storing relational data
-* [Node.js] and [NPM], for running apps and installing JavaScript packages
 * [Postgres] for storing relational data
-* [Python 3] for programming software and data analysis
-* [Qt] for headless JavaScript testing via Capybara Webkit
 * [Redis] for storing key-value data
-* [RVM] for managing Ruby versions (includes [Bundler] and the latest [Ruby])
-* [Slack] for communicating with your team
-* [Sublime Text 3] for coding all the things
-* [The Silver Searcher] for finding things in files
+* [Python 3] for programming software and data analysis
 * [Virtualenv] for creating isolated Python environments
 * [Virtualenvwrapper] for extending Virtualenv
+* [Node.js] and [NPM], for running apps and installing JavaScript packages
+* [Qt] for headless JavaScript testing via Capybara Webkit
+* [RVM] for managing Ruby versions (includes [Bundler] and the latest [Ruby])
+* [RCM] for managing company and personal dotfiles
+* [hub] for interacting with the GitHub API
+* [Heroku Toolbelt] for interacting with the Heroku API
+* [ImageMagick] for cropping and resizing images
+* [The Silver Searcher] for finding things in files
+* [Tmux] for saving project state and switching between projects
+* [reattach-to-user-namespace] to allow copy and paste from Tmux
+* [Vim] for those who prefer the command line
+* [Exuberant Ctags] for indexing files for vim tab completion
 * [Zsh] as your shell
 
 [Bundler]: http://bundler.io/
-[CloudApp]: http://getcloudapp.com/
-[Cloud Foundry CLI]: https://github.com/cloudfoundry/cli
-[Flux]: https://justgetflux.com/
-[GitHub for Mac]: https://mac.github.com/
 [Homebrew]: http://brew.sh/
 [Homebrew Cask]: http://caskroom.io/
 [Homebrew Services]: https://github.com/gapple/homebrew-services
@@ -107,12 +100,16 @@ What it sets up
 [Redis]: http://redis.io/
 [Ruby]: https://www.ruby-lang.org/en/
 [RVM]: https://github.com/wayneeseguin/rvm
-[Slack]: https://slack.com/
-[Sublime Text 3]: http://www.sublimetext.com/3
 [The Silver Searcher]: https://github.com/ggreer/the_silver_searcher
 [Virtualenv]: https://virtualenv.pypa.io/en/latest/
 [Virtualenvwrapper]: http://virtualenvwrapper.readthedocs.org/en/latest/#
 [Zsh]: http://www.zsh.org/
+[Exuberant Ctags]: http://ctags.sourceforge.net/
+[Heroku Toolbelt]: https://toolbelt.heroku.com/
+[RCM]: https://github.com/thoughtbot/rcm
+[Tmux]: http://tmux.sourceforge.net/
+[Vim]: http://www.vim.org/
+[reattach-to-user-namespace]: https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard
 
 It should take less than 15 minutes to install (depends on your machine and
 internet connection).
@@ -126,34 +123,23 @@ you can use to get started. It lets you install the following tools
 (commented out by default):
 
 * [Atom] - GitHub's open source text editor
-* [Exuberant Ctags] for indexing files for vim tab completion
 * [Firefox] for testing your website on a browser other than Chrome
 * [iTerm2] - an awesome replacement for the OS X Terminal
-* [reattach-to-user-namespace] to allow copy and paste from Tmux
-* [Tmux] for saving project state and switching between projects
-* [Vim] for those who prefer the command line
 
 [Atom]: https://atom.io/
-[Exuberant Ctags]: http://ctags.sourceforge.net/
 [Firefox]: https://www.mozilla.org/en-US/firefox/new/
 [iTerm2]: http://iterm2.com/
-[reattach-to-user-namespace]: https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard
-[Tmux]: http://tmux.sourceforge.net/
-[Vim]: http://www.vim.org/
+
 
 For example:
 
 ```sh
 #!/bin/sh
 
-# brew_cask_install 'atom'
-# brew_cask_install 'firefox'
+brew_cask_install 'atom'
+brew_cask_install 'firefox'
 brew_cask_install 'iterm2'
 
-# brew_install_or_upgrade 'vim'
-# brew_install_or_upgrade 'ctags'
-# brew_install_or_upgrade 'tmux'
-# brew_install_or_upgrade 'reattach-to-user-namespace'
 ```
 
 Write your customizations such that they can be run safely more than once.
@@ -174,8 +160,8 @@ curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/.laptop.l
 Credits
 -------
 
-The 18F laptop script is based on and inspired by
-[thoughtbot's laptop](https://github.com/thoughtbot/laptop) script.
+The StackNG laptop script is based on and inspired by
+[thoughtbot's](https://github.com/thoughtbot/laptop) and [18F's]((https://github.com/18F/laptop)) laptop script.
 
 ### Public domain
 
