@@ -136,8 +136,6 @@ brew update
 
 brew_install_or_upgrade 'git'
 
-brew_install_or_upgrade 'the_silver_searcher'
-
 brew_tap 'gapple/services'
 
 brew_install_or_upgrade 'postgresql'
@@ -154,10 +152,15 @@ brew_install_or_upgrade 'redis'
 fancy_echo 'Restarting redis...'
 brew services restart redis
 
+brew_install_or_upgrade 'the_silver_searcher'
+brew_install_or_upgrade 'vim'
+brew_install_or_upgrade 'ctags'
+brew_install_or_upgrade 'tmux'
+brew_install_or_upgrade 'reattach-to-user-namespace'
 brew_install_or_upgrade 'imagemagick'
 brew_install_or_upgrade 'qt'
-
 brew_install_or_upgrade 'hub'
+
 # shellcheck disable=SC2016
 append_to_file "$HOME/.zshrc" 'eval "$(hub alias -s)"'
 
@@ -192,6 +195,10 @@ if ! command -v rbenv >/dev/null; then
   fi
 fi
 
+brew_install_or_upgrade 'openssl'
+brew unlink openssl && brew link openssl --force
+brew_install_or_upgrade 'libyaml'
+
 fancy_echo 'Updating Rubygems...'
 gem update --system
 
@@ -207,21 +214,15 @@ brew_install_or_upgrade 'brew-cask'
 
 brew_tap 'caskroom/versions'
 
-brew_cask_install 'cloud'
-brew_cask_install 'flux'
-brew_cask_install 'github'
-brew_cask_install 'slack'
-brew_cask_install 'sublime-text3'
+brew_install_or_upgrade 'heroku-toolbelt'
+
+if ! command -v rcup >/dev/null; then
+  brew_tap 'thoughtbot/formulae'
+  brew_install_or_upgrade 'rcm'
+fi
 
 if [ -f "$HOME/.laptop.local" ]; then
   . "$HOME/.laptop.local"
 fi
 
 append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
-
-brew_tap 'pivotal/tap'
-brew_install_or_upgrade 'cloudfoundry-cli'
-
-if [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
-  open ~/Applications/GitHub.app
-fi
