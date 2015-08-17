@@ -76,9 +76,9 @@ What it sets up
 * [ImageMagick] for cropping and resizing images
 * [MySQL] for storing relational data
 * [Node.js] and [NPM], for running apps and installing JavaScript packages
+* [PhantomJS] for headless website testing
 * [Postgres] for storing relational data
 * [Python 3] for programming software and data analysis
-* [Qt] for headless JavaScript testing via Capybara Webkit
 * [Redis] for storing key-value data
 * [RVM] for managing Ruby versions (includes [Bundler] and the latest [Ruby])
 * [Slack] for communicating with your team
@@ -101,9 +101,9 @@ What it sets up
 [MySQL]: https://www.mysql.com/
 [Node.js]: http://nodejs.org/
 [NPM]: https://www.npmjs.org/
+[PhantomJS]: http://phantomjs.org/
 [Postgres]: http://www.postgresql.org/
 [Python 3]: https://www.python.org/
-[Qt]: http://qt-project.org/
 [Redis]: http://redis.io/
 [Ruby]: https://www.ruby-lang.org/en/
 [RVM]: https://github.com/wayneeseguin/rvm

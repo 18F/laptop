@@ -155,7 +155,7 @@ fancy_echo 'Restarting redis...'
 brew services restart redis
 
 brew_install_or_upgrade 'imagemagick'
-brew_install_or_upgrade 'qt'
+brew_install_or_upgrade 'phantomjs'
 
 brew_install_or_upgrade 'hub'
 # shellcheck disable=SC2016
