@@ -224,5 +224,5 @@ brew_tap 'pivotal/tap'
 brew_install_or_upgrade 'cloudfoundry-cli'
 
 if [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
-  open ~/Applications/GitHub.app
+  open ~/Applications/GitHub.app || open /Applications/GitHub.app
 fi
