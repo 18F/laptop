@@ -223,6 +223,11 @@ append_to_file "$HOME/.rvm/gemsets/global.gems" 'bundler'
 brew_tap 'pivotal/tap'
 brew_install_or_upgrade 'cloudfoundry-cli'
 
-if [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
+if app_is_installed 'GitHub'; then
+  fancy_echo "It looks like you've already configured your GitHub SSH keys."
+  fancy_echo "If not, you can do it by signing in to the GitHub app on your Mac."
+elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub.app
 fi
+
+fancy_echo 'All done!'
