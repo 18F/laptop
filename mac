@@ -209,7 +209,7 @@ brew_tap 'caskroom/versions'
 
 brew_cask_install 'cloud'
 brew_cask_install 'flux'
-brew_cask_install 'github'
+brew_cask_install 'github-desktop'
 brew_cask_install 'slack'
 brew_cask_install 'sublime-text3'
 
