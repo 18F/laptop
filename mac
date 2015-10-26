@@ -155,7 +155,10 @@ fancy_echo 'Restarting redis...'
 brew services restart redis
 
 brew_install_or_upgrade 'imagemagick'
-brew_install_or_upgrade 'phantomjs'
+
+if ! sw_vers -productVersion | grep -q "^10\.11"; then
+  brew_install_or_upgrade 'phantomjs'
+fi
 
 brew_install_or_upgrade 'hub'
 # shellcheck disable=SC2016
