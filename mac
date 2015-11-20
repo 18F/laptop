@@ -166,7 +166,16 @@ brew_install_or_upgrade 'hub'
 # shellcheck disable=SC2016
 append_to_file "$HOME/.zshrc" 'eval "$(hub alias -s)"'
 
-brew_install_or_upgrade 'node'
+if ! brew_is_installed "node"; then
+  if ! command -v n > /dev/null; then
+    fancy_echo 'Installing n and latest Node.js and NPM...'
+    curl -L http://git.io/n-install | bash -s -- -y latest
+  else
+    fancy_echo 'Updating n...'
+    n-update -y
+  fi
+fi
+
 brew_install_or_upgrade 'python3'
 
 if ! pip3 list | ag "virtualenvwrapper" > /dev/null; then

@@ -75,7 +75,7 @@ What it sets up
 * [hub] for interacting with the GitHub API
 * [ImageMagick] for cropping and resizing images
 * [MySQL] for storing relational data
-* [Node.js] and [NPM], for running apps and installing JavaScript packages
+* [n] for managing Node.js versions if you do not have [Node.js] already installed (Includes latest [Node.js] and [NPM], for running apps and installing JavaScript packages)
 * [PhantomJS] for headless website testing (unless on El Capitan, due to [this bug](https://github.com/Homebrew/homebrew/issues/42249))
 * [Postgres] for storing relational data
 * [Python 3] for programming software and data analysis
@@ -99,6 +99,7 @@ What it sets up
 [hub]: https://github.com/github/hub
 [ImageMagick]: http://www.imagemagick.org/
 [MySQL]: https://www.mysql.com/
+[n]: https://github.com/tj/n
 [Node.js]: http://nodejs.org/
 [NPM]: https://www.npmjs.org/
 [PhantomJS]: http://phantomjs.org/
