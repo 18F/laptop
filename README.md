@@ -68,7 +68,7 @@ What it sets up
 * [CloudApp] for sharing screenshots and making an animated GIF from a video
 * [Cloud Foundry CLI] for command line access to 18F's Cloud Foundry-based application platform
 * [Flux] for adjusting your Mac's display color so you can sleep better
-* [GitHub for Mac] for setting up your SSH keys automatically
+* [GitHub Desktop] for setting up your SSH keys automatically
 * [Homebrew] for managing operating system libraries
 * [Homebrew Cask] for quickly installing Mac apps from the command line
 * [Homebrew Services] so you can easily stop, start, and restart services
@@ -92,7 +92,7 @@ What it sets up
 [CloudApp]: http://getcloudapp.com/
 [Cloud Foundry CLI]: https://github.com/cloudfoundry/cli
 [Flux]: https://justgetflux.com/
-[GitHub for Mac]: https://mac.github.com/
+[GitHub Desktop]: https://desktop.github.com/
 [Homebrew]: http://brew.sh/
 [Homebrew Cask]: http://caskroom.io/
 [Homebrew Services]: https://github.com/gapple/homebrew-services
