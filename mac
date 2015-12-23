@@ -234,8 +234,8 @@ fi
 append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
 append_to_file "$HOME/.rvm/gemsets/global.gems" 'bundler'
 
-brew_tap 'pivotal/tap'
-brew_install_or_upgrade 'cloudfoundry-cli'
+brew_tap 'cloudfoundry/homebrew-tap'
+brew_install_or_upgrade 'cf-cli'
 
 if app_is_installed 'GitHub'; then
   fancy_echo "It looks like you've already configured your GitHub SSH keys."
