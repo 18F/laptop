@@ -166,28 +166,68 @@ brew_install_or_upgrade 'hub'
 # shellcheck disable=SC2016
 append_to_file "$HOME/.zshrc" 'eval "$(hub alias -s)"'
 
+
+fancy_echo 'Checking on Node.js installation...'
+
 if ! brew_is_installed "node"; then
-  if ! command -v n > /dev/null; then
-    fancy_echo 'Installing n and latest Node.js and NPM...'
-    curl -L http://git.io/n-install | bash -s -- -y latest
+  if ! command -v nvm > /dev/null; then
+    if ! command -v n > /dev/null; then
+      fancy_echo 'Installing n and latest Node.js and NPM...'
+      curl -L http://git.io/n-install | bash -s -- -y latest
+    else
+      fancy_echo 'Updating n...'
+      n-update -y
+    fi
   else
-    fancy_echo 'Updating n...'
-    n-update -y
+    fancy_echo 'nvm detected.  Skipping...'
+  fi
+else
+  brew_install_or_upgrade 'node'
+fi
+
+fancy_echo '...Finished Node.js installation checks.'
+
+
+fancy_echo 'Checking on Python installation...'
+
+if ! brew_is_installed "python3"; then
+  brew_install_or_upgrade 'pyenv'
+  # shellcheck disable=SC2016
+  append_to_file "$HOME/.zshrc" 'if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi'
+  brew_install_or_upgrade 'pyenv-virtualenv'
+  # shellcheck disable=SC2016
+  append_to_file "$HOME/.zshrc" 'if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi'
+  brew_install_or_upgrade 'pyenv-virtualenvwrapper'
+
+  # pyenv currently doesn't have a convenience version to use, e.g., "latest",
+  # so we check for the latest version against Homebrew instead.
+  latest_python_3="$(brew info python3 | sed -n -e 's/^.*python3: stable //p' | egrep -o "3\.\d+\.\d+")"
+
+  if ! pyenv versions | ag "$latest_python_3" > /dev/null; then
+    pyenv install "$latest_python_3"
+    pyenv global "$latest_python_3"
+    pyenv rehash
+  fi
+else
+  brew_install_or_upgrade 'python3'
+fi
+
+if ! brew_is_installed "pyenv-virtualenvwrapper"; then
+  if ! pip3 list | ag "virtualenvwrapper" > /dev/null; then
+    fancy_echo 'Installing virtualenvwrapper...'
+    pip3 install virtualenvwrapper
+    append_to_file "$HOME/.zshrc" 'export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3'
+    append_to_file "$HOME/.zshrc" 'export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv'
+    append_to_file "$HOME/.zshrc" 'source /usr/local/bin/virtualenvwrapper.sh'
   fi
 fi
 
-brew_install_or_upgrade 'python3'
+fancy_echo '...Finished Python installation checks.'
 
-if ! pip3 list | ag "virtualenvwrapper" > /dev/null; then
-  fancy_echo 'Installing virtualenvwrapper...'
-  pip3 install virtualenvwrapper
-  append_to_file "$HOME/.zshrc" 'export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3'
-  append_to_file "$HOME/.zshrc" 'export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv'
-  append_to_file "$HOME/.zshrc" 'source /usr/local/bin/virtualenvwrapper.sh'
-fi
+
+fancy_echo 'Checking on Ruby installation...'
 
 append_to_file "$HOME/.gemrc" 'gem: --no-document'
-
 
 if ! command -v rbenv >/dev/null; then
   if ! command -v rvm >/dev/null; then
@@ -212,8 +252,10 @@ gem update --system
 gem_install_or_update 'bundler'
 
 fancy_echo "Configuring Bundler ..."
-  number_of_cores=$(sysctl -n hw.ncpu)
-  bundle config --global jobs $((number_of_cores - 1))
+number_of_cores=$(sysctl -n hw.ncpu)
+bundle config --global jobs $((number_of_cores - 1))
+
+fancy_echo '...Finished Ruby installation checks.'
 
 brew_tap 'caskroom/cask'
 

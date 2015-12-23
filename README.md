@@ -78,14 +78,14 @@ What it sets up
 * [n] for managing Node.js versions if you do not have [Node.js] already installed (Includes latest [Node.js] and [NPM], for running apps and installing JavaScript packages)
 * [PhantomJS] for headless website testing (unless on El Capitan, due to [this bug](https://github.com/Homebrew/homebrew/issues/42249))
 * [Postgres] for storing relational data
-* [Python 3] for programming software and data analysis
+* [pyenv] for managing Python versions if you do not have [Python] already installed (includes the latest 3.x [Python])
 * [Redis] for storing key-value data
 * [RVM] for managing Ruby versions (includes [Bundler] and the latest [Ruby])
 * [Slack] for communicating with your team
 * [Sublime Text 3] for coding all the things
 * [The Silver Searcher] for finding things in files
-* [Virtualenv] for creating isolated Python environments
-* [Virtualenvwrapper] for extending Virtualenv
+* [Virtualenv] for creating isolated Python environments (via [pyenv] if it is installed)
+* [Virtualenvwrapper] for extending Virtualenv (via [pyenv] if it is installed)
 * [Zsh] as your shell
 
 [Bundler]: http://bundler.io/
@@ -104,7 +104,8 @@ What it sets up
 [NPM]: https://www.npmjs.org/
 [PhantomJS]: http://phantomjs.org/
 [Postgres]: http://www.postgresql.org/
-[Python 3]: https://www.python.org/
+[Python]: https://www.python.org/
+[pyenv]: https://github.com/yyuu/pyenv/
 [Redis]: http://redis.io/
 [Ruby]: https://www.ruby-lang.org/en/
 [RVM]: https://github.com/wayneeseguin/rvm
