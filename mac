@@ -234,6 +234,9 @@ fi
 append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
 append_to_file "$HOME/.rvm/gemsets/global.gems" 'bundler'
 
+if brew_is_installed 'cloudfoundry-cli'; then
+  brew uninstall cloudfoundry-cli
+fi
 brew_tap 'cloudfoundry/homebrew-tap'
 brew_install_or_upgrade 'cf-cli'
 
