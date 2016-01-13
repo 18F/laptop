@@ -13,7 +13,7 @@ type: app
 
 # Describes whether a project team, working group/guild, etc. owns the repo (required)
 # values: guild, working-group, project
-# owner_type:
+owner_type: project
 
 # Name of the main project repo if this is a sub-repo; name of the working group/guild repo if this is a working group/guild subproject
 # parent:
