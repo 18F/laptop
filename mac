@@ -135,7 +135,13 @@ fancy_echo "Updating Homebrew formulas ..."
 brew update
 
 fancy_echo "Verifying the Homebrew installation..."
-brew doctor
+if brew doctor; then
+  fancy_echo "Your Homebrew installation is good to go."
+else
+  fancy_echo "Your Homebrew installation reported some errors or warnings."
+  echo "If the warnings are related to Python, you can ignore them."
+  echo "Otherwise, review the Homebrew messages to see if any action is needed."
+fi
 
 brew_install_or_upgrade 'git'
 
@@ -280,10 +286,16 @@ append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
 append_to_file "$HOME/.rvm/gemsets/global.gems" 'bundler'
 
 if brew_is_installed 'cloudfoundry-cli'; then
-  brew uninstall cloudfoundry-cli
+  brew uninstall --force cloudfoundry-cli
 fi
 brew_tap 'cloudfoundry/homebrew-tap'
-brew_install_or_upgrade 'cf-cli'
+
+if brew_install_or_upgrade 'cf-cli'; then
+  echo "Successfully installed cf-cli"
+else
+  fancy_echo "cf-cli failed to install. If you see a SHA1 mismatch error above, please report it here:"
+  echo "https://github.com/cloudfoundry/homebrew-tap/issues"
+fi
 
 if app_is_installed 'GitHub'; then
   fancy_echo "It looks like you've already configured your GitHub SSH keys."
