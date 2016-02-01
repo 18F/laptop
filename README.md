@@ -13,7 +13,8 @@ Requirements
 
 We support:
 
-* [OS X Yosemite (10.10)](https://www.apple.com/osx/)
+* [OS X El Capitan (10.11)](https://www.apple.com/osx/)
+* OS X Yosemite (10.10)
 * OS X Mavericks (10.9)
 
 Older versions may work but aren't regularly tested. Bug reports for older
