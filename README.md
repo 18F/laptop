@@ -77,7 +77,7 @@ What it sets up
 * [ImageMagick] for cropping and resizing images
 * [MySQL] for storing relational data
 * [n] for managing Node.js versions if you do not have [Node.js] already installed (Includes latest [Node.js] and [NPM], for running apps and installing JavaScript packages)
-* [PhantomJS] for headless website testing (unless on El Capitan, due to [this bug](https://github.com/Homebrew/homebrew/issues/42249))
+* [PhantomJS] for headless website testing
 * [Postgres] for storing relational data
 * [pyenv] for managing Python versions if you do not have [Python] already installed (includes the latest 3.x [Python])
 * [Redis] for storing key-value data
