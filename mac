@@ -165,11 +165,7 @@ brew services restart redis
 
 brew_install_or_upgrade 'imagemagick'
 
-# PhantomJS doesn't support El Capitan yet
-# https://github.com/Homebrew/homebrew/issues/42249
-if ! sw_vers -productVersion | grep -q "^10\.11"; then
-  brew_install_or_upgrade 'phantomjs'
-fi
+brew_install_or_upgrade 'phantomjs'
 
 brew_install_or_upgrade 'hub'
 # shellcheck disable=SC2016
