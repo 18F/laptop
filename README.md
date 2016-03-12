@@ -58,10 +58,8 @@ Debugging
 ---------
 
 Your last Laptop run will be saved to `~/laptop.log`. Read through it to see if
-you can debug the issue yourself. If not, copy the lines where the script
-failed into a [new GitHub
-Issue](https://github.com/18F/laptop/issues/new) for us. Or, attach the
-whole log file as an attachment.
+you can debug the issue yourself. If not, copy and paste the entire log into a
+[new GitHub Issue](https://github.com/18F/laptop/issues/new) for us.
 
 What it sets up
 ---------------
@@ -96,7 +94,7 @@ What it sets up
 [GitHub Desktop]: https://desktop.github.com/
 [Homebrew]: http://brew.sh/
 [Homebrew Cask]: http://caskroom.io/
-[Homebrew Services]: https://github.com/gapple/homebrew-services
+[Homebrew Services]: https://github.com/Homebrew/homebrew-services
 [hub]: https://github.com/github/hub
 [ImageMagick]: http://www.imagemagick.org/
 [MySQL]: https://www.mysql.com/
@@ -172,6 +170,34 @@ cd ~
 
 # Download the sample file to your computer
 curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/.laptop.local
+```
+
+How to manage background services (Redis, Postgres, MySQL)
+----------------------------------------------------------
+The script does not automatically launch these services after installation
+because you might not need or want them to be running. With Homebrew Services,
+starting, stopping, or restarting these services is as easy as:
+
+```
+brew services start|stop|restart [name of service]
+```
+
+For example:
+
+```
+brew services start redis
+```
+
+To see a list of all installed services:
+
+```
+brew services list
+```
+
+To start all services at once:
+
+```
+brew services start --all
 ```
 
 Credits

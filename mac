@@ -147,21 +147,13 @@ brew_install_or_upgrade 'git'
 
 brew_install_or_upgrade 'the_silver_searcher'
 
-brew_tap 'gapple/services'
+brew_tap 'homebrew/services'
 
 brew_install_or_upgrade 'postgresql'
-fancy_echo 'Restarting postgres...'
-brew services restart postgresql
 
 brew_install_or_upgrade 'mysql'
-fancy_echo 'Restarting mysql...'
-brew services restart mysql
-sleep 2
-mysql.server start
 
 brew_install_or_upgrade 'redis'
-fancy_echo 'Restarting redis...'
-brew services restart redis
 
 brew_install_or_upgrade 'imagemagick'
 
