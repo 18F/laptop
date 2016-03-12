@@ -29,12 +29,13 @@ keyboard shortcut for invoking Spotlight is `command-Space`. Once Spotlight
 is up, just start typing the first few letters of the app you are looking for,
 and once it appears, press `return` to launch it.
 
-In your Terminal window, copy and paste each of these two commands one at a
-time, then press `return` after each one to download and execute the
-script, respectively:
+In your Terminal window, copy and paste each of these three commands one at a
+time, then press `return` after each one. The first two commands download the
+files the script needs to run, and the third command executes the script.
 
 ```sh
 curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/mac
+curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/Brewfile
 bash mac 2>&1 | tee ~/laptop.log
 ```
 The [script](https://github.com/18F/laptop/blob/master/mac) itself is
@@ -47,7 +48,7 @@ If you don't already have it installed, GitHub for Mac will launch
 automatically at the end of the script so you can set up everything you'll
 need to push code to GitHub.
 
-Once the script is done, make sure to quit and relaunch Terminal.
+**Once the script is done, make sure to quit and relaunch Terminal.**
 
 More [detailed instructions with a video][video] are available in the Wiki.
 
@@ -58,10 +59,8 @@ Debugging
 ---------
 
 Your last Laptop run will be saved to `~/laptop.log`. Read through it to see if
-you can debug the issue yourself. If not, copy the lines where the script
-failed into a [new GitHub
-Issue](https://github.com/18F/laptop/issues/new) for us. Or, attach the
-whole log file as an attachment.
+you can debug the issue yourself. If not, copy and paste the entire log into a
+[new GitHub Issue](https://github.com/18F/laptop/issues/new) for us.
 
 What it sets up
 ---------------
@@ -96,7 +95,7 @@ What it sets up
 [GitHub Desktop]: https://desktop.github.com/
 [Homebrew]: http://brew.sh/
 [Homebrew Cask]: http://caskroom.io/
-[Homebrew Services]: https://github.com/gapple/homebrew-services
+[Homebrew Services]: https://github.com/Homebrew/homebrew-services
 [hub]: https://github.com/github/hub
 [ImageMagick]: http://www.imagemagick.org/
 [MySQL]: https://www.mysql.com/
@@ -120,13 +119,22 @@ What it sets up
 It should take less than 15 minutes to install (depends on your machine and
 internet connection).
 
-Customize in `~/.laptop.local`
-------------------------------
+Customize in `~/.laptop.local` and `Brewfile`
+---------------------------------------------
 
 Your `~/.laptop.local` is run at the end of the `mac` script.
 Put your customizations there. This repo already contains a `.laptop.local`
-you can use to get started. It lets you install the following tools
-(commented out by default):
+you can use to get started.
+
+```sh
+# Go to your OS X user's root directory
+cd ~
+
+# Download the sample file to your computer
+curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/.laptop.local
+```
+
+It lets you install the following tools:
 
 * [Atom] - GitHub's open source text editor
 * [Exuberant Ctags] for indexing files for vim tab completion
@@ -149,29 +157,62 @@ For example:
 ```sh
 #!/bin/sh
 
-# brew_cask_install 'atom'
-# brew_cask_install 'firefox'
-brew_cask_install 'iterm2'
+fancy_echo "Running your customizations from ~/.laptop.local ..."
 
-# brew_install_or_upgrade 'vim'
-# brew_install_or_upgrade 'ctags'
-# brew_install_or_upgrade 'tmux'
-# brew_install_or_upgrade 'reattach-to-user-namespace'
+brew bundle --file=- <<EOF
+cask 'atom'
+cask 'firefox'
+cask 'iterm2'
+
+brew 'vim'
+brew 'ctags'
+brew 'tmux'
+brew 'reattach-to-user-namespace'
+
+brew 'go'
+EOF
+
+append_to_file "$HOME/.zshrc" 'export PATH="$PATH:/usr/local/opt/go/libexec/bin"'
 ```
 
 Write your customizations such that they can be run safely more than once.
 See the `mac` script for examples.
 
-Laptop functions such as `fancy_echo`, `brew_install_or_upgrade`,
-`gem_install_or_update`, and `brew_cask_install` can be used in your
-`~/.laptop.local`.
+Laptop functions such as `fancy_echo` and `gem_install_or_update` can be used
+in your `~/.laptop.local`.
 
-```sh
-# Go to your OS X user's root directory
-cd ~
+Editing the `Brewfile`
+----------------------
+Most of what the script installs is listed in the `Brewfile`. If you don't want
+the script to install certain tools, you can remove them from the `Brewfile`.
 
-# Download the sample file to your computer
-curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/.laptop.local
+
+How to manage background services (Redis, Postgres, MySQL)
+----------------------------------------------------------
+The script does not automatically launch these services after installation
+because you might not need or want them to be running. With Homebrew Services,
+starting, stopping, or restarting these services is as easy as:
+
+```
+brew services start|stop|restart [name of service]
+```
+
+For example:
+
+```
+brew services start redis
+```
+
+To see a list of all installed services:
+
+```
+brew services list
+```
+
+To start all services at once:
+
+```
+brew services start --all
 ```
 
 Credits

@@ -52,37 +52,8 @@ case "$SHELL" in
     ;;
 esac
 
-brew_install_or_upgrade() {
-  if brew_is_installed "$1"; then
-    if brew_is_upgradable "$1"; then
-      fancy_echo "Upgrading %s ..." "$1"
-      brew upgrade "$@"
-    else
-      fancy_echo "Already using the latest version of %s. Skipping ..." "$1"
-    fi
-  else
-    fancy_echo "Installing %s ..." "$1"
-    brew install "$@"
-  fi
-}
-
 brew_is_installed() {
   brew list -1 | grep -Fqx "$1"
-}
-
-brew_is_upgradable() {
-  ! brew outdated --quiet "$1" >/dev/null
-}
-
-brew_tap_is_installed() {
-  brew tap | ag "$1" > /dev/null
-}
-
-brew_tap() {
-  if ! brew_tap_is_installed "$1"; then
-    fancy_echo "Tapping $1..."
-    brew tap "$1" 2> /dev/null
-  fi
 }
 
 gem_install_or_update() {
@@ -95,29 +66,10 @@ gem_install_or_update() {
   fi
 }
 
-brew_cask_expand_alias() {
-  brew cask info "$1" 2>/dev/null | head -1 | awk '{gsub(/:/, ""); print $1}'
-}
-
-brew_cask_is_installed() {
-  local NAME
-  NAME=$(brew_cask_expand_alias "$1")
-  brew cask list -1 | grep -Fqx "$NAME"
-}
-
 app_is_installed() {
   local app_name
   app_name=$(echo "$1" | cut -d'-' -f1)
   find /Applications -iname "$app_name*" -maxdepth 1 | egrep '.*' > /dev/null
-}
-
-brew_cask_install() {
-  if app_is_installed "$1" || brew_cask_is_installed "$1"; then
-    fancy_echo "$1 is already installed. Skipping..."
-  else
-    fancy_echo "Installing $1..."
-    brew cask install "$@"
-  fi
 }
 
 if ! command -v brew >/dev/null; then
@@ -129,6 +81,13 @@ if ! command -v brew >/dev/null; then
     append_to_file "$HOME/.zshrc" 'export PATH="/usr/local/bin:$PATH"'
 else
   fancy_echo "Homebrew already installed. Skipping ..."
+fi
+
+# Remove brew-cask since it is now installed as part of brew tap caskroom/cask.
+# See https://github.com/caskroom/homebrew-cask/releases/tag/v0.60.0
+if brew_is_installed 'brew-cask'; then
+  brew uninstall --force 'brew-cask'
+  brew untap caskroom/versions
 fi
 
 fancy_echo "Updating Homebrew formulas ..."
@@ -143,34 +102,15 @@ else
   echo "Otherwise, review the Homebrew messages to see if any action is needed."
 fi
 
-brew_install_or_upgrade 'git'
+if brew_is_installed 'cloudfoundry-cli'; then
+  brew uninstall --force cloudfoundry-cli
+fi
 
-brew_install_or_upgrade 'the_silver_searcher'
+fancy_echo "Installing formulas and casks from the Brewfile ..."
+brew bundle
 
-brew_tap 'gapple/services'
-
-brew_install_or_upgrade 'postgresql'
-fancy_echo 'Restarting postgres...'
-brew services restart postgresql
-
-brew_install_or_upgrade 'mysql'
-fancy_echo 'Restarting mysql...'
-brew services restart mysql
-sleep 2
-mysql.server start
-
-brew_install_or_upgrade 'redis'
-fancy_echo 'Restarting redis...'
-brew services restart redis
-
-brew_install_or_upgrade 'imagemagick'
-
-brew_install_or_upgrade 'phantomjs'
-
-brew_install_or_upgrade 'hub'
 # shellcheck disable=SC2016
 append_to_file "$HOME/.zshrc" 'eval "$(hub alias -s)"'
-
 
 fancy_echo 'Checking on Node.js installation...'
 
@@ -187,7 +127,9 @@ if ! brew_is_installed "node"; then
     fancy_echo 'nvm detected.  Skipping...'
   fi
 else
-  brew_install_or_upgrade 'node'
+  brew bundle --file=- <<EOF
+  brew 'node'
+EOF
 fi
 
 fancy_echo '...Finished Node.js installation checks.'
@@ -196,13 +138,15 @@ fancy_echo '...Finished Node.js installation checks.'
 fancy_echo 'Checking on Python installation...'
 
 if ! brew_is_installed "python3"; then
-  brew_install_or_upgrade 'pyenv'
+  brew bundle --file=- <<EOF
+  brew 'pyenv'
+  brew 'pyenv-virtualenv'
+  brew 'pyenv-virtualenvwrapper'
+EOF
   # shellcheck disable=SC2016
   append_to_file "$HOME/.zshrc" 'if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi'
-  brew_install_or_upgrade 'pyenv-virtualenv'
   # shellcheck disable=SC2016
   append_to_file "$HOME/.zshrc" 'if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi'
-  brew_install_or_upgrade 'pyenv-virtualenvwrapper'
 
   # pyenv currently doesn't have a convenience version to use, e.g., "latest",
   # so we check for the latest version against Homebrew instead.
@@ -214,7 +158,9 @@ if ! brew_is_installed "python3"; then
     pyenv rehash
   fi
 else
-  brew_install_or_upgrade 'python3'
+  brew bundle --file=- <<EOF
+  brew 'python3'
+EOF
 fi
 
 if ! brew_is_installed "pyenv-virtualenvwrapper"; then
@@ -262,36 +208,12 @@ bundle config --global jobs $((number_of_cores - 1))
 
 fancy_echo '...Finished Ruby installation checks.'
 
-brew_tap 'caskroom/cask'
-
-brew_install_or_upgrade 'brew-cask'
-
-brew_tap 'caskroom/versions'
-
-brew_cask_install 'cloud'
-brew_cask_install 'flux'
-brew_cask_install 'github-desktop'
-brew_cask_install 'slack'
-brew_cask_install 'sublime-text3'
-
 if [ -f "$HOME/.laptop.local" ]; then
   . "$HOME/.laptop.local"
 fi
 
 append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
 append_to_file "$HOME/.rvm/gemsets/global.gems" 'bundler'
-
-if brew_is_installed 'cloudfoundry-cli'; then
-  brew uninstall --force cloudfoundry-cli
-fi
-brew_tap 'cloudfoundry/homebrew-tap'
-
-if brew_install_or_upgrade 'cf-cli'; then
-  echo "Successfully installed cf-cli"
-else
-  fancy_echo "cf-cli failed to install. If you see a SHA1 mismatch error above, please report it here:"
-  echo "https://github.com/cloudfoundry/homebrew-tap/issues"
-fi
 
 if app_is_installed 'GitHub'; then
   fancy_echo "It looks like you've already configured your GitHub SSH keys."

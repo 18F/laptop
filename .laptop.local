@@ -1,12 +1,18 @@
 #!/bin/sh
 
-# brew_cask_install 'atom'
-# brew_cask_install 'firefox'
-# brew_cask_install 'iterm2'
+fancy_echo "Running your customizations from ~/.laptop.local ..."
 
-# brew_install_or_upgrade 'vim'
-# brew_install_or_upgrade 'ctags'
-# brew_install_or_upgrade 'tmux'
-# brew_install_or_upgrade 'reattach-to-user-namespace'
+brew bundle --file=- <<EOF
+cask 'atom'
+cask 'firefox'
+cask 'iterm2'
 
-# brew_install_or_upgrade 'go' && append_to_file "$HOME/.zshrc" 'export PATH="$PATH:/usr/local/opt/go/libexec/bin"'
+brew 'vim'
+brew 'ctags'
+brew 'tmux'
+brew 'reattach-to-user-namespace'
+
+brew 'go'
+EOF
+
+append_to_file "$HOME/.zshrc" 'export PATH="$PATH:/usr/local/opt/go/libexec/bin"'
