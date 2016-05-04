@@ -73,7 +73,6 @@ What it sets up
 * [Homebrew Cask] for quickly installing Mac apps from the command line
 * [Homebrew Services] so you can easily stop, start, and restart services
 * [hub] for interacting with the GitHub API
-* [ImageMagick] for cropping and resizing images
 * [MySQL] for storing relational data
 * [n] for managing Node.js versions if you do not have [Node.js] already installed (Includes latest [Node.js] and [NPM], for running apps and installing JavaScript packages)
 * [PhantomJS] for headless website testing
@@ -97,7 +96,6 @@ What it sets up
 [Homebrew Cask]: http://caskroom.io/
 [Homebrew Services]: https://github.com/Homebrew/homebrew-services
 [hub]: https://github.com/github/hub
-[ImageMagick]: http://www.imagemagick.org/
 [MySQL]: https://www.mysql.com/
 [n]: https://github.com/tj/n
 [Node.js]: http://nodejs.org/

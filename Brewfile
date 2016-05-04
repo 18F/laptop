@@ -12,8 +12,6 @@ brew 'mysql'
 
 brew 'redis'
 
-brew 'imagemagick'
-
 brew 'phantomjs'
 
 brew 'hub'
