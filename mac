@@ -150,7 +150,7 @@ EOF
 
   # pyenv currently doesn't have a convenience version to use, e.g., "latest",
   # so we check for the latest version against Homebrew instead.
-  latest_python_3="$(brew info python3 | sed -n -e 's/^.*python3: stable //p' | egrep -o "3\.\d+\.\d+")"
+  latest_python_3="$(brew info python3 | egrep -o "3\.\d+\.\d+" | head -1)"
 
   if ! pyenv versions | ag "$latest_python_3" > /dev/null; then
     pyenv install "$latest_python_3"
