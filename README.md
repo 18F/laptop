@@ -141,6 +141,7 @@ It lets you install the following tools:
 * [reattach-to-user-namespace] to allow copy and paste from Tmux
 * [Tmux] for saving project state and switching between projects
 * [Vim] for those who prefer the command line
+* [Spectacle] - automatic window manipulation
 
 [Atom]: https://atom.io/
 [Exuberant Ctags]: http://ctags.sourceforge.net/
@@ -149,6 +150,7 @@ It lets you install the following tools:
 [reattach-to-user-namespace]: https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard
 [Tmux]: http://tmux.sourceforge.net/
 [Vim]: http://www.vim.org/
+[Spectacle]: https://www.spectacleapp.com/
 
 For example:
 
