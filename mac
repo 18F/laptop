@@ -222,12 +222,4 @@ elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub\ Desktop.app
 fi
 
-if app_is_installed 'Spectacle'; then
-  tar -xvzf Spectacle+1.0.6.zip
-  xattr -dr com.apple.quarantine "Spectacle.app"
-  mv Spectacle.app /Applications
-elif [ ! -f /Applications/Spectacle.app ]; then
-  open /Applications/Spectacle.app
-fi
-
 fancy_echo 'All done!'
