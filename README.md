@@ -163,6 +163,7 @@ brew bundle --file=- <<EOF
 cask 'atom'
 cask 'firefox'
 cask 'iterm2'
+cask 'spectacle'
 
 brew 'vim'
 brew 'ctags'
