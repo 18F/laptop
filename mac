@@ -222,4 +222,15 @@ elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub\ Desktop.app
 fi
 
+brew_install_or_upgrade 'git-secrets'
+git secrets --install -f "$HOME/.git-secrets"
+git config --global init.templatedir "$HOME/.git-secrets"
+git config --global core.hooksPath "$HOME/.git-secrets/hooks"
+git secrets --register-aws --global
+find secret-patterns -type f -name '*.txt' -exec awk 'NF FNR==1{print ""}1' {} + > "$HOME/.git-secrets/patterns"
+git secrets --add-provider --global -- cat "$HOME/.git-secrets/patterns"
+git secrets --add --allowed --global 'github.com.*/[A-Za-z0-9]{40}'
+git secrets --add --allowed --global 'sha.*[A-Za-z0-9]{40}'
+git secrets --add --allowed --global 'secure:.*'
+
 fancy_echo 'All done!'
