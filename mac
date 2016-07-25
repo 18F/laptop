@@ -222,7 +222,6 @@ elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub\ Desktop.app
 fi
 
-brew_install_or_upgrade 'git-secrets'
 git secrets --install -f "$HOME/.git-secrets"
 git config --global init.templatedir "$HOME/.git-secrets"
 git config --global core.hooksPath "$HOME/.git-secrets/hooks"
