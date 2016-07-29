@@ -231,5 +231,7 @@ git secrets --add-provider --global -- cat "$HOME/.git-secrets/patterns" || true
 git secrets --add --allowed --global 'github.com.*/[A-Za-z0-9]{40}' || true
 git secrets --add --allowed --global 'sha.*[A-Za-z0-9]{40}' || true
 git secrets --add --allowed --global 'secure:.*' || true
+git secrets --add --allowed --global 'revision:.*[A-Za-z0-9]{40}' || true
+git secrets --add --allowed --global '123-45-6789' || true
 
 fancy_echo 'All done!'
