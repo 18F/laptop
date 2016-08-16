@@ -27,3 +27,6 @@ cask 'flux'
 cask 'github-desktop'
 cask 'slack'
 cask 'sublime-text'
+
+brew 'libgit2'
+brew 'go'

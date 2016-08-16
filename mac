@@ -234,6 +234,28 @@ elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub\ Desktop.app
 fi
 
+fancy_echo "Installing Seekret"
+fancy_echo "Creating temporary workspace to install seekret from source."
+mkdir -p $HOME/.temp_workspace
+export GOPATH=$HOME/.temp_workspace
+go get github.com/apuigsech/git-seekret
+cp $GOPATH/bin/git-seekret /usr/local/bin/
+rm -rf $HOME/.temp_workspace
+append_to_file "$HOME/.zshrc" 'export SEEKRET_RULES_PATH="$HOME/.seekret_rules"'
+fancy_echo "Finished installing Seekret"
+
+fancy_echo "Installing Seekret rules"
+mkdir -p $HOME/.seekret_rules
+curl -o $HOME/.seekret_rules/password.rule https://raw.githubusercontent.com/apuigsech/seekret/master/rules/password.rule
+
+fancy_echo "Setting up Seekret hooks"
+mkdir -p $HOME/.git-templates/hooks
+git config --global init.templatedir $HOME/.git-templates
+cp git/hooks/post-checkout $HOME/.git-templates/hooks/post-checkout
+cp git/hooks/pre-commit $HOME/.git-templates/hooks/pre-commit
+#curl -o $HOME/.git-templates/post-checkout https://raw.githubusercontent.com/18F/laptop/master/git/post-checkout
+#curl -o $HOME/.git-templates/pre-commit https://raw.githubusercontent.com/18F/laptop/master/git/pre-commit
+
 # git secrets --install -f "$HOME/.git-secrets"
 # git config --global init.templatedir "$HOME/.git-secrets"
 # git config --global core.hooksPath "$HOME/.git-secrets/hooks"
