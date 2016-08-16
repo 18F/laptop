@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Since git-seekret does not have a way of handling global settings yet,
+# we need to initialize the rules for each repo.
+
+git seekret config --init
+
+git seekret rules --enable password.password
