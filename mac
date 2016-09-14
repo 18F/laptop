@@ -116,13 +116,10 @@ fancy_echo 'Checking on Node.js installation...'
 
 if ! brew_is_installed "node"; then
   if ! command -v nvm > /dev/null; then
-    if ! command -v n > /dev/null; then
-      fancy_echo 'Installing n and latest Node.js and NPM...'
-      curl -L http://git.io/n-install | bash -s -- -y latest
-    else
-      fancy_echo 'Updating n...'
-      n-update -y
-    fi
+    fancy_echo 'Installing nvm and lts Node.js and npm...'
+    touch ~/.bash_profile
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.7/install.sh | bash
+    nvm install --lts 
   else
     fancy_echo 'nvm detected.  Skipping...'
   fi
