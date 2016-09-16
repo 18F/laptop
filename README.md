@@ -75,7 +75,7 @@ What it sets up
 * [Homebrew Services] so you can easily stop, start, and restart services
 * [hub] for interacting with the GitHub API
 * [MySQL] for storing relational data
-* [n] for managing Node.js versions if you do not have [Node.js] already installed (Includes latest [Node.js] and [NPM], for running apps and installing JavaScript packages)
+* [nvm] for managing Node.js versions if you do not have [Node.js] already installed (Includes latest [Node.js] and [NPM], for running apps and installing JavaScript packages)
 * [PhantomJS] for headless website testing
 * [Postgres] for storing relational data
 * [pyenv] for managing Python versions if you do not have [Python] already installed (includes the latest 3.x [Python])
