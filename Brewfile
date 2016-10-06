@@ -20,6 +20,8 @@ brew 'hub'
 tap 'cloudfoundry/homebrew-tap'
 brew 'cf-cli'
 
+brew 'go'
+
 tap 'caskroom/cask'
 tap 'caskroom/versions'
 cask 'cloud'
