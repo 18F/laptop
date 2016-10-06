@@ -50,8 +50,12 @@ append_to_file "$HOME/.zshrc" 'export PATH="$HOME/.bin:$PATH"'
 case "$SHELL" in
   */zsh) : ;;
   *)
-    fancy_echo "Changing your shell to zsh ..."
+    if [ -z "$CI" ]; then
+      fancy_echo "Changing your shell to zsh ..."
       chsh -s "$(which zsh)"
+    else
+      fancy_echo "CI System detected, will not change shells"
+    fi
     ;;
 esac
 
@@ -126,7 +130,7 @@ if ! brew_is_installed "node"; then
     fancy_echo 'Installing nvm and lts Node.js and npm...'
     touch ~/.bash_profile
     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.7/install.sh | bash
-    nvm install --lts 
+    nvm install --lts
   else
     fancy_echo 'version manager detected.  Skipping...'
   fi
