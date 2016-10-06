@@ -5,6 +5,7 @@
 # into an awesome development machine.
 
 fancy_echo() {
+  # shellcheck disable=SC2039
   local fmt="$1"; shift
 
   # shellcheck disable=SC2059
@@ -12,7 +13,9 @@ fancy_echo() {
 }
 
 append_to_file() {
+  # shellcheck disable=SC2039
   local file="$1"
+  # shellcheck disable=SC2039
   local text="$2"
 
   if [ "$file" = "$HOME/.zshrc" ]; then
@@ -67,6 +70,7 @@ gem_install_or_update() {
 }
 
 app_is_installed() {
+  # shellcheck disable=SC2039
   local app_name
   app_name=$(echo "$1" | cut -d'-' -f1)
   find /Applications -iname "$app_name*" -maxdepth 1 | egrep '.*' > /dev/null
@@ -184,6 +188,7 @@ if ! command -v rbenv >/dev/null; then
   if ! command -v rvm >/dev/null; then
     fancy_echo 'Installing RVM and the latest Ruby...'
     curl -L https://get.rvm.io | bash -s stable --ruby --auto-dotfiles --autolibs=enable
+    # shellcheck source=/dev/null
     . ~/.rvm/scripts/rvm
   else
     local_version="$(rvm -v 2> /dev/null | awk '$2 != ""{print $2}')"
@@ -209,6 +214,7 @@ bundle config --global jobs $((number_of_cores - 1))
 fancy_echo '...Finished Ruby installation checks.'
 
 if [ -f "$HOME/.laptop.local" ]; then
+  # shellcheck source=/dev/null
   . "$HOME/.laptop.local"
 fi
 
