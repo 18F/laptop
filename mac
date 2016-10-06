@@ -234,36 +234,12 @@ elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub\ Desktop.app
 fi
 
-fancy_echo "Installing Seekret"
-fancy_echo "Creating temporary workspace to install seekret from source."
-mkdir -p $HOME/.temp_workspace
-export GOPATH=$HOME/.temp_workspace
-go get github.com/apuigsech/git-seekret
-cp $GOPATH/bin/git-seekret /usr/local/bin/
-rm -rf $HOME/.temp_workspace
-append_to_file "$HOME/.zshrc" 'export SEEKRET_RULES_PATH="$HOME/.seekret_rules"'
-fancy_echo "Finished installing Seekret"
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+WORK_DIR=`mktemp -d -p "$CURRENT_DIR"`
+curl -o $WORK_DIR/seekrets-install https://raw.githubusercontent.com/18F/laptop/master/seekrets-install 2>&1 > /dev/null
+chmod +x $WORK_DIR/seekrets-install
+$WORK_DIR/seekrets-install
+rm -rf "$WORK_DIR"
 
-fancy_echo "Installing Seekret rules"
-mkdir -p $HOME/.seekret_rules
-curl -o $HOME/.seekret_rules/password.rule https://raw.githubusercontent.com/apuigsech/seekret/master/rules/password.rule
-
-fancy_echo "Setting up Seekret hooks"
-mkdir -p $HOME/.git-templates/hooks
-git config --global init.templatedir $HOME/.git-templates
-cp git/hooks/post-checkout $HOME/.git-templates/hooks/post-checkout
-cp git/hooks/pre-commit $HOME/.git-templates/hooks/pre-commit
-#curl -o $HOME/.git-templates/post-checkout https://raw.githubusercontent.com/18F/laptop/master/git/post-checkout
-#curl -o $HOME/.git-templates/pre-commit https://raw.githubusercontent.com/18F/laptop/master/git/pre-commit
-
-# git secrets --install -f "$HOME/.git-secrets"
-# git config --global init.templatedir "$HOME/.git-secrets"
-# git config --global core.hooksPath "$HOME/.git-secrets/hooks"
-# git secrets --register-aws --global || true
-# find secret-patterns -type f -name '*.txt' -exec awk 'NF FNR==1{print ""}1' {} + > "$HOME/.git-secrets/patterns"
-# git secrets --add-provider --global -- cat "$HOME/.git-secrets/patterns" || true
-# git secrets --add --allowed --global 'github.com.*/[A-Za-z0-9]{40}' || true
-# git secrets --add --allowed --global 'sha.*[A-Za-z0-9]{40}' || true
-# git secrets --add --allowed --global 'secure:.*' || true
 
 fancy_echo 'All done!'
