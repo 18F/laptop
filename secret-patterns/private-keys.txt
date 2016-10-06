@@ -1,4 +1,0 @@
-(BEGIN\s[A-Z]{0,3}\sPRIVATE\sKEY)
-(END\s[A-Z]{0,3}\sPRIVATE\sKEY)
-SECRET_KEY
-_auth(Token)?=.+

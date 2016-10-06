@@ -1,0 +1,32 @@
+#!/bin/sh
+
+fancy_echo() {
+  local fmt="$1"; shift
+
+  # shellcheck disable=SC2059
+  printf "\n$fmt\n" "$@"
+}
+
+set -e
+set -x
+
+fancy_echo "Installing Seekret"
+mkdir -p $HOME/.temp_workspace
+(export GOPATH=$HOME/.temp_workspace \
+  && go get github.com/apuigsech/git-seekret \
+  && cp $GOPATH/bin/git-seekret /usr/local/bin/)
+rm -rf $HOME/.temp_workspace
+
+fancy_echo "Downloading Seekret rules"
+export SEEKRET_RULES_PATH=$HOME/.git-support/seekret-rules
+mkdir -p $SEEKRET_RULES_PATH
+# TODO: Download rules here...
+
+fancy_echo "Configuring Seekret"
+mkdir -p $HOME/.git-support/hooks
+git config --global core.hooksPath $HOME/.git-support/hooks
+git seekret --global config --init
+# TODO: enable rules here...
+git seekret --global hook --enable-all
+
+fancy_echo "Finished installing Seekret"
