@@ -8,4 +8,4 @@ before_script:
 
 script:
   - shellcheck mac
-  - ./mac
+  - sh -C "mac"
