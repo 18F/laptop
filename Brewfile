@@ -1,7 +1,6 @@
 cask_args appdir: '/Applications'
 
 brew 'git'
-brew 'git-secrets'
 
 brew 'the_silver_searcher'
 
