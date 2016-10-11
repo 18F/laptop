@@ -235,7 +235,8 @@ fi
 # shellcheck disable=SC2039
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 WORK_DIR=$( mktemp -d -t "$( basename "${CURRENT_DIR}" )" )
-curl -o "${WORK_DIR}/seekrets-install" https://raw.githubusercontent.com/18F/laptop/master/seekrets-install > /dev/null 2>&1
+# TODO: Change to master for merge
+curl -o "${WORK_DIR}/seekrets-install" https://raw.githubusercontent.com/18F/laptop/seekret/seekrets-install > /dev/null 2>&1
 chmod +x "${WORK_DIR}/seekrets-install"
 "${WORK_DIR}/seekrets-install"
 rm -rf "${WORK_DIR}"
