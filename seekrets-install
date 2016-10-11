@@ -8,25 +8,59 @@ fancy_echo() {
   printf "\n$fmt\n" "$@"
 }
 
+toolversion() {
+    # shellcheck disable=SC2039
+    local prog="$1" operator="$2" value="$3" version
+
+    version=$($prog --version | awk '{print $NF; exit}')
+
+    awk -v v1="$version" -v v2="$value" 'BEGIN {
+        split(v1, a, /\./); split(v2, b, /\./);
+        if (a[2] == b[2]) {
+          exit (a[3] '"${operator}"' b[3]) ? 0 : 1
+        }
+        else if (a[1] == b[1]) {
+          exit (a[2] '"${operator}"' b[2]) ? 0 : 1
+        }
+        else {
+          exit (a[1] '"${operator}"' b[1]) ? 0 : 1
+        }
+    }'
+}
+
 set -e
 
-fancy_echo "Installing Seekret"
-mkdir -p "${HOME}/.temp_workspace"
-(export GOPATH="${HOME}/.temp_workspace" \
-  && go get github.com/apuigsech/git-seekret \
-  && cp "${GOPATH}/bin/git-seekret" /usr/local/bin/)
-rm -rf "${HOME}/.temp_workspace"
+if toolversion git '>=' 2.9.1; then
+  fancy_echo "Installing Seekret"
+  mkdir -p "${HOME}/.temp_workspace"
+  (export GOPATH="${HOME}/.temp_workspace" \
+    && go get github.com/apuigsech/git-seekret \
+    && cp "${GOPATH}/bin/git-seekret" /usr/local/bin/)
+  rm -rf "${HOME}/.temp_workspace"
 
-fancy_echo "Downloading Seekret rules"
-export SEEKRET_RULES_PATH="${HOME}/.git-support/seekret-rules"
-mkdir -p "${SEEKRET_RULES_PATH}"
-# TODO: Download rules here...
+  fancy_echo "Downloading Seekret rules"
+  export SEEKRET_RULES_PATH="${HOME}/.git-support/seekret-rules"
+  mkdir -p "${SEEKRET_RULES_PATH}"
+  # TODO: Download rules here...
 
-fancy_echo "Configuring Seekret"
-mkdir -p "${HOME}/.git-support/hooks"
-git config --global core.hooksPath "${HOME}/.git-support/hooks"
-git seekret --global config --init
-# TODO: enable rules here...
-git seekret --global hook --enable-all
+  fancy_echo "Configuring Seekret"
+  mkdir -p "${HOME}/.git-support/hooks"
+  git config --global core.hooksPath "${HOME}/.git-support/hooks"
+  git seekret --global config --init
+  # TODO: enable rules here...
+  git seekret --global hook --enable-all
 
-fancy_echo "Finished installing Seekret"
+  fancy_echo "Finished installing Seekret"
+else
+  echo
+  echo "Looks like you need to install git 2.9.1 or better."
+  echo
+  echo "If you are using git from the command line, this should"
+  echo "be as easy as upgrading with homebrew:"
+  echo "   $ brew update && brew upgrade git"
+  echo
+  echo "If you are using GitHub Desktop, please upgrade to version"
+  echo "221 or better for OS X. Download: https://desktop.github.com/"
+  echo
+  exit 1;
+fi
