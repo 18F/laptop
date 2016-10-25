@@ -203,6 +203,8 @@ if ! command -v rbenv >/dev/null; then
     else
       fancy_echo "Already using the latest version of RVM. Skipping..."
     fi
+    fancy_echo "Installing the latest stable Ruby..."
+    rvm install ruby --latest
   fi
 fi
 
