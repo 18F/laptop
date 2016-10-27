@@ -59,8 +59,10 @@ if toolversion git '>=' 2.9.1; then
   mkdir -p "${HOME}/.git-support/hooks"
   git config --global core.hooksPath "${HOME}/.git-support/hooks"
   git seekret --global config --init
-  # TODO: enable rules here...
   git seekret --global hook --enable-all
+  # Activate all installed rules
+  git seekret rules | grep '\[ \] ' | awk ' { print $3 } ' | xargs -n 1 git seekret --global rules --enable
+
 
   fancy_echo "Finished installing Seekret"
 else
