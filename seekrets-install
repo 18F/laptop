@@ -51,8 +51,8 @@ if toolversion git '>=' 2.9.1; then
   SEEKRET_RULES="${SEEKRET_RULES:=$SEEKRET_DEFAULT_RULES}"
   for rule in ${SEEKRET_RULES}
   do
-      printf "$rule: "
-      (cd ${SEEKRET_RULES_PATH} \
+      printf "%s: " "$rule"
+      (cd "${SEEKRET_RULES_PATH}" \
 	  && curl -# -o "${rule}" "${SEEKRET_RULES_URL}/${rule}")
   done
   fancy_echo "Configuring Seekret"
