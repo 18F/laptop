@@ -27,21 +27,14 @@ load test_helper
     [ $(expr "${lines[0]}" : "List of rules:") -ne 0 ]
 }
 
-@test "git-seekrets does not find secrets in this repo" {
-    result=$(cd $BATS_TEST_DIRNAME && git-seekret check)
-    [ "$result" = "Found Secrets: 0" ]
-}
-
 @test "git-seekrets can disable all rulesets" {
-    skip
-    run git-seekret rule --disable-all
+    run git-seekret rules --disable-all
     [ $status -eq 0 ]
     [ $(echo "$output" | grep -c '\[x\]') -eq 0 ]
 }
 
 @test "git-seekrets can enable all rulesets" {
-    skip
-    run git-seekret rule --enable-all
+    run git-seekret rules --enable-all
     [ $status -eq 0 ]
     [ $(echo "$output" | grep -c '\[x\]') -gt 0 ]
 }
