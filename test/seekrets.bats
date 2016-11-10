@@ -1,4 +1,23 @@
 #!/usr/bin/env bats
+#
+# bats test file for testing git seekrets and
+# seekrets rulesets
+#
+# Prerequisites:
+#     * git seekrets is installed (cf. seekrets-install)
+#
+# Installation:
+#     * Use the laptop script via ~/.laptop.local
+#
+#              echo 'bats' >> ~/.laptop.local
+#
+#     * homebrew method
+#
+#              brew install bats
+#
+# Running Tests:
+#
+#              bats seekrets.bat
 
 load test_helper
 
