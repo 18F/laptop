@@ -27,6 +27,16 @@ load test_helper
     [ $(expr "${lines[0]}" : "List of rules:") -ne 0 ]
 }
 
+@test "git-seekrets does not find secrets in test repo" {
+    run addFileWithNoSecrets
+    [ $status -eq 0 ]
+}
+
+@test "git-seekrets does find secrets in test repo" {
+    run addFileWithSecrets
+    [ $status -gt 0 ]
+}
+
 @test "git-seekrets can disable all rulesets" {
     run git-seekret rules --disable-all
     [ $status -eq 0 ]
