@@ -31,7 +31,6 @@ load test_helper
     run git-seekret --version
     [ $status -eq 0 ]
     [ $(expr "$output" : "git-seekret version [0-9][0-9.]*") -ne 0 ]
-
 }
 
 @test "config command with no options shows config" {

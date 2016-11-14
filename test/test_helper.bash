@@ -1,7 +1,6 @@
 #!/usr/bin/env bats
 
-GIT_TESTREPO="gittest"
-REPO_PATH="${BATS_TMPDIR}/${GIT_TESTREPO}"
+REPO_PATH=$(mktemp -d "${BATS_TMPDIR}/gittest.XXXXXX")
 
 setupGitRepo() {
     git init "${REPO_PATH}"
@@ -9,6 +8,7 @@ setupGitRepo() {
 
 cleanGitRepo() {
     (cd "${REPO_PATH}" && git reset --hard)
+    rm -fr "${REPO_PATH}"
 }
 
 addFileWithNoSecrets() {
