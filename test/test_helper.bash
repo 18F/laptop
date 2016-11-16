@@ -11,6 +11,16 @@ cleanGitRepo() {
     rm -fr "${REPO_PATH}"
 }
 
+addFalseNewrelicSecrets() {
+    local secrets_file="$1"
+
+    touch "${secrets_file}"
+    echo "False secrets in this file" >> "${secrets_file}"
+    echo "github.com/18f/#$(seq -s '' 2 1 25)" >> "${secrets_file}"
+    echo "sha = $(seq -s '' 4 1 26)" >> "${secrets_file}"
+    echo "revision: $(seq -s '' 6 1 27)" >> "${secrets_file}"
+}
+
 addFileWithNoSecrets() {
     local filename="${REPO_PATH}/plainfile.md"
 
@@ -25,7 +35,17 @@ addFileWithAwsSecrets() {
 
     touch "${secrets_file}"
     echo "SHHHH... Secrets in this file" >> "${secrets_file}"
-    echo "aws_secret_key: $(seq -s '' 0 1 24)" >> "${secrets_file}"
+    echo "aws_secret_key: $(seq -s '' 8 1 28)" >> "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithAwsAccounts() {
+    local secrets_file="${REPO_PATH}/awsaccountsfile.md"
+
+    touch "${secrets_file}"
+    echo "SHHHH... Secrets in this file" >> "${secrets_file}"
+    echo "aws_account_id=$(jot -s '-' 4 1024 5096)" >> "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
@@ -36,6 +56,26 @@ addFileWithNewrelicSecrets() {
     touch "${secrets_file}"
     echo "Secrets in this file" >> "${secrets_file}"
     echo "$(seq -s '' 2 1 25)" >> "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithSomeNewrelicSecrets() {
+    local secrets_file="${REPO_PATH}/somesecretsfile.md"
+
+    touch "${secrets_file}"
+    addFalseNewrelicSecrets "${secrets_file}"
+    echo "Secrets in this file" >> "${secrets_file}"
+    echo "$(seq -s '' 2 1 25)" >> "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithFalseNewrelicSecrets() {
+    local secrets_file="${REPO_PATH}/secretsfile.md"
+
+    touch "${secrets_file}"
+    addFalseNewrelicSecrets "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
