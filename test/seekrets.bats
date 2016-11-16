@@ -45,13 +45,29 @@ load test_helper
     [ $(expr "${lines[0]}" : "List of rules:") -ne 0 ]
 }
 
-@test "git-seekrets does find newrelic secrets in test repo" {
-    run addFileWithNewlicSecrets
+@test "git-seekrets does find aws secrets in test repo" {
+    run addFileWithAwsSecrets
     [ $status -gt 0 ]
 }
 
-@test "git-seekrets does find aws secrets in test repo" {
-    run addFileWithAwsSecrets
+@test "git-seekrets does find aws accounts in test repo" {
+    run addFileWithAwsAccounts
+    [ $status -gt 0 ]
+}
+
+@test "git-seekrets does find newrelic secrets in test repo" {
+    run addFileWithNewRelicSecrets
+    [ $status -gt 0 ]
+}
+
+@test "git-seekrets does not find newrelic false positives in test repo" {
+    run addFileWithFalseNewrelicSecrets
+    [ $(expr "${lines[1]}" : "Found Secrets: 0") -eq 0 ]
+}
+
+@test "git-seekrets only matches newrelic secrets in test repo" {
+    run addFileWithSomeNewrelicSecrets
+    [ $(expr "${lines[1]}" : "Found Secrets: 1") -eq 0 ]
     [ $status -gt 0 ]
 }
 
