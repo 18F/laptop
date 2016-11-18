@@ -128,9 +128,11 @@ if ! brew_is_installed "node"; then
     fancy_echo "See https://pages.18f.gov/frontend/#install-npm"
   elif ! command -v nvm > /dev/null; then
     fancy_echo 'Installing nvm and lts Node.js and npm...'
-    touch ~/.bash_profile
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.7/install.sh | bash
-    nvm install --lts
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    # shellcheck source=/dev/null
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install node --lts
   else
     fancy_echo 'version manager detected.  Skipping...'
   fi
