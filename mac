@@ -80,6 +80,36 @@ app_is_installed() {
   find /Applications -iname "$app_name*" -maxdepth 1 | egrep '.*' > /dev/null
 }
 
+install_go_app() {
+  # Create a temporary Go workspace.
+  mkdir -p /tmp/go-ws
+  # Retreive and compile the program.
+  GOPATH=/tmp/go-ws go get -u $1
+  # Copy the binary to /usr/local/bin.
+  cp /tmp/go-ws/bin/$2 /usr/local/bin/$2
+  # Clean-up the temporary workspace.
+  rm -rf /tmp/go-ws
+}
+
+configure_git_seekret() {
+  fancy_echo "Configuring git-seekret ..."
+  # Create a temporary place to download the rules.
+  TEMP_RULES_REPO=/tmp/rules-repo
+  mkdir -p $TEMP_RULES_REPO
+  # Download the repository with the rules.
+  git clone https://github.com/apuigsech/seekret $TEMP_RULES_REPO
+  # Wipe out the existing rules.
+  RULES_REPO=$HOME/.laptop_git_rules
+  rm -rf $RULES_REPO
+  # Copy rules from temporary place to permanent place.
+  mkdir -p $RULES_REPO
+  cp $TEMP_RULES_REPO/rules/* $RULES_REPO
+  # Activate the new rules.
+  # TODO!!!!!
+  # Clean the temporary workspace.
+  rm -rf $TEMP_RULES_REPO
+}
+
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
     curl -fsS \
@@ -234,6 +264,14 @@ elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub\ Desktop.app
 fi
 
+fancy_echo 'Checking on Go installation...'
+if brew_is_installed "go"; then
+  fancy_echo 'Installing Git-Seekret'
+  # Always want to install the latest Go programs.
+  install_go_app "github.com/apuigsech/git-seekret" "git-seekret"
+  # Configure after installing git-seekret
+  configure_git_seekret
+fi
 # git secrets --install -f "$HOME/.git-secrets"
 # git config --global init.templatedir "$HOME/.git-secrets"
 # git config --global core.hooksPath "$HOME/.git-secrets/hooks"
