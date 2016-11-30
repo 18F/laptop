@@ -39,7 +39,7 @@ if toolversion git '>=' 2.9.1; then
   fancy_echo "Installing Seekret"
   mkdir -p "${HOME}/.temp_workspace"
   (export GOPATH="${HOME}/.temp_workspace" \
-    && go get github.com/apuigsech/git-seekret \
+    && go get github.com/18f/git-seekret \
     && cp "${GOPATH}/bin/git-seekret" /usr/local/bin/)
   rm -rf "${HOME}/.temp_workspace"
 
