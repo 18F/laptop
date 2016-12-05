@@ -4,6 +4,7 @@ REPO_PATH=$(mktemp -d "${BATS_TMPDIR}/gittest.XXXXXX")
 
 setupGitRepo() {
     git init "${REPO_PATH}"
+    (cd "${REPO_PATH}" && git-seekret rules --enable-all)
 }
 
 cleanGitRepo() {
