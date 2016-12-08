@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Add new baseline rules here
+#rsa-private.rule
 SEEKRET_DEFAULT_RULES="
-rsa-private.rule
 aws.rule
 newrelic.rule"
 
