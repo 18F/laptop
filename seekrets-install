@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 # Add new baseline rules here
+#rsa-private.rule
 SEEKRET_DEFAULT_RULES="
 aws.rule
 newrelic.rule"
@@ -33,15 +34,18 @@ toolversion() {
     }'
 }
 
+
 set -e
 
 if toolversion git '>=' 2.9.1; then
   fancy_echo "Installing Seekret"
   mkdir -p "${HOME}/.temp_workspace"
-  (export GOPATH="${HOME}/.temp_workspace" \
-    && go get github.com/18f/git-seekret \
-    && cp "${GOPATH}/bin/git-seekret" /usr/local/bin/)
-  rm -rf "${HOME}/.temp_workspace"
+  pushd "${HOME}/.temp_workspace"
+  git init
+  LATEST_RELEASE_URL=$(curl -s https://api.github.com/repos/18F/git-seekret/releases | grep browser_download_url | grep 'osx' | head -n 1 | cut -d '"' -f 4)
+  AWS_URL=$(curl -s "$LATEST_RELEASE_URL" | cut -d '"' -f2 | sed -e "s/amp\;//g")
+  (curl "$AWS_URL" -o /usr/local/bin/git-seekret \
+    && chmod u+x /usr/local/bin/git-seekret)
 
   fancy_echo "Downloading Seekret rules"
   export SEEKRET_RULES_PATH="${HOME}/.git-support/seekret-rules"
@@ -63,6 +67,8 @@ if toolversion git '>=' 2.9.1; then
   git seekret --global rules --enable-all
   git seekret --global hook --enable-all
 
+  popd "${HOME}/.temp_workspace"
+  rm -rf "${HOME}/.temp_workspace"
   fancy_echo "Finished installing Seekret"
 else
   echo
