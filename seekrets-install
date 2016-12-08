@@ -2,6 +2,7 @@
 
 # Add new baseline rules here
 SEEKRET_DEFAULT_RULES="
+rsa-private.rule
 aws.rule
 newrelic.rule"
 
@@ -33,14 +34,17 @@ toolversion() {
     }'
 }
 
+local gitseekretversion="0.0.1-18f.0"
+
 set -e
 
 if toolversion git '>=' 2.9.1; then
   fancy_echo "Installing Seekret"
   mkdir -p "${HOME}/.temp_workspace"
   (export GOPATH="${HOME}/.temp_workspace" \
-    && go get github.com/18f/git-seekret \
-    && cp "${GOPATH}/bin/git-seekret" /usr/local/bin/)
+    && curl -O
+"https://github.com/18F/git-seekret/releases/download/${gitseekretversion}/git-seekret-osx" \
+    && cp "${GOPATH}/bin/git-seekret-osx" /usr/local/bin/)
   rm -rf "${HOME}/.temp_workspace"
 
   fancy_echo "Downloading Seekret rules"
