@@ -22,6 +22,14 @@ addFalseNewrelicSecrets() {
     echo "revision: $(seq -s '' 6 1 27)" >> "${secrets_file}"
 }
 
+addNewrelicSecrets() {
+    local secrets_file="$1"
+
+    touch "${secrets_file}"
+    echo "Secrets in this file" >> "${secrets_file}"
+    echo "$(seq -s '' 2 1 25)" >> "${secrets_file}"
+}
+
 addFileWithNoSecrets() {
     local filename="${REPO_PATH}/plainfile.md"
 
@@ -55,8 +63,7 @@ addFileWithNewrelicSecrets() {
     local secrets_file="${REPO_PATH}/secretsfile.md"
 
     touch "${secrets_file}"
-    echo "Secrets in this file" >> "${secrets_file}"
-    echo "$(seq -s '' 2 1 25)" >> "${secrets_file}"
+    addNewrelicSecrets "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
@@ -66,8 +73,7 @@ addFileWithSomeNewrelicSecrets() {
 
     touch "${secrets_file}"
     addFalseNewrelicSecrets "${secrets_file}"
-    echo "Secrets in this file" >> "${secrets_file}"
-    echo "$(seq -s '' 2 1 25)" >> "${secrets_file}"
+    addNewrelicSecrets "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
