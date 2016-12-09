@@ -62,12 +62,14 @@ load test_helper
 
 @test "git-seekrets does not find newrelic false positives in test repo" {
     run addFileWithFalseNewrelicSecrets
-    [ $(expr "${lines[0]}" : "Found Secrets: 0") -ne 0 ]
+    [ $status -eq 0 ]
+    [ $(echo "$output" | grep -c 'Found Secrets: 0') -eq 1 ]
 }
 
 @test "git-seekrets only matches newrelic secrets in test repo" {
     run addFileWithSomeNewrelicSecrets
-    [ $(expr "${lines[0]}" : "Found Secrets: 1") -ne 0 ]
+    [ $status -gt 0 ]
+    [ $(echo "$output" | grep -c 'Found Secrets: 1') -eq 1 ]
 }
 
 @test "git-seekrets does not find secrets in test repo" {
