@@ -39,12 +39,12 @@ set -e
 
 if toolversion git '>=' 2.9.1; then
   fancy_echo "Installing Seekret"
-  mkdir -p "${HOME}/.temp_workspace"
-  pushd "${HOME}/.temp_workspace"
-  git init
+  WORK_DIR=$( mktemp -d -t "$( basename "${CURRENT_DIR}" )" )
+  pushd "${WORK_DIR}" > /dev/null 2>&1
+  git init > /dev/null 2>&1
   LATEST_RELEASE_URL=$(curl -s https://api.github.com/repos/18F/git-seekret/releases | grep browser_download_url | grep 'osx' | head -n 1 | cut -d '"' -f 4)
   AWS_URL=$(curl -s "$LATEST_RELEASE_URL" | cut -d '"' -f2 | sed -e "s/amp\;//g")
-  (curl "$AWS_URL" -o /usr/local/bin/git-seekret \
+  (curl "$AWS_URL" -o /usr/local/bin/git-seekret > /dev/null 2>&1 \
     && chmod u+x /usr/local/bin/git-seekret)
 
   fancy_echo "Downloading Seekret rules"
@@ -55,9 +55,10 @@ if toolversion git '>=' 2.9.1; then
   SEEKRET_RULES="${SEEKRET_RULES:=$SEEKRET_DEFAULT_RULES}"
   for rule in ${SEEKRET_RULES}
   do
-      printf "%s: " "$rule"
+      printf "\t%s: " "$rule"
       (cd "${SEEKRET_RULES_PATH}" \
-	  && curl -# -o "${rule}" "${SEEKRET_RULES_URL}/${rule}")
+	  && curl -# -o "${rule}" "${SEEKRET_RULES_URL}/${rule}" > /dev/null 2>&1)
+      printf "done\n"
   done
   fancy_echo "Configuring Seekret"
   mkdir -p "${HOME}/.git-support/hooks"
@@ -67,8 +68,8 @@ if toolversion git '>=' 2.9.1; then
   git seekret --global rules --enable-all
   git seekret --global hook --enable-all
 
-  popd "${HOME}/.temp_workspace"
-  rm -rf "${HOME}/.temp_workspace"
+  popd "${WORK_DIR}" > /dev/null 2>&1
+  rm -rf "${WORK_DIR}"
   fancy_echo "Finished installing Seekret"
 else
   echo
