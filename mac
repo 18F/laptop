@@ -234,14 +234,7 @@ elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub\ Desktop.app
 fi
 
-# shellcheck disable=SC2039
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-WORK_DIR=$( mktemp -d -t "$( basename "${CURRENT_DIR}" )" )
 # TODO: Change to master for merge
-curl -o "${WORK_DIR}/seekrets-install" https://raw.githubusercontent.com/18F/laptop/seekret/seekrets-install > /dev/null 2>&1
-chmod +x "${WORK_DIR}/seekrets-install"
-"${WORK_DIR}/seekrets-install"
-rm -rf "${WORK_DIR}"
-
+curl -s https://raw.githubusercontent.com/18F/laptop/seekret/seekrets-install | sh -
 
 fancy_echo 'All done!'

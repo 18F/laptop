@@ -55,6 +55,11 @@ More [detailed instructions with a video][video] are available in the Wiki.
 [Spotlight]: https://support.apple.com/en-us/HT204014
 [video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
 
+### Want to install just git-seekret?
+```sh
+curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | sh -
+```
+
 Debugging
 ---------
 
@@ -68,7 +73,7 @@ What it sets up
 * [CloudApp] for sharing screenshots and making an animated GIF from a video
 * [Cloud Foundry CLI] for command line access to 18F's Cloud Foundry-based application platform
 * [Flux] for adjusting your Mac's display color so you can sleep better
-* [git secrets] for preventing you from committing passwords and other sensitive information to a git repository
+* [git-seekret] for preventing you from committing passwords and other sensitive information to a git repository
 * [GitHub Desktop] for setting up your SSH keys automatically
 * [Homebrew] for managing operating system libraries
 * [Homebrew Cask] for quickly installing Mac apps from the command line
@@ -92,7 +97,7 @@ What it sets up
 [CloudApp]: http://getcloudapp.com/
 [Cloud Foundry CLI]: https://github.com/cloudfoundry/cli
 [Flux]: https://justgetflux.com/
-[git secrets]: https://github.com/awslabs/git-secrets
+[git-seekret]: https://github.com/18F/git-seekret
 [GitHub Desktop]: https://desktop.github.com/
 [Homebrew]: http://brew.sh/
 [Homebrew Cask]: http://caskroom.io/
