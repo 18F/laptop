@@ -1,0 +1,4 @@
+mandrill_smtp_credentials:
+  match: (\"|')?(address(\"|'):)?(\"|')?(smtp.mandrillaapp.com)?(\"|')?(\"|')?(password(\"|'):)\s*(\"|')?[A-Za-z0-9_]{21,}(\"|')?
+  unmatch:
+    - (\"|')?password:\s*ENV\[\'MANDRILL_API_KEY\'\]

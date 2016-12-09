@@ -70,6 +70,11 @@ load test_helper
     [ $(expr "${lines[0]}" : "Found Secrets: 1") -ne 0 ]
 }
 
+@test "git-seekrets does not find mandrill fake api keys in test repo" {
+    run addFileFalseMandrillKey
+    [ $(expr "${lines[0]}" : "Found Secrets: 0") -eq 0 ]
+}
+
 @test "git-seekrets does not find secrets in test repo" {
     run addFileWithNoSecrets
     [ $status -eq 0 ]

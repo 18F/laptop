@@ -12,6 +12,14 @@ cleanGitRepo() {
     rm -fr "${REPO_PATH}"
 }
 
+addFalseMandrillKey() {
+    local secrets_file="$1"
+
+    touch "${secrets_file}"
+    echo "Fake keys in this file" >> "${secrets_file}"
+    echo "password: ENV['MANDRILL_API_KEY']" >> "${secrets_file}"
+}
+
 addFalseNewrelicSecrets() {
     local secrets_file="$1"
 
@@ -83,6 +91,15 @@ addFileWithFalseNewrelicSecrets() {
 
     touch "${secrets_file}"
     addFalseNewrelicSecrets "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithFalseMandrillKey() {
+    local secrets_file="${REPO_PATH}/secretsfile.md"
+
+    touch "${secrets_file}"
+    addFalseMandrillKey "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
