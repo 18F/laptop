@@ -72,6 +72,17 @@ load test_helper
     [ $(echo "$output" | grep -c 'Found Secrets: 1') -eq 1 ]
 }
 
+@test "git-seekrets does find mandrill keys in test repo" {
+    run addFileWithMandrillKey
+    [ $status -gt 0 ]
+}
+
+@test "git-seekrets does not find mandrill false positives in test repo" {
+    run addFileWithFalseMandrillKey
+    [ $status -eq 0 ]
+    [ $(echo "$output" | grep -c 'Found Secrets: 0') -eq 1 ]
+}
+
 @test "git-seekrets does not find secrets in test repo" {
     run addFileWithNoSecrets
     [ $status -eq 0 ]
