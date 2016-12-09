@@ -4,7 +4,8 @@
 #rsa-private.rule
 SEEKRET_DEFAULT_RULES="
 aws.rule
-newrelic.rule"
+newrelic.rule
+mandrill.rule"
 
 fancy_echo() {
   # shellcheck disable=SC2039

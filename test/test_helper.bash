@@ -12,6 +12,15 @@ cleanGitRepo() {
     rm -fr "${REPO_PATH}"
 }
 
+addFalseMandrillKey() {
+    local secrets_file="$1"
+
+    touch "${secrets_file}"
+    echo "Fake keys in this file" >> "${secrets_file}"
+    echo "password => ENV['MANDRILL_API_KEY']" >> "${secrets_file}"
+    echo "password: MANDRILL_PASSWORD" >> "${secrets_file}"
+}
+
 addFalseNewrelicSecrets() {
     local secrets_file="$1"
 
@@ -20,6 +29,14 @@ addFalseNewrelicSecrets() {
     echo "github.com/18f/#$(seq -s '' 2 1 25)" >> "${secrets_file}"
     echo "sha = $(seq -s '' 4 1 26)" >> "${secrets_file}"
     echo "revision: $(seq -s '' 6 1 27)" >> "${secrets_file}"
+}
+
+addMandrillKey() {
+    local secrets_file="$1"
+
+    touch "${secrets_file}"
+    echo "Keys in this file" >> "${secrets_file}"
+    echo "password: p$(jot -s '' -w p%c 11 c)" >> "${secrets_file}"
 }
 
 addNewrelicSecrets() {
@@ -83,6 +100,24 @@ addFileWithFalseNewrelicSecrets() {
 
     touch "${secrets_file}"
     addFalseNewrelicSecrets "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithFalseMandrillKey() {
+    local secrets_file="${REPO_PATH}/secretsfile.md"
+
+    touch "${secrets_file}"
+    addFalseMandrillKey "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithMandrillKey() {
+    local secrets_file="${REPO_PATH}/secretsfile.md"
+
+    touch "${secrets_file}"
+    addMandrillKey "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
