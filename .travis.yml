@@ -11,3 +11,4 @@ script:
   - shellcheck mac
   - shellcheck seekrets-install
   - sh -C "mac"
+  - bats test/seekrets.bats
