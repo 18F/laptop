@@ -35,7 +35,7 @@ toolversion() {
 }
 
 
-set -e
+set -ex
 
 if toolversion git '>=' 2.9.1; then
   fancy_echo "Installing Seekret"
