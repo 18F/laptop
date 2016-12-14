@@ -60,6 +60,9 @@ More [detailed instructions with a video][video] are available in the Wiki.
 curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | sh -
 ```
 
+**git-seekret will install global git hooks into ~/.git-support/hooks.   To restore pre-existing git hooks, it is recommended to save pre-existing hooks into a seperate directory and to copy those hooks into ~/.git-support/hooks after git-seekret is installed.**
+
+
 Debugging
 ---------
 

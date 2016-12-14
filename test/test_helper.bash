@@ -17,8 +17,16 @@ addFalseMandrillKey() {
 
     touch "${secrets_file}"
     echo "Fake keys in this file" >> "${secrets_file}"
-    echo "password => ENV['MANDRILL_API_KEY']" >> "${secrets_file}"
-    echo "password: MANDRILL_PASSWORD" >> "${secrets_file}"
+    echo "MANDRILL_API_KEY => ENV['MANDRILL_API_KEY']" >> "${secrets_file}"
+    echo "mandrill_api_key: ENV['MANDRILL_API_KEY']" >> "${secrets_file}"
+}
+
+addFalseMandrillPassword() {
+    local secrets_file="$1"
+
+    touch "${secrets_file}"
+    echo "Fake passwords in this file" >> "${secrets_file}"
+    echo "MANDRILL_PASSWORD: ENV['MANDRILL_PASSWORD']" >> "${secrets_file}"
 }
 
 addFalseNewrelicSecrets() {
@@ -36,7 +44,15 @@ addMandrillKey() {
 
     touch "${secrets_file}"
     echo "Keys in this file" >> "${secrets_file}"
-    echo "password: p$(jot -s '' -w p%c 11 c)" >> "${secrets_file}"
+    echo "mandrill_api_key: p$(jot -s '' -w p%c 11 c)" >> "${secrets_file}"
+}
+
+addMandrillPassword() {
+    local secrets_file="$1"
+
+    touch "${secrets_file}"
+    echo "Secrets in this file" >> "${secrets_file}"
+    echo "MANDRILL_PASSWORD: pa+$(jot -s '' -w K%c 5 c)-$(jot -s '' -w K%c 5 c)%" >> "${secrets_file}"
 }
 
 addNewrelicSecrets() {
@@ -113,11 +129,29 @@ addFileWithFalseMandrillKey() {
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
+addFileWithFalseMandrillPassword() {
+    local secrets_file="${REPO_PATH}/secretsfile.md"
+
+    touch "${secrets_file}"
+    addFalseMandrillPassword "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
 addFileWithMandrillKey() {
     local secrets_file="${REPO_PATH}/secretsfile.md"
 
     touch "${secrets_file}"
     addMandrillKey "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithMandrillPassword() {
+    local secrets_file="${REPO_PATH}/secretsfile.md"
+
+    touch "${secrets_file}"
+    addMandrillPassword "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
