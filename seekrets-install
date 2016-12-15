@@ -36,12 +36,18 @@ toolversion() {
 }
 
 get_platform() {
-  OS=$(uname -s)
-  if [ "x${OS}" == "xDarwin" ]; then
-    PLATFORM="osx"
-  elif [ "x${OS}" == "xLinux" ]; then
-    PLATFORM="linux"
-  fi
+  case $OSTYPE in
+    linux*)
+      PLATFORM=linux
+      ;;
+    darwin*)
+      PLATFORM=osx
+      ;;
+    *)
+      echo "unknown platform: $OSTYPE"
+      exit 1
+      ;;
+  esac
 }
 
 set -e
