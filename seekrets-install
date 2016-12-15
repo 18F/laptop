@@ -37,9 +37,9 @@ toolversion() {
 
 get_platform() {
   OS=$(uname -s)
-  if [ $OS == 'Darwin' ]; then
+  if [ "x${OS}" == "xDarwin" ]; then
     PLATFORM="osx"
-  elif [ $OS == 'Linux' ]; then
+  elif [ "x${OS}" == "xLinux" ]; then
     PLATFORM="linux"
   fi
 }
