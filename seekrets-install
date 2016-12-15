@@ -35,6 +35,14 @@ toolversion() {
     }'
 }
 
+get_platform() {
+  OS=$(uname -s)
+  if [ $OS == 'Darwin' ]; then
+    PLATFORM="osx"
+  elif [ $OS == 'Linux' ]; then
+    PLATFORM="linux"
+  fi
+}
 
 set -e
 
@@ -43,7 +51,8 @@ if toolversion git '>=' 2.9.1; then
   WORK_DIR=$( mktemp -d -t "$( basename "${CURRENT_DIR}" )" )
   pushd "${WORK_DIR}" > /dev/null
   git init > /dev/null
-  LATEST_RELEASE_URL=$(curl -s https://github.com/18F/git-seekret/releases | grep "18F/git-seekret/releases/download" | grep 'osx' | head -n 1 | cut -d '"' -f 2)
+  get_platform
+  LATEST_RELEASE_URL=$(curl -s https://github.com/18F/git-seekret/releases | grep "18F/git-seekret/releases/download" | grep ${PLATFORM} | head -n 1 | cut -d '"' -f 2)
   AWS_URL=$(curl -s "https://github.com${LATEST_RELEASE_URL}" | cut -d '"' -f2 | sed -e "s/amp\;//g")
   (curl "$AWS_URL" -o /usr/local/bin/git-seekret > /dev/null \
     && chmod u+x /usr/local/bin/git-seekret)
@@ -58,7 +67,7 @@ if toolversion git '>=' 2.9.1; then
   do
       printf "\t%s: " "$rule"
       (cd "${SEEKRET_RULES_PATH}" \
-	  && curl -# -o "${rule}" "${SEEKRET_RULES_URL}/${rule}" > /dev/null)
+       && curl -# -o "${rule}" "${SEEKRET_RULES_URL}/${rule}" > /dev/null)
       printf "done\n"
   done
   fancy_echo "Configuring Seekret"
