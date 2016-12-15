@@ -39,8 +39,6 @@ toolversion() {
 set -e
 
 if toolversion git '>=' 2.9.1; then
-  fancy_echo "Ensuring libgit installed"
-  brew install libgit2 > /dev/null
   fancy_echo "Installing Seekret"
   WORK_DIR=$( mktemp -d -t "$( basename "${CURRENT_DIR}" )" )
   pushd "${WORK_DIR}" > /dev/null
