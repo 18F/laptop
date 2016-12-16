@@ -1,5 +1,4 @@
 #!/usr/bin/env bats
-
 REPO_PATH=$(mktemp -d "${BATS_TMPDIR}/gittest.XXXXXX")
 LOCAL_SEEKRETS="$(dirname $BATS_TEST_DIRNAME)/seekret-rules"
 
@@ -30,6 +29,8 @@ addFalseMandrillPassword() {
     touch "${secrets_file}"
     echo "Fake passwords in this file" >> "${secrets_file}"
     echo "MANDRILL_PASSWORD: ENV['MANDRILL_PASSWORD']" >> "${secrets_file}"
+    echo "MANDRILL_PASSWORD: ''" >> "${secrets_file}"
+    echo "address\":smtp.mandrillaapp.compassword:1234" >> "${secrets_file}"
 }
 
 addFalseNewrelicSecrets() {
@@ -56,6 +57,17 @@ addMandrillPassword() {
     touch "${secrets_file}"
     echo "Secrets in this file" >> "${secrets_file}"
     echo "MANDRILL_PASSWORD: pa+$(jot -s '' -w K%c 5 c)-$(jot -s '' -w K%c 5 c)%" >> "${secrets_file}"
+    printf "export MANDRILL_PASSWORD" >> "${secrets_file}"
+    echo "='TNT42__H1_18fZbbT+c41A'" >> "${secrets_file}"
+}
+
+addMandrillUsername() {
+    local secrets_file="$1"
+
+    touch "${secrets_file}"
+    echo "Secrets in this file" >> "${secrets_file}"
+    printf "MANDRILL_USERNAME"  >> "${secrets_file}"
+    echo ": notauser@example.com" >> "${secrets_file}"
 }
 
 addNewrelicSecrets() {
@@ -63,7 +75,8 @@ addNewrelicSecrets() {
 
     touch "${secrets_file}"
     echo "Secrets in this file" >> "${secrets_file}"
-    echo "$(seq -s '' 2 1 25)" >> "${secrets_file}"
+    printf "NEW_RELIC_LICENSE_KEY" >> "${secrets_file}"
+    echo ": 6333476647d1758c8fe524655342a3c56lff45ac"  >> "${secrets_file}"
 }
 
 addFileWithNoSecrets() {
@@ -81,6 +94,14 @@ addFileWithAwsSecrets() {
     touch "${secrets_file}"
     echo "SHHHH... Secrets in this file" >> "${secrets_file}"
     echo "aws_secret_key: $(seq -s '' 8 1 28)" >> "${secrets_file}"
+    printf "AWS_SECRET_ACCESS_KEY" >> "${secrets_file}"
+    echo ": fhhlE5DalovdNsSVY3Zu0D/oi9RZF5gvEt6h7ofU" >> "${secrets_file}"
+    printf "secretKey" >> "${secrets_file}"
+    echo ":  fqhl4EDajovdNsSVV3Zu0F/oi9RZF5qvEt6h7bfU" >> "${secrets_file}"
+    printf "key_id" >> "${secrets_file}"
+    echo ": AKIALLVCLLYFEWP5MWXA" >> "${secrets_file}"
+    printf "secret_key" >> "${secrets_file}"
+    echo ": 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" >> "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
@@ -91,6 +112,18 @@ addFileWithAwsAccounts() {
     touch "${secrets_file}"
     echo "SHHHH... Secrets in this file" >> "${secrets_file}"
     echo "aws_account_id=$(jot -s '-' 4 1024 5096)" >> "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithAwsAccessKey() {
+    local secrets_file="${REPO_PATH}/secretsfile.md"
+
+    touch "${secrets_file}"
+    echo "SHHHH... Secrets in this file" >> "${secrets_file}"
+    echo "aws_key: $(seq -s '' 8 1 28)" >> "${secrets_file}"
+    printf "AWS_ACCESS_KEY_ID" >> "${secrets_file}"
+    echo ": AKIAJLLCKKYFEWP5MWXA    " >> "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
@@ -155,6 +188,15 @@ addFileWithMandrillPassword() {
 
     touch "${secrets_file}"
     addMandrillPassword "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
+addFileWithMandrillUsername() {
+    local secrets_file="${REPO_PATH}/secretsfile.md"
+
+    touch "${secrets_file}"
+    addMandrillUsername "${secrets_file}"
     (cd "${REPO_PATH}" && git add "${secretsfile}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }

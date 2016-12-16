@@ -55,6 +55,11 @@ load test_helper
     [ $status -gt 0 ]
 }
 
+@test "git-seekrets does find aws access keys in test repo" {
+    run addFileWithAwsAccessKey
+    [ $status -gt 0 ]
+}
+
 @test "git-seekrets does find newrelic secrets in test repo" {
     run addFileWithNewRelicSecrets
     [ $status -gt 0 ]
@@ -92,6 +97,11 @@ load test_helper
     run addFileWithFalseMandrillPassword
     [ $status -eq 0 ]
     [ $(echo "$output" | grep -c 'Found Secrets: 0') -eq 1 ]
+}
+
+@test "git-seekrets does find mandrill usernames in test repo" {
+    run addFileWithMandrillUsername
+    [ $status -gt 0 ]
 }
 
 @test "git-seekrets does not find secrets in test repo" {
