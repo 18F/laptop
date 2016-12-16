@@ -60,6 +60,12 @@ load test_helper
     [ $status -gt 0 ]
 }
 
+@test "git-seekrets does not find newrelic keys as aws keys in test repo" {
+    run addFileWithNewrelicSecrets
+    [ $status -gt 0 ]
+    [ $(echo "$output" | grep -c 'Found Secrets: 1') -eq 1 ]
+}
+
 @test "git-seekrets does find newrelic secrets in test repo" {
     run addFileWithNewRelicSecrets
     [ $status -gt 0 ]

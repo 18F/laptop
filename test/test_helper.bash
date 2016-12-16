@@ -102,7 +102,7 @@ addFileWithAwsSecrets() {
     echo ": AKIALLVCLLYFEWP5MWXA" >> "${secrets_file}"
     printf "secret_key" >> "${secrets_file}"
     echo ": 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" >> "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -112,7 +112,7 @@ addFileWithAwsAccounts() {
     touch "${secrets_file}"
     echo "SHHHH... Secrets in this file" >> "${secrets_file}"
     echo "aws_account_id=$(jot -s '-' 4 1024 5096)" >> "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -124,7 +124,7 @@ addFileWithAwsAccessKey() {
     echo "aws_key: $(seq -s '' 8 1 28)" >> "${secrets_file}"
     printf "AWS_ACCESS_KEY_ID" >> "${secrets_file}"
     echo ": AKIAJLLCKKYFEWP5MWXA    " >> "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -133,7 +133,7 @@ addFileWithNewrelicSecrets() {
 
     touch "${secrets_file}"
     addNewrelicSecrets "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -143,7 +143,7 @@ addFileWithSomeNewrelicSecrets() {
     touch "${secrets_file}"
     addFalseNewrelicSecrets "${secrets_file}"
     addNewrelicSecrets "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -152,7 +152,7 @@ addFileWithFalseNewrelicSecrets() {
 
     touch "${secrets_file}"
     addFalseNewrelicSecrets "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -161,7 +161,7 @@ addFileWithFalseMandrillKey() {
 
     touch "${secrets_file}"
     addFalseMandrillKey "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -170,7 +170,7 @@ addFileWithFalseMandrillPassword() {
 
     touch "${secrets_file}"
     addFalseMandrillPassword "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -179,7 +179,7 @@ addFileWithMandrillKey() {
 
     touch "${secrets_file}"
     addMandrillKey "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -188,7 +188,7 @@ addFileWithMandrillPassword() {
 
     touch "${secrets_file}"
     addMandrillPassword "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
@@ -197,7 +197,7 @@ addFileWithMandrillUsername() {
 
     touch "${secrets_file}"
     addMandrillUsername "${secrets_file}"
-    (cd "${REPO_PATH}" && git add "${secretsfile}")
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
