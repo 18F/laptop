@@ -1,0 +1,70 @@
+Some Sources of Ideas for Rules:
+
+https://github.com/michenriksen/gitrob
+and the signature JSON file here:  https://github.com/michenriksen/gitrob/blob/master/signatures.json
+https://github.com/techgaun/github-dorks
+https://github.com/danielmiessler/SecLists/tree/master/Pattern_Matching
+
+    Private SSH key
+    SSH configuration file
+    Potential cryptographic private key
+    Potential cryptographic key bundle
+    Web browser history file
+    Any single-sign-on credential storage file
+    Contains word: backup
+    Contains word: dump
+    Contains word: password
+    Contains word: credential
+    Contains word: secret
+    Contains words: private, key
+    Pidgin OTR private key
+    Shell command history file
+    MySQL client command history file
+    PostgreSQL client command history file
+    Eclipse configuration file
+    JBoss configuration xml
+    PostgreSQL password file
+    Ruby IRB console history file
+    Pidgin chat client account configuration file
+    Hexchat/XChat IRC client server list configuration file
+    Irssi IRC client configuration file
+    Mutt e-mail client configuration file
+    AWS CLI credentials file
+    T command-line Twitter client configuration file
+    OpenVPN client configuration file
+    Shell configuration file
+    Shell profile configuration file
+    Shell command alias configuration file
+    Ruby On Rails secret token configuration file
+    OmniAuth configuration file
+    any files containing KEK or key files for data store access in java
+    Ruby On Rails database schema file
+    Potential Ruby On Rails database configuration file
+    Django configuration file
+    PHP configuration file
+    KeePass password manager database file
+    1Password password manager database file
+    Apple Keychain database file
+    GNOME Keyring database file
+    Generic system log file
+    Network traffic capture file
+    SQL dump file
+    Jenkins publish over SSH plugin file
+    Potential Jenkins credentials file
+    Apache htpasswd file
+    Configuration file for auto-login process
+    KDE Wallet Manager database file
+    Potential MediaWiki configuration file
+    Tunnelblick VPN configuration file
+    Rubygems credentials file
+    Potential MSBuild publish profile
+    Sequel Pro MySQL database manager bookmark file
+    git-credential-store helper credentials file
+    Git configuration file
+    Chef Knife configuration file
+    Chef private key
+    cPanel backup ProFTPd credentials file
+    Robomongo MongoDB manager configuration file
+    FileZilla FTP configuration or recent servers list
+    Docker configuration file
+    Environment configuration file
