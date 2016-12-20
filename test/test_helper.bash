@@ -14,6 +14,16 @@ cleanGitRepo() {
     rm -fr "${REPO_PATH}"
 }
 
+enableOnlyRuleFile() {
+    local rule_file="$1"
+    local rule_file_rules=$(cd "${REPO_PATH}" && git-seekret rules | grep "$1\." | awk ' { print $2 } ')
+
+    (cd "${REPO_PATH}" && git-seekret rules --disable-all)
+    for rf in $rule_file_rules; do
+	(cd "${REPO_PATH}" && git-seekret rules --enable "${rf}")
+    done
+}
+
 addFalseMandrillKey() {
     local secrets_file="$1"
 
@@ -76,7 +86,7 @@ addNewrelicSecrets() {
     touch "${secrets_file}"
     echo "Secrets in this file" >> "${secrets_file}"
     printf "NEW_RELIC_LICENSE_KEY" >> "${secrets_file}"
-    echo ": 6333476647d1758c8fe524655342a3c56lff45ac"  >> "${secrets_file}"
+    echo ": 6333476647d1758c8fe524655342a3c561ff45ac"  >> "${secrets_file}"
 }
 
 addFileWithNoSecrets() {
