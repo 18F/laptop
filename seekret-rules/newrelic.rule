@@ -1,5 +1,5 @@
 license_key:
-  match: (\"|')?(license)?_?(key)?\s*(:|=>|=)?\s*(\"|')?[0-9A-Fa-f]{40}(\"|')?
+  match: (\"|')?(NEW|New|new)?_?(RELIC|Relic|relic)_?(LICENSE|License|license)?_?(KEY|Key|key)?\s*(:|=>|=)?\s*(\"|')?[0-9A-Fa-f]{40}(\"|')?
   unmatch:
     - (\"|')?github.com.*/#[A-Za-z0-9]{40}(\"|')?
     - (\"|')?sha(\"|')?\s*(:|=>|=)\s*(\"|')?[A-Za-z0-9]{40}(\"|')?
