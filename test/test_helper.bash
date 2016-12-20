@@ -1,9 +1,12 @@
 #!/usr/bin/env bats
 
 REPO_PATH=$(mktemp -d "${BATS_TMPDIR}/gittest.XXXXXX")
+LOCAL_SEEKRETS="$(dirname $BATS_TEST_DIRNAME)/seekret-rules"
 
 setupGitRepo() {
     git init "${REPO_PATH}"
+    git config --local gitseekret.rulespath "$LOCAL_SEEKRETS"
+    git config --global gitseekret.rulespath "$LOCAL_SEEKRETS"
     (cd "${REPO_PATH}" && git-seekret rules --enable-all)
 }
 
