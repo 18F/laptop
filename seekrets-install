@@ -72,7 +72,7 @@ if toolversion git '>=' 2.9.1; then
   export SEEKRET_RULES_PATH="${HOME}/.git-support/seekret-rules"
   mkdir -p "${SEEKRET_RULES_PATH}"
   # Download rules
-  SEEKRET_RULES_URL="https://raw.githubusercontent.com/18F/laptop/seekret/seekret-rules"
+  SEEKRET_RULES_URL="https://raw.githubusercontent.com/18F/laptop/master/seekret-rules"
   SEEKRET_RULES="${SEEKRET_RULES:=$SEEKRET_DEFAULT_RULES}"
   for rule in ${SEEKRET_RULES}
   do
