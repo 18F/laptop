@@ -2,7 +2,15 @@
 
 # Add new baseline rules here
 #rsa-private.rule
-SEEKRET_DEFAULT_RULES=$( ls ./seekret-rules )
+SEEKRET_DEFAULT_RULES="
+aws.rule
+newrelic.rule
+mandrill.rule"
+
+if [ -d ./seekret-rules ]
+then
+  SEEKRET_DEFAULT_RULES=$( ls ./seekret-rules )
+fi
 
 fancy_echo() {
   # shellcheck disable=SC2039
