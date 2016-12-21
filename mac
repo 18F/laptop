@@ -234,7 +234,6 @@ elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
   open ~/Applications/GitHub\ Desktop.app
 fi
 
-# TODO: Change to master for merge
-curl -s https://raw.githubusercontent.com/18F/laptop/seekret/seekrets-install | sh -
+curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | sh -
 
 fancy_echo 'All done!'
