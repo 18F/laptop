@@ -96,7 +96,7 @@ You can test secret rulesets using BATS for automated testing and manually using
 
 ##### Let's talk about BATS
 
-Please read the [local BATS documentation](./test/README.md).
+Please read the [local BATS documentation](./test).
 
 ##### Let's talk about local manual testing
 

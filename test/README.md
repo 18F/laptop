@@ -1,3 +1,5 @@
+## Local BATS documentation
+
 Testing for the `git-seekrets` is performed via a testing framework called
 [BATS](https://github.com/sstephenson/bats).  To create an associated test
 for new seekrets rulesets, it is necessary to install BATS.   More
