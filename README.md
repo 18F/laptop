@@ -62,6 +62,69 @@ curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | s
 
 **git-seekret will install global git hooks into ~/.git-support/hooks.   To restore pre-existing git hooks, it is recommended to save pre-existing hooks into a seperate directory and to copy those hooks into ~/.git-support/hooks after git-seekret is installed.**
 
+Development
+-----------
+
+### Git Seekret
+
+This section covers contributing and developing new rulesets for `git-seekrets`.
+
+The rules installed by the `seekret-install` script are located in the `seekret-rules` directory at the root of this repository.  Inside each rule file is a list of rules.  The rule file can be considered a tree with the rules as the leaves of the tree.
+
+An example rule file is below:
+
+```yaml
+thing_to_match:
+  match: r[egx]{2,}p?
+  unmatch:
+    - r[egx]{2,}p?
+    - r[egx]{2,}p?
+    - r[egx]{2,}p?
+```
+
+Using the example above, let's break down each stanza:
+
+- `thing_to_match` : The name of the rule we'd like to match / unmatch. This can be anything that makes sense for the `.rule` file being created / edited.
+- `match` : A single regular expression which will be used to match any rules for the name above.
+- `unmatch` : A list of regular expressions which will be used to unmatch anything that the `match` rule matches.
+
+Feel free to submit an issue/create a pull request in order to submit a new ruleset or to apply a modifification to an existing ruleset.
+
+#### Testing Git Seekrets
+
+You can test secret rulesets using BATS for automated testing and manually using the installation script.
+
+##### Let's talk about BATS
+
+Please read the [local BATS documentation](./test).
+
+##### Let's talk about local manual testing
+
+To install the `*.rule` files located in the repo, just run the installation script locally. This will update your local `~/.git-support/seekret-rules` directory with the changes in this repository.
+
+```shell
+./seekrets-install
+```
+
+You should now be able to run the check within any repository on your machine.
+
+```shell
+git seekret check -c 0 # check for secrets within commit history
+```
+
+```shell
+git seekret check -s # check for secrets within staged files
+```
+
+**Don't forget to add the rule to `SEEKRET_DEFAULT_RULES` if your PR for a new rule is accepted**
+
+```shell
+SEEKRET_DEFAULT_RULES=" # <= default ruleset if installed via curl
+ aws.rule
+ newrelic.rule
+ mandrill.rule
+ new.rule"
+```
 
 Debugging
 ---------
@@ -95,6 +158,7 @@ What it sets up
 * [Virtualenv] for creating isolated Python environments (via [pyenv] if it is installed)
 * [Virtualenvwrapper] for extending Virtualenv (via [pyenv] if it is installed)
 * [Zsh] as your shell
+
 
 [Bundler]: http://bundler.io/
 [CloudApp]: http://getcloudapp.com/
