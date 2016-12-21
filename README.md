@@ -69,7 +69,7 @@ Development
 
 This section covers contributing and developing new rulesets for `git-seekrets`.
 
-The rules installed by the `seekret-install` script are located in the `seekret-rules` directory at the root of this repository.  Inside each rule file is a list of rules.  The rule file can be considered a tree with the rules inside the leaves of the tree.
+The rules installed by the `seekret-install` script are located in the `seekret-rules` directory at the root of this repository.  Inside each rule file is a list of rules.  The rule file can be considered a tree with the rules as the leaves of the tree.
 
 An example rule file is below:
 
@@ -116,7 +116,7 @@ git seekret check -c 0 # check for secrets within commit history
 git seekret check -s # check for secrets within staged files
 ```
 
-**Don't forget to add the rule to SEEKRET_DEFAULT_RULES if your PR for a new rule is accepted**
+**Don't forget to add the rule to `SEEKRET_DEFAULT_RULES` if your PR for a new rule is accepted**
 
 ```shell
 SEEKRET_DEFAULT_RULES=" # <= default ruleset if installed via curl
