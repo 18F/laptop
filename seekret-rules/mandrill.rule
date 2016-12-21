@@ -1,12 +1,12 @@
-mandrill_username:
+username:
   match: (\"|')?(MANDRILL|mandrill)_?(\"|')?(USERNAME|username)?(\"|')?\s*(:|=>|=)\s*(\"|')?[A-Za-z0-9_\-\.]+\@[A-Za-z0-9_\-\.]+(\"|')?
 
-mandrill_password:
+password:
   match: (\"|')?(MANDRILL|mandrill)_(\"|')?(PASSWORD|password)(\"|')?\s*(:|=>|=)\s*(\"|')?[A-Za-z0-9\+\!\^\%\*\-_]{8,}(\"|')?
   unmatch:
     - (\"|')?(MANDRILL|mandrill)_?(PASSWORD|password)(\"|')?\s*(:|=>|=)\s*(\"|')?\s*ENV\[\'MANDRILL_PASSWORD\'\]
 
-mandrill_api_key:
+api_key:
   match: (\"|')?(MANDRILL|mandrill)_?(API|api)?_?(KEY|key|Key)(\"|')?\s*(:|=>|=)\s*(\"|')?[A-Za-z0-9\-]{20,}(\"|')?
   unmatch:
     - (\"|')?(MANDRILL|mandrill)?_?(API|api)?_?(KEY|key|Key)(\"|')?\s*(:|=>|=)\s*(\"|')?ENV\[\'MANDRILL_API_KEY\'\](\"|')?
