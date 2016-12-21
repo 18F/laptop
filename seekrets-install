@@ -7,6 +7,11 @@ aws.rule
 newrelic.rule
 mandrill.rule"
 
+if [ -d ./seekret-rules ]
+then
+  SEEKRET_DEFAULT_RULES=$( ls ./seekret-rules )
+fi
+
 fancy_echo() {
   # shellcheck disable=SC2039
   local fmt="$1"; shift
