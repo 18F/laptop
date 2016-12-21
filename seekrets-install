@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# Add new baseline rules here
+#rsa-private.rule
+SEEKRET_DEFAULT_RULES="
+aws.rule
+newrelic.rule
+mandrill.rule"
+
+if [ -d ./seekret-rules ]
+then
+  SEEKRET_DEFAULT_RULES=$( ls ./seekret-rules )
+fi
+
+fancy_echo() {
+  # shellcheck disable=SC2039
+  local fmt="$1"; shift
+
+  # shellcheck disable=SC2059
+  printf "\n$fmt\n" "$@"
+}
+
+toolversion() {
+    # shellcheck disable=SC2039
+    local prog="$1" operator="$2" value="$3" version
+
+    version=$($prog --version | awk '{print $NF; exit}')
+
+    awk -v v1="$version" -v v2="$value" 'BEGIN {
+        split(v1, a, /\./); split(v2, b, /\./);
+        if (a[2] == b[2]) {
+          exit (a[3] '"${operator}"' b[3]) ? 0 : 1
+        }
+        else if (a[1] == b[1]) {
+          exit (a[2] '"${operator}"' b[2]) ? 0 : 1
+        }
+        else {
+          exit (a[1] '"${operator}"' b[1]) ? 0 : 1
+        }
+    }'
+}
+
+get_platform() {
+  case $OSTYPE in
+    linux*)
+      PLATFORM=linux
+      ;;
+    darwin*)
+      PLATFORM=osx
+      ;;
+    *)
+      echo "unknown platform: $OSTYPE"
+      exit 1
+      ;;
+  esac
+}
+
+set -e
+
+if toolversion git '>=' 2.9.1; then
+  fancy_echo "Installing Seekret"
+  WORK_DIR=$( mktemp -d -t "$( basename "${CURRENT_DIR}" )" )
+  pushd "${WORK_DIR}" > /dev/null
+  git init > /dev/null
+  get_platform
+  LATEST_RELEASE_URL=$(curl -s https://github.com/18F/git-seekret/releases | grep "18F/git-seekret/releases/download" | grep ${PLATFORM} | head -n 1 | cut -d '"' -f 2)
+  AWS_URL=$(curl -s "https://github.com${LATEST_RELEASE_URL}" | cut -d '"' -f2 | sed -e "s/amp\;//g")
+  (curl "$AWS_URL" -o /usr/local/bin/git-seekret > /dev/null \
+    && chmod u+x /usr/local/bin/git-seekret)
+
+  fancy_echo "Downloading Seekret rules"
+  export SEEKRET_RULES_PATH="${HOME}/.git-support/seekret-rules"
+  mkdir -p "${SEEKRET_RULES_PATH}"
+  # Download rules
+  SEEKRET_RULES_URL="https://raw.githubusercontent.com/18F/laptop/master/seekret-rules"
+  SEEKRET_RULES="${SEEKRET_RULES:=$SEEKRET_DEFAULT_RULES}"
+  for rule in ${SEEKRET_RULES}
+  do
+      printf "\t%s: " "$rule"
+      (cd "${SEEKRET_RULES_PATH}" \
+       && curl -# -o "${rule}" "${SEEKRET_RULES_URL}/${rule}" > /dev/null)
+      printf "done\n"
+  done
+  fancy_echo "Configuring Seekret"
+  mkdir -p "${HOME}/.git-support/hooks"
+  git config --global core.hooksPath "${HOME}/.git-support/hooks"
+  git seekret --global config --init
+  # Activate all installed rules
+  git seekret --global rules --enable-all
+  git seekret --global hook --enable-all
+
+  popd "${WORK_DIR}" > /dev/null
+  rm -rf "${WORK_DIR}"
+  fancy_echo "Finished installing Seekret"
+else
+  echo
+  echo "Looks like you need to install git 2.9.1 or better."
+  echo
+  echo "If you are using git from the command line, this should"
+  echo "be as easy as upgrading with homebrew:"
+  echo "   $ brew update && brew upgrade git"
+  echo
+  echo "If you are using GitHub Desktop, please upgrade to version"
+  echo "221 or better for OS X. Download: https://desktop.github.com/"
+  echo
+  exit 1;
+fi

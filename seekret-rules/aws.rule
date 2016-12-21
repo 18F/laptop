@@ -1,0 +1,12 @@
+secret_access_key:
+  match: (\"|')?(AWS|aws|Aws)_?(SECRET|secret|Secret)?_?(ACCESS|access|Access)?_?(KEY|key|Key)(\"|')?\s*(:|=>|=)\s*(\"|')?[A-Za-z0-9/\+=]{40}(\"|')?
+  unmatch:
+    - .+(RELIC|Relic|relic).+
+
+access_key_id:
+  match: (\"|')?(AWS|aws|Aws)_?(ACCESS|access|Access)?_?(KEY|key|Key)_?(ID|id|Id)(\"|')?\s*(:|=>|=)\s*(\"|')?[A-Za-z0-9]{20}(\"|')?
+  unmatch:
+    - .+(RELIC|Relic|relic).+
+
+account_id:
+  match: (\"|')?(AWS|aws|Aws)_?(ACCOUNT|account|Account)_?(ID|id|Id)?(\"|')?\s*(:|=>|=)\s*(\"|')?[0-9]{4}\-?[0-9]{4}\-?[0-9]{4}(\"|')?
