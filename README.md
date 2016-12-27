@@ -77,9 +77,8 @@ An example rule file is below:
 thing_to_match:
   match: r[egx]{2,}p?
   unmatch:
-    - r[egx]{2,}p?
-    - r[egx]{2,}p?
-    - r[egx]{2,}p?
+    - some_prefix\s*r[egx]{2,}p?
+    - r[egx]{2,}p?\s*some_suffix
 ```
 
 Using the example above, let's break down each stanza:
