@@ -132,6 +132,20 @@ Your last Laptop run will be saved to `~/laptop.log`. Read through it to see if
 you can debug the issue yourself. If not, copy and paste the entire log into a
 [new GitHub Issue](https://github.com/18F/laptop/issues/new) for us.
 
+#### Git Seekrets False Positives
+
+Sometimes the `git-seekrets` rules may indicate a false positive and matching
+things at aren't actually secrets. This can be solved in a number of ways, but
+the root cause is that the regular expressions used to `match` and `unmatch` for
+the specific rule that is being triggered and should be evaluated.
+
+Make sure you have [the latest rulesets from this repository by running the
+git-seekrets installation script](#want-to-install-just-git-seekret).
+
+If the ruleset is still triggering a false positive, please evaluate the
+corresponding `*.rule` file in the `~/.git-support/seekret-rules/` directory
+that is created and updated from running the installation script.
+
 What it sets up
 ---------------
 
