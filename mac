@@ -80,6 +80,16 @@ app_is_installed() {
   find /Applications -iname "$app_name*" -maxdepth 1 | egrep '.*' > /dev/null
 }
 
+latest_installed_ruby() {
+  find "$HOME/.rubies" -maxdepth 1 -name 'ruby-*' | tail -n1 | egrep -o '\d+\.\d+\.\d+'
+}
+
+switch_to_latest_ruby() {
+  # shellcheck disable=SC1091
+  . /usr/local/share/chruby/chruby.sh
+  chruby "ruby-$(latest_installed_ruby)"
+}
+
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
     curl -fsS \
@@ -190,20 +200,41 @@ fancy_echo 'Checking on Ruby installation...'
 
 append_to_file "$HOME/.gemrc" 'gem: --no-document'
 
-if ! command -v rbenv >/dev/null; then
-  if ! command -v rvm >/dev/null; then
-    fancy_echo 'Installing RVM and the latest Ruby...'
-    curl -L https://get.rvm.io | bash -s stable --ruby --auto-dotfiles --autolibs=enable
-    # shellcheck source=/dev/null
-    . ~/.rvm/scripts/rvm
+if command -v rbenv >/dev/null || command -v rvm >/dev/null; then
+  fancy_echo 'We recommend chruby and ruby-install over RVM or rbenv'
+else
+  if ! brew_is_installed "chruby"; then
+    fancy_echo 'Installing chruby, ruby-install, and the latest Ruby...'
+
+    brew bundle --file=- <<EOF
+    brew 'chruby'
+    brew 'ruby-install'
+EOF
+
+    append_to_file "$HOME/.zshrc" 'source /usr/local/share/chruby/chruby.sh'
+    append_to_file "$HOME/.zshrc" 'source /usr/local/share/chruby/auto.sh'
+
+    ruby-install ruby
+
+    append_to_file "$HOME/.zshrc" "chruby ruby-$(latest_installed_ruby)"
+
+    switch_to_latest_ruby
   else
-    local_version="$(rvm -v 2> /dev/null | awk '$2 != ""{print $2}')"
-    latest_version="$(curl -s https://raw.githubusercontent.com/wayneeseguin/rvm/stable/VERSION)"
-    if [ "$local_version" != "$latest_version" ]; then
-      fancy_echo 'Upgrading RVM...'
-      rvm get stable --auto-dotfiles --autolibs=enable --with-gems="bundler"
+    brew bundle --file=- <<EOF
+    brew 'chruby'
+    brew 'ruby-install'
+EOF
+    fancy_echo 'Checking if a newer version of Ruby is available...'
+    switch_to_latest_ruby
+
+    ruby-install --latest > /dev/null
+    latest_stable_ruby="$(cat < "$HOME/.cache/ruby-install/ruby/stable.txt" | tail -n1)"
+
+    if ! [ "$latest_stable_ruby" = "$(latest_installed_ruby)" ]; then
+      fancy_echo "Installing latest stable Ruby version: $latest_stable_ruby"
+      ruby-install ruby
     else
-      fancy_echo "Already using the latest version of RVM. Skipping..."
+      fancy_echo 'You have the latest version of Ruby'
     fi
   fi
 fi
@@ -223,9 +254,6 @@ if [ -f "$HOME/.laptop.local" ]; then
   # shellcheck source=/dev/null
   . "$HOME/.laptop.local"
 fi
-
-append_to_file "$HOME/.rvmrc" 'rvm_auto_reload_flag=2'
-append_to_file "$HOME/.rvm/gemsets/global.gems" 'bundler'
 
 if app_is_installed 'GitHub'; then
   fancy_echo "It looks like you've already configured your GitHub SSH keys."

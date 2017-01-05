@@ -136,6 +136,7 @@ you can debug the issue yourself. If not, copy and paste the entire log into a
 What it sets up
 ---------------
 
+* [chruby] for managing [Ruby] versions
 * [CloudApp] for sharing screenshots and making an animated GIF from a video
 * [Cloud Foundry CLI] for command line access to 18F's Cloud Foundry-based application platform
 * [Flux] for adjusting your Mac's display color so you can sleep better
@@ -151,7 +152,7 @@ What it sets up
 * [Postgres] for storing relational data
 * [pyenv] for managing Python versions if you do not have [Python] already installed (includes the latest 3.x [Python])
 * [Redis] for storing key-value data
-* [RVM] for managing Ruby versions (includes [Bundler] and the latest [Ruby])
+* [ruby-install] for installing different versions of Ruby
 * [Slack] for communicating with your team
 * [Sublime Text 3] for coding all the things
 * [The Silver Searcher] for finding things in files
@@ -161,6 +162,7 @@ What it sets up
 
 
 [Bundler]: http://bundler.io/
+[chruby]: https://github.com/postmodern/chruby
 [CloudApp]: http://getcloudapp.com/
 [Cloud Foundry CLI]: https://github.com/cloudfoundry/cli
 [Flux]: https://justgetflux.com/
@@ -180,7 +182,7 @@ What it sets up
 [pyenv]: https://github.com/yyuu/pyenv/
 [Redis]: http://redis.io/
 [Ruby]: https://www.ruby-lang.org/en/
-[RVM]: https://github.com/wayneeseguin/rvm
+[ruby-install]: https://github.com/postmodern/ruby-install
 [Slack]: https://slack.com/
 [Sublime Text 3]: http://www.sublimetext.com/3
 [The Silver Searcher]: https://github.com/ggreer/the_silver_searcher
