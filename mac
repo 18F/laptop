@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Welcome to the 18F laptop script!
 # Be prepared to turn your laptop (or desktop)
@@ -24,11 +24,29 @@ append_to_file() {
     else
       file="$HOME/.zshrc"
     fi
+  elif [ "$file" = "$HOME/.bash_profile" ]; then
+    file="$HOME/.bash_profile"
   fi
 
   if ! grep -qs "^$text$" "$file"; then
     printf "\n%s\n" "$text" >> "$file"
   fi
+}
+
+create_zshrc_and_set_it_as_shell_file() {
+  if [ ! -f "$HOME/.zshrc" ]; then
+    touch "$HOME/.zshrc"
+  fi
+
+  shell_file="$HOME/.zshrc"
+}
+
+create_bash_profile_and_set_it_as_shell_file() {
+  if [ ! -f "$HOME/.bash_profile" ]; then
+    touch "$HOME/.bash_profile"
+  fi
+
+  shell_file="$HOME/.bash_profile"
 }
 
 # shellcheck disable=SC2154
@@ -40,19 +58,37 @@ if [ ! -d "$HOME/.bin/" ]; then
   mkdir "$HOME/.bin"
 fi
 
-if [ ! -f "$HOME/.zshrc" ]; then
-  touch "$HOME/.zshrc"
-fi
-
-# shellcheck disable=SC2016
-append_to_file "$HOME/.zshrc" 'export PATH="$HOME/.bin:$PATH"'
-
 case "$SHELL" in
-  */zsh) : ;;
+  */zsh) :
+    create_zshrc_and_set_it_as_shell_file
+    ;;
   *)
+    create_bash_profile_and_set_it_as_shell_file
     if [ -z "$CI" ]; then
-      fancy_echo "Changing your shell to zsh ..."
-      chsh -s "$(which zsh)"
+      bold=$(tput bold)
+      normal=$(tput sgr0)
+      echo "Want to switch your shell from the default ${bold}bash${normal} to ${bold}zsh${normal}?"
+      echo "Both work fine for development, and ${bold}zsh${normal} has some extra "
+      echo "features for customization and tab completion."
+      echo "If you aren't sure or don't care, we recommend ${bold}zsh${normal}."
+      echo -n "Press ${bold}y${normal} to switch to zsh, ${bold}n${normal} to keep bash: "
+      read -r -n 1 response
+      if [ "$response" = "y" ]; then
+        fancy_echo "=== Getting ready to change your shell to zsh. Please enter your password to continue. ==="
+        echo "=== Note that there won't be visual feedback when you type your password. Type it slowly and press return. ==="
+        echo "=== Press control-c to cancel ==="
+        create_zshrc_and_set_it_as_shell_file
+        chsh -s "$(which zsh)"
+        echo "Note that you can always switch back to ${bold}bash${normal} if you change your mind."
+        echo "To do that, run ${bold}chsh -s $(which bash)${normal}"
+        echo "Then quit and restart your Terminal app for the changes to take effect."
+        echo "Then, we recommend installing the latest version of ${bold}bash${normal} with Homebrew,"
+        echo "because the one that came with your Mac is really old."
+        echo "Run ${bold}brew install bash${normal} to install the latest version."
+        echo "Then quit and restart your Terminal app for the changes to take effect."
+      else
+        fancy_echo "Shell will not be changed."
+      fi
     else
       fancy_echo "CI System detected, will not change shells"
     fi
@@ -90,13 +126,16 @@ switch_to_latest_ruby() {
   chruby "ruby-$(latest_installed_ruby)"
 }
 
+# shellcheck disable=SC2016
+append_to_file "$shell_file" 'export PATH="$HOME/.bin:$PATH"'
+
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
     curl -fsS \
       'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
 
     # shellcheck disable=SC2016
-    append_to_file "$HOME/.zshrc" 'export PATH="/usr/local/bin:$PATH"'
+    append_to_file "$shell_file" 'export PATH="/usr/local/bin:$PATH"'
 else
   fancy_echo "Homebrew already installed. Skipping ..."
 fi
@@ -128,7 +167,7 @@ fancy_echo "Installing formulas and casks from the Brewfile ..."
 brew bundle
 
 # shellcheck disable=SC2016
-append_to_file "$HOME/.zshrc" 'eval "$(hub alias -s)"'
+append_to_file "$shell_file" 'eval "$(hub alias -s)"'
 
 fancy_echo 'Checking on Node.js installation...'
 
@@ -164,9 +203,9 @@ if ! brew_is_installed "python3"; then
   brew 'pyenv-virtualenvwrapper'
 EOF
   # shellcheck disable=SC2016
-  append_to_file "$HOME/.zshrc" 'if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi'
+  append_to_file "$shell_file" 'if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi'
   # shellcheck disable=SC2016
-  append_to_file "$HOME/.zshrc" 'if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi'
+  append_to_file "$shell_file" 'if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi'
 
   # pyenv currently doesn't have a convenience version to use, e.g., "latest",
   # so we check for the latest version against Homebrew instead.
@@ -187,9 +226,9 @@ if ! brew_is_installed "pyenv-virtualenvwrapper"; then
   if ! pip3 list | ag "virtualenvwrapper" > /dev/null; then
     fancy_echo 'Installing virtualenvwrapper...'
     pip3 install virtualenvwrapper
-    append_to_file "$HOME/.zshrc" 'export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3'
-    append_to_file "$HOME/.zshrc" 'export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv'
-    append_to_file "$HOME/.zshrc" 'source /usr/local/bin/virtualenvwrapper.sh'
+    append_to_file "$shell_file" 'export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3'
+    append_to_file "$shell_file" 'export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv'
+    append_to_file "$shell_file" 'source /usr/local/bin/virtualenvwrapper.sh'
   fi
 fi
 
@@ -211,12 +250,12 @@ else
     brew 'ruby-install'
 EOF
 
-    append_to_file "$HOME/.zshrc" 'source /usr/local/share/chruby/chruby.sh'
-    append_to_file "$HOME/.zshrc" 'source /usr/local/share/chruby/auto.sh'
+    append_to_file "$shell_file" 'source /usr/local/share/chruby/chruby.sh'
+    append_to_file "$shell_file" 'source /usr/local/share/chruby/auto.sh'
 
     ruby-install ruby
 
-    append_to_file "$HOME/.zshrc" "chruby ruby-$(latest_installed_ruby)"
+    append_to_file "$shell_file" "chruby ruby-$(latest_installed_ruby)"
 
     switch_to_latest_ruby
   else

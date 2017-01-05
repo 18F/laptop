@@ -10,5 +10,5 @@ before_script:
 script:
   - shellcheck mac
   - shellcheck seekrets-install
-  - sh -C "mac"
+  - bash mac
   - bats test/seekrets.bats
