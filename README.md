@@ -134,10 +134,9 @@ you can debug the issue yourself. If not, copy and paste the entire log into a
 
 #### Git Seekrets False Positives
 
-Sometimes the `git-seekrets` rules may indicate a false positive and matching
-things at aren't actually secrets. This can be solved in a number of ways, but
-the root cause is that the regular expressions used to `match` and `unmatch` for
-the specific rule that is being triggered and should be evaluated.
+Sometimes the `git-seekrets` rules may indicate a false positive and match
+things that aren't actually secrets. This can happen if the regular
+expressions used to `match` and `unmatch` are too strict.
 
 Make sure you have [the latest rulesets from this repository by running the
 git-seekrets installation script](#want-to-install-just-git-seekret).
