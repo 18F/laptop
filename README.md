@@ -141,9 +141,15 @@ expressions used to `match` and `unmatch` are too strict.
 Make sure you have [the latest rulesets from this repository by running the
 git-seekrets installation script](#want-to-install-just-git-seekret).
 
-If the ruleset is still triggering a false positive, please evaluate the
-corresponding `*.rule` file in the `~/.git-support/seekret-rules/` directory
-that is created and updated from running the installation script.
+If the ruleset is still triggering a false positive, please open an issue
+(or a pull request if you know how to fix the regular expression), and
+include the text that is being treated as a false positive, along with the
+rules installed on your computer. Please run this command to output
+your current rules, then copy and paste them into the GitHub issue:
+
+```shell
+cat ~/.git-support/seekret-rules/*.rule
+```
 
 What it sets up
 ---------------
