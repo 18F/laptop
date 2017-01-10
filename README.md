@@ -77,9 +77,8 @@ An example rule file is below:
 thing_to_match:
   match: r[egx]{2,}p?
   unmatch:
-    - r[egx]{2,}p?
-    - r[egx]{2,}p?
-    - r[egx]{2,}p?
+    - some_prefix\s*r[egx]{2,}p?
+    - r[egx]{2,}p?\s*some_suffix
 ```
 
 Using the example above, let's break down each stanza:
@@ -132,6 +131,25 @@ Debugging
 Your last Laptop run will be saved to `~/laptop.log`. Read through it to see if
 you can debug the issue yourself. If not, copy and paste the entire log into a
 [new GitHub Issue](https://github.com/18F/laptop/issues/new) for us.
+
+#### Git Seekrets False Positives
+
+Sometimes the `git-seekrets` rules may indicate a false positive and match
+things that aren't actually secrets. This can happen if the regular
+expressions used to `match` and `unmatch` are too strict.
+
+Make sure you have [the latest rulesets from this repository by running the
+git-seekrets installation script](#want-to-install-just-git-seekret).
+
+If the ruleset is still triggering a false positive, please open an issue
+(or a pull request if you know how to fix the regular expression), and
+include the text that is being treated as a false positive, along with the
+rules installed on your computer. Please run this command to output
+your current rules, then copy and paste them into the GitHub issue:
+
+```shell
+cat ~/.git-support/seekret-rules/*.rule
+```
 
 What it sets up
 ---------------
