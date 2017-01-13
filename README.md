@@ -310,6 +310,35 @@ To start all services at once:
 brew services start --all
 ```
 
+How to switch your shell back to bash from zsh (or vice versa)
+--------------------------------------------------------------
+1. Find out which shell you're currently running: `echo $SHELL`
+2. Find out the location of the shell you want to switch to. For example, if
+   you want to switch to `bash`, run `which bash`.
+3. Verify if the shell location is included in `/etc/shells`.
+   Run `cat /etc/shells` to see the contents of the file.
+4. If the location of the shell is included, run
+   `chsh -s [the location of the shell]`.
+   For example, if `which bash` returned `/bin/bash`, you would run
+  `chsh -s /bin/bash`.
+
+   If the location of the shell is not in `/etc/shells`, add it, then run the
+   `chsh` command.
+   If you have Sublime Text, you can open the file by running
+   `subl /etc/shells`.
+5. Quit and restart Terminal (or iTerm2), or open a new tab for the new shell
+   to take effect.
+
+Whether you're using bash or zsh, we recommend installing the latest versions
+with Homebrew because the versions that came with your Mac are really old.
+```
+brew install bash
+```
+or
+```
+brew install zsh
+```
+
 Credits
 -------
 

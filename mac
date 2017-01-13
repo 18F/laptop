@@ -71,6 +71,8 @@ case "$SHELL" in
       echo "Both work fine for development, and ${bold}zsh${normal} has some extra "
       echo "features for customization and tab completion."
       echo "If you aren't sure or don't care, we recommend ${bold}zsh${normal}."
+      echo "Note that you can always switch back to ${bold}bash${normal} if you change your mind."
+      echo "Please see the README for instructions."
       echo -n "Press ${bold}y${normal} to switch to zsh, ${bold}n${normal} to keep bash: "
       read -r -n 1 response
       if [ "$response" = "y" ]; then
@@ -79,13 +81,6 @@ case "$SHELL" in
         echo "=== Press control-c to cancel ==="
         create_zshrc_and_set_it_as_shell_file
         chsh -s "$(which zsh)"
-        echo "Note that you can always switch back to ${bold}bash${normal} if you change your mind."
-        echo "To do that, run ${bold}chsh -s $(which bash)${normal}"
-        echo "Then quit and restart your Terminal app for the changes to take effect."
-        echo "Then, we recommend installing the latest version of ${bold}bash${normal} with Homebrew,"
-        echo "because the one that came with your Mac is really old."
-        echo "Run ${bold}brew install bash${normal} to install the latest version."
-        echo "Then quit and restart your Terminal app for the changes to take effect."
       else
         fancy_echo "Shell will not be changed."
       fi
