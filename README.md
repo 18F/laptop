@@ -132,6 +132,19 @@ Your last Laptop run will be saved to `~/laptop.log`. Read through it to see if
 you can debug the issue yourself. If not, copy and paste the entire log into a
 [new GitHub Issue](https://github.com/18F/laptop/issues/new) for us.
 
+#### Git Seekrets Troubleshooting
+
+If you're running into issues after installing `git-seekret`, make sure that you
+install the necessary dependencies.
+
+```shell
+brew install openssl
+```
+
+If the running of `git seekret` is still causing issues, please open an issue
+(or a pull request if you know how to fix the issue), and include the error
+message shown in the terminal.
+
 #### Git Seekrets False Positives
 
 Sometimes the `git-seekrets` rules may indicate a false positive and match
