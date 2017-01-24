@@ -65,8 +65,19 @@ if toolversion git '>=' 2.9.1; then
   get_platform
   LATEST_RELEASE_URL=$(curl -s https://github.com/18F/git-seekret/releases | grep "18F/git-seekret/releases/download" | grep ${PLATFORM} | head -n 1 | cut -d '"' -f 2)
   AWS_URL=$(curl -s "https://github.com${LATEST_RELEASE_URL}" | cut -d '"' -f2 | sed -e "s/amp\;//g")
-  (curl "$AWS_URL" -o /usr/local/bin/git-seekret > /dev/null \
-    && chmod u+x /usr/local/bin/git-seekret)
+  BIN_LOCATION="/usr/local/bin"
+  SUDO_REQUIRED=true
+  if [[ ":$PATH:" == *":$HOME/bin:"* ]]; then
+    BIN_LOCATION="$HOME/bin"
+    SUDO_REQUIRED=false
+  fi
+  INSTALL_CMD="curl \"$AWS_URL\" -o \"${BIN_LOCATION}/git-seekret\" > /dev/null && chmod a+x \"${BIN_LOCATION}/git-seekret\""
+  echo "Installing in $BIN_LOCATION"
+  if [  "$SUDO_REQUIRED" = false ]; then
+    eval $INSTALL_CMD
+  else
+    sudo sh -c "$INSTALL_CMD"
+  fi
 
   fancy_echo "Downloading Seekret rules"
   export SEEKRET_RULES_PATH="${HOME}/.git-support/seekret-rules"
