@@ -121,6 +121,8 @@ switch_to_latest_ruby() {
   chruby "ruby-$(latest_installed_ruby)"
 }
 
+append_to_file "$shell_file" "alias laptop='curl -s https://raw.githubusercontent.com/18F/laptop/master/laptop | sh -'"
+
 # shellcheck disable=SC2016
 append_to_file "$shell_file" 'export PATH="$HOME/.bin:$PATH"'
 
