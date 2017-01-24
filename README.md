@@ -56,9 +56,11 @@ More [detailed instructions with a video][video] are available in the Wiki.
 [video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
 
 ### Want to install just git-seekret?
+In your terminal window, copy and paste the following line, and press `return`:
 ```sh
-curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | sh -
+curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | bash -
 ```
+Note that the script may ask you to enter your password. This is the same password that you use to log in to your computer.
 
 **git-seekret will install global git hooks into ~/.git-support/hooks.   To restore pre-existing git hooks, it is recommended to save pre-existing hooks into a seperate directory and to copy those hooks into ~/.git-support/hooks after git-seekret is installed.**
 
