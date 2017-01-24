@@ -74,7 +74,7 @@ if toolversion git '>=' 2.9.1; then
   INSTALL_CMD="curl \"$AWS_URL\" -o \"${BIN_LOCATION}/git-seekret\" > /dev/null && chmod a+x \"${BIN_LOCATION}/git-seekret\""
   echo "Installing in $BIN_LOCATION"
   if [  "$SUDO_REQUIRED" = false ]; then
-    eval $INSTALL_CMD
+    eval "$INSTALL_CMD"
   else
     sudo sh -c "$INSTALL_CMD"
   fi
