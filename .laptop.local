@@ -2,18 +2,12 @@
 
 fancy_echo "Running your customizations from ~/.laptop.local ..."
 
-brew bundle --file=- <<EOF
-cask 'atom'
-cask 'firefox'
-cask 'iterm2'
-cask 'spectacle'
-
-brew 'vim'
-brew 'ctags'
-brew 'tmux'
-brew 'reattach-to-user-namespace'
-
-brew 'go'
-EOF
+if [ -f "$HOME/Brewfile.local" ]; then
+  if brew bundle --file="$HOME/Brewfile.local"; then
+    fancy_echo "All items in Brewfile.local were installed successfully."
+  else
+    fancy_echo "Some items in Brewfile.local were not installed successfully."
+  fi
+fi
 
 append_to_file "$HOME/.zshrc" 'export PATH="$PATH:/usr/local/opt/go/libexec/bin"'

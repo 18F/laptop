@@ -215,22 +215,25 @@ What it sets up
 It should take less than 15 minutes to install (depends on your machine and
 internet connection).
 
-Customize in `~/.laptop.local` and `Brewfile`
----------------------------------------------
+Customize in `~/.laptop.local` and `~/Brewfile.local`
+-----------------------------------------------------
 
 Your `~/.laptop.local` is run at the end of the `mac` script.
-Put your customizations there. This repo already contains a `.laptop.local`
+Put your customizations there. If you want to install additional
+tools or Mac apps with Homebrew, add them to your `~/Brewfile.local`.
+This repo already contains a [.laptop.local] and [Brewfile.local]
 you can use to get started.
 
 ```sh
 # Go to your OS X user's root directory
 cd ~
 
-# Download the sample file to your computer
+# Download the sample files to your computer
 curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/.laptop.local
+curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/Brewfile.local
 ```
 
-It lets you install the following tools:
+It lets you install the following tools and apps:
 
 * [Atom] - GitHub's open source text editor
 * [Exuberant Ctags] for indexing files for vim tab completion
@@ -241,6 +244,8 @@ It lets you install the following tools:
 * [Vim] for those who prefer the command line
 * [Spectacle] - automatic window manipulation
 
+[.laptop.local]: https://github.com/18F/laptop/blob/master/.laptop.local
+[Brewfile.local]: https://github.com/18F/laptop/blob/master/Brewfile.local
 [Atom]: https://atom.io/
 [Exuberant Ctags]: http://ctags.sourceforge.net/
 [Firefox]: https://www.mozilla.org/en-US/firefox/new/
@@ -250,41 +255,11 @@ It lets you install the following tools:
 [Vim]: http://www.vim.org/
 [Spectacle]: https://www.spectacleapp.com/
 
-For example:
-
-```sh
-#!/bin/sh
-
-fancy_echo "Running your customizations from ~/.laptop.local ..."
-
-brew bundle --file=- <<EOF
-cask 'atom'
-cask 'firefox'
-cask 'iterm2'
-cask 'spectacle'
-
-brew 'vim'
-brew 'ctags'
-brew 'tmux'
-brew 'reattach-to-user-namespace'
-
-brew 'go'
-EOF
-
-append_to_file "$HOME/.zshrc" 'export PATH="$PATH:/usr/local/opt/go/libexec/bin"'
-```
-
 Write your customizations such that they can be run safely more than once.
 See the `mac` script for examples.
 
 Laptop functions such as `fancy_echo` and `gem_install_or_update` can be used
 in your `~/.laptop.local`.
-
-Editing the `Brewfile`
-----------------------
-Most of what the script installs is listed in the `Brewfile`. If you don't want
-the script to install certain tools, you can remove them from the `Brewfile`.
-
 
 How to manage background services (Redis, Postgres, MySQL)
 ----------------------------------------------------------
