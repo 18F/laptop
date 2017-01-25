@@ -2,7 +2,8 @@ Laptop
 ======
 [![Build Status](https://travis-ci.org/18F/laptop.svg)](https://travis-ci.org/18F/laptop)
 
-Laptop is a script to set up an OS X computer for web development.
+Laptop is a script to set up an OS X computer for web development, and to keep
+it up to date.
 
 It can be run multiple times on the same machine safely.
 It installs, upgrades, or skips packages
@@ -13,7 +14,8 @@ Requirements
 
 We support:
 
-* [OS X El Capitan (10.11)](https://www.apple.com/osx/)
+* [macOS Sierra (10.12)](https://www.apple.com/osx/)
+* OS X El Capitan (10.11)
 * OS X Yosemite (10.10)
 * OS X Mavericks (10.9)
 
@@ -29,14 +31,10 @@ keyboard shortcut for invoking Spotlight is `command-Space`. Once Spotlight
 is up, just start typing the first few letters of the app you are looking for,
 and once it appears, press `return` to launch it.
 
-In your Terminal window, copy and paste each of these three commands one at a
-time, then press `return` after each one. The first two commands download the
-files the script needs to run, and the third command executes the script.
+In your Terminal window, copy and paste the command below, then press `return`.
 
 ```sh
-curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/mac
-curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/Brewfile
-bash mac 2>&1 | tee ~/laptop.log
+curl -s https://raw.githubusercontent.com/18F/laptop/master/laptop | sh -
 ```
 The [script](https://github.com/18F/laptop/blob/master/mac) itself is
 available in this repo for you to review if you want to see what it does
@@ -51,6 +49,10 @@ need to push code to GitHub.
 **Once the script is done, make sure to quit and relaunch Terminal.**
 
 More [detailed instructions with a video][video] are available in the Wiki.
+
+It is highly recommended to run the script regularly to keep your computer
+up to date. Once the script has been installed, you'll be able to run it
+at your convenience by typing `laptop` and hitting `return` in your Terminal.
 
 [Spotlight]: https://support.apple.com/en-us/HT204014
 [video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
