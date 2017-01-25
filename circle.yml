@@ -1,0 +1,15 @@
+machine:
+  pre:
+    - sudo apt-get update; sudo apt-get install athena-jot
+    - wget "http://ftp.debian.org/debian/pool/main/s/shellcheck/shellcheck_0.4.4-4_amd64.deb"
+    - sudo dpkg -i "shellcheck_0.4.4-4_amd64.deb"
+    - export PATH="/usr/local/bin:$PATH"
+    - git clone https://github.com/sstephenson/bats.git /tmp/bats && pushd /tmp/bats && sudo ./install.sh /usr/local && popd
+
+test:
+  override:
+    - cat seekrets-install | bash -
+  post:
+    - shellcheck mac
+    - shellcheck seekrets-install
+    - bats test/seekrets.bats
