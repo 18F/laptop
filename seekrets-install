@@ -67,7 +67,7 @@ if toolversion git '>=' 2.9.1; then
   AWS_URL=$(curl -s "https://github.com${LATEST_RELEASE_URL}" | cut -d '"' -f2 | sed -e "s/amp\;//g")
   BIN_LOCATION="/usr/local/bin"
   SUDO_REQUIRED=true
-  if [[ ":$PATH:" == *":$HOME/bin:"* ]]; then
+  if [[ -d "$HOME/bin" && ":$PATH:" == *":$HOME/bin:"* ]]; then
     BIN_LOCATION="$HOME/bin"
     SUDO_REQUIRED=false
   fi

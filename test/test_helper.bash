@@ -6,7 +6,10 @@ setupGitRepo() {
     git init "${REPO_PATH}"
     git config --local gitseekret.rulespath "$LOCAL_SEEKRETS"
     git config --global gitseekret.rulespath "$LOCAL_SEEKRETS"
-    (cd "${REPO_PATH}" && git-seekret rules --enable-all)
+    (cd "${REPO_PATH}" && \
+        git config user.email "example@example.com" && \
+        git config user.name "Example User" && \
+        git-seekret rules --enable-all)
 }
 
 cleanGitRepo() {
