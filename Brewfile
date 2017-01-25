@@ -20,8 +20,6 @@ brew 'hub'
 tap 'cloudfoundry/homebrew-tap'
 brew 'cf-cli'
 
-tap 'caskroom/cask'
-tap 'caskroom/versions'
 cask 'cloud'
 cask 'flux'
 cask 'github-desktop'
