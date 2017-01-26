@@ -1,0 +1,11 @@
+cask 'atom'
+cask 'firefox'
+cask 'iterm2'
+cask 'spectacle'
+
+brew 'vim'
+brew 'ctags'
+brew 'tmux'
+brew 'reattach-to-user-namespace'
+
+brew 'go'
