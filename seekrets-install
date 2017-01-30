@@ -64,14 +64,13 @@ if toolversion git '>=' 2.9.1; then
   git init > /dev/null
   get_platform
   LATEST_RELEASE_URL=$(curl -s https://github.com/18F/git-seekret/releases | grep "18F/git-seekret/releases/download" | grep ${PLATFORM} | head -n 1 | cut -d '"' -f 2)
-  AWS_URL=$(curl -s "https://github.com${LATEST_RELEASE_URL}" | cut -d '"' -f2 | sed -e "s/amp\;//g")
   BIN_LOCATION="/usr/local/bin"
   SUDO_REQUIRED=true
   if [[ -d "$HOME/bin" && ":$PATH:" == *":$HOME/bin:"* ]]; then
     BIN_LOCATION="$HOME/bin"
     SUDO_REQUIRED=false
   fi
-  INSTALL_CMD="curl \"$AWS_URL\" -o \"${BIN_LOCATION}/git-seekret\" > /dev/null && chmod a+x \"${BIN_LOCATION}/git-seekret\""
+  INSTALL_CMD="curl -L \"https://github.com${LATEST_RELEASE_URL}\" -o \"${BIN_LOCATION}/git-seekret\" > /dev/null && chmod a+x \"${BIN_LOCATION}/git-seekret\""
   echo "Installing in $BIN_LOCATION"
   if [  "$SUDO_REQUIRED" = false ]; then
     eval "$INSTALL_CMD"
