@@ -106,6 +106,11 @@ load test_helper
     [ $(echo "$output" | grep -c 'Found Secrets: 1') -eq 1 ]
 }
 
+@test "git-seekrets does find slack api token in test repo" {
+    run addFileWithSlackAPIToken
+    [ $(echo "$output" | grep -c 'Found Secrets: 1') -eq 1 ]
+}
+
 @test "git-seekrets does not find secrets in test repo" {
     run addFileWithNoSecrets
     [ $(echo "$output" | grep -c 'Found Secrets: 0') -eq 1 ]
