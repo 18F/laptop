@@ -251,7 +251,7 @@ It lets you install the following tools and apps:
 [Firefox]: https://www.mozilla.org/en-US/firefox/new/
 [iTerm2]: http://iterm2.com/
 [reattach-to-user-namespace]: https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard
-[Tmux]: http://tmux.sourceforge.net/
+[Tmux]: https://tmux.github.io/
 [Vim]: http://www.vim.org/
 [Spectacle]: https://www.spectacleapp.com/
 
