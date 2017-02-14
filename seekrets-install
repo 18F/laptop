@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTPATH=$( cd $(dirname $0) ; pwd -P )
+SCRIPTPATH=$( cd "$(dirname "$0")" ; pwd -P )
 
 # Add new baseline rules here
 #rsa-private.rule
