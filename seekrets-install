@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SCRIPTPATH=$( cd "$(dirname "$0")" ; pwd -P )
+
 # Add new baseline rules here
 #rsa-private.rule
 SEEKRET_DEFAULT_RULES="
@@ -7,9 +9,8 @@ aws.rule
 newrelic.rule
 mandrill.rule"
 
-if [ -d ./seekret-rules ]
-then
-  SEEKRET_DEFAULT_RULES=$( ls ./seekret-rules )
+if [ -d "${SCRIPTPATH}/seekret-rules" ]; then
+  SEEKRET_DEFAULT_RULES=$( ls "${SCRIPTPATH}/seekret-rules" )
 fi
 
 fancy_echo() {
@@ -70,7 +71,7 @@ if toolversion git '>=' 2.9.1; then
     BIN_LOCATION="$HOME/bin"
     SUDO_REQUIRED=false
   fi
-  INSTALL_CMD="curl -L \"https://github.com${LATEST_RELEASE_URL}\" -o \"${BIN_LOCATION}/git-seekret\" > /dev/null && chmod a+x \"${BIN_LOCATION}/git-seekret\""
+  INSTALL_CMD="curl -L -# \"https://github.com${LATEST_RELEASE_URL}\" -o \"${BIN_LOCATION}/git-seekret\" > /dev/null && chmod a+x \"${BIN_LOCATION}/git-seekret\""
   echo "Installing in $BIN_LOCATION"
   if [  "$SUDO_REQUIRED" = false ]; then
     eval "$INSTALL_CMD"
@@ -87,8 +88,12 @@ if toolversion git '>=' 2.9.1; then
   for rule in ${SEEKRET_RULES}
   do
       printf "\t%s: " "$rule"
-      (cd "${SEEKRET_RULES_PATH}" \
-       && curl -# -o "${rule}" "${SEEKRET_RULES_URL}/${rule}" > /dev/null)
+      if [ -d "${SCRIPTPATH}/seekret-rules" ]; then
+        cp "${SCRIPTPATH}/seekret-rules/${rule}" "${SEEKRET_RULES_PATH}"
+      else
+        (cd "${SEEKRET_RULES_PATH}" \
+          && curl -# -o "${rule}" "${SEEKRET_RULES_URL}/${rule}" > /dev/null)
+      fi
       printf "done\n"
   done
   fancy_echo "Configuring Seekret"
