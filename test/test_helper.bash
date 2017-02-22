@@ -214,6 +214,16 @@ addFileWithMandrillUsername() {
     (cd ${REPO_PATH} && git commit -m 'test commit')
 }
 
+addFileWithSlackAPIToken() {
+    local secrets_file="${REPO_PATH}/slacktokenfile.md"
+
+    touch "${secrets_file}"
+    echo "SHHHH... Secrets in this file" >> "${secrets_file}"
+    echo "slack_api_token=xoxo-11111111111-222222222222-333333333333-0123456789abcdef0123456789abcdef" >> "${secrets_file}"
+    (cd "${REPO_PATH}" && git add "${secrets_file}")
+    (cd ${REPO_PATH} && git commit -m 'test commit')
+}
+
 setup() {
     setupGitRepo
 }
