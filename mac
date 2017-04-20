@@ -285,6 +285,8 @@ EOF
     else
       fancy_echo 'You have the latest version of Ruby'
     fi
+    fancy_echo "Installing the latest stable Ruby..."
+    rvm install ruby --latest
   fi
 fi
 
