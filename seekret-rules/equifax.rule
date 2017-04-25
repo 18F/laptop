@@ -1,0 +1,2 @@
+equifax_password:
+  match: (\"|')?(equifax|Equifax|EQUIFAX)_?(password|Password|PASSWORD)?_?(:)(\"|')?\s*(:|=>|=)\s*(\"|')?[A-Za-z0-9/\+=]{16}\+[A-Za-z0-9/\+=]{16}(\"|')?
