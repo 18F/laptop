@@ -152,7 +152,7 @@ if tap_is_installed 'caskroom/versions'; then
 fi
 
 fancy_echo "Updating Homebrew..."
-cd "$(brew --repo)" && git fetch && git reset --hard origin/master && brew update
+brew update
 
 fancy_echo "Verifying the Homebrew installation..."
 if brew doctor; then
