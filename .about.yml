@@ -79,10 +79,10 @@ impact: >
 #   url: URL for detailed information
 #   badge: URL for the status badge
 services:
-- name: Travis
+- name: Circle CI
   category: Continous integration
-  url: https://travis-ci.org/18F/laptop
-  badge: https://travis-ci.org/18F/laptop.svg
+  url: https://circleci.com/gh/18F/laptop
+  badge: https://circleci.com/gh/18F/laptop.svg
 
 # Licenses that apply to the project and/or its components (required)
 # Items by property name pattern:
