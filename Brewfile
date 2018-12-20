@@ -13,13 +13,12 @@ brew 'mysql'
 
 brew 'redis'
 
-brew 'phantomjs'
-
 brew 'hub'
 
 tap 'cloudfoundry/homebrew-tap'
 brew 'cf-cli'
 
+cask 'chromedriver'
 cask 'cloudapp'
 cask 'flux'
 cask 'github'
