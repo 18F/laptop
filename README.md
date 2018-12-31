@@ -180,6 +180,7 @@ What it sets up
 * [The Silver Searcher] for finding things in files
 * [Virtualenv] for creating isolated Python environments (via [pyenv] if it is installed)
 * [Virtualenvwrapper] for extending Virtualenv (via [pyenv] if it is installed)
+* [VSCode] also for coding all the things
 * [Zsh] as your shell
 
 
@@ -210,6 +211,7 @@ What it sets up
 [The Silver Searcher]: https://github.com/ggreer/the_silver_searcher
 [Virtualenv]: https://virtualenv.pypa.io/en/latest/
 [Virtualenvwrapper]: http://virtualenvwrapper.readthedocs.org/en/latest/#
+[VSCode]: https://code.visualstudio.com/
 [Zsh]: http://www.zsh.org/
 
 It should take less than 15 minutes to install (depends on your machine and
