@@ -7,21 +7,14 @@ brew 'the_silver_searcher'
 
 tap 'homebrew/services'
 
-brew 'postgresql'
-
-brew 'mysql'
-
-brew 'redis'
-
-brew 'phantomjs'
-
 brew 'hub'
 
 tap 'cloudfoundry/homebrew-tap'
 brew 'cf-cli'
 
+cask 'chromedriver'
 cask 'cloudapp'
-cask 'flux'
+cask 'docker'
 cask 'github'
 cask 'slack'
-cask 'sublime-text'
+
