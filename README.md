@@ -158,60 +158,50 @@ cat ~/.git-support/seekret-rules/*.rule
 What it sets up
 ---------------
 
+* [ChromeDriver] for headless website testing
 * [chruby] for managing [Ruby] versions
 * [CloudApp] for sharing screenshots and making an animated GIF from a video
 * [Cloud Foundry CLI] for command line access to 18F's Cloud Foundry-based application platform
-* [Flux] for adjusting your Mac's display color so you can sleep better
+* [Docker] for all your containerization needs
 * [git-seekret] for preventing you from committing passwords and other sensitive information to a git repository
 * [GitHub Desktop] for setting up your SSH keys automatically
 * [Homebrew] for managing operating system libraries
 * [Homebrew Cask] for quickly installing Mac apps from the command line
 * [Homebrew Services] so you can easily stop, start, and restart services
 * [hub] for interacting with the GitHub API
-* [MySQL] for storing relational data
 * [nvm] for managing Node.js versions if you do not have [Node.js] already installed (Includes latest [Node.js] and [NPM], for running apps and installing JavaScript packages)
-* [PhantomJS] for headless website testing
-* [Postgres] for storing relational data
 * [pyenv] for managing Python versions if you do not have [Python] already installed (includes the latest 3.x [Python])
-* [Redis] for storing key-value data
 * [ruby-install] for installing different versions of Ruby
 * [Slack] for communicating with your team
-* [Sublime Text 3] for coding all the things
 * [The Silver Searcher] for finding things in files
 * [Virtualenv] for creating isolated Python environments (via [pyenv] if it is installed)
 * [Virtualenvwrapper] for extending Virtualenv (via [pyenv] if it is installed)
 * [Zsh] as your shell
 
-
 [Bundler]: http://bundler.io/
+[ChromeDriver]: http://chromedriver.chromium.org/
 [chruby]: https://github.com/postmodern/chruby
 [CloudApp]: http://getcloudapp.com/
 [Cloud Foundry CLI]: https://github.com/cloudfoundry/cli
-[Flux]: https://justgetflux.com/
+[Docker]: https://www.docker.com/
 [git-seekret]: https://github.com/18F/git-seekret
 [GitHub Desktop]: https://desktop.github.com/
 [Homebrew]: http://brew.sh/
 [Homebrew Cask]: http://caskroom.io/
 [Homebrew Services]: https://github.com/Homebrew/homebrew-services
 [hub]: https://github.com/github/hub
-[MySQL]: https://www.mysql.com/
 [n]: https://github.com/tj/n
 [Node.js]: http://nodejs.org/
 [NPM]: https://www.npmjs.org/
-[PhantomJS]: http://phantomjs.org/
-[Postgres]: http://www.postgresql.org/
 [Python]: https://www.python.org/
 [pyenv]: https://github.com/yyuu/pyenv/
-[Redis]: http://redis.io/
 [Ruby]: https://www.ruby-lang.org/en/
 [ruby-install]: https://github.com/postmodern/ruby-install
 [Slack]: https://slack.com/
-[Sublime Text 3]: http://www.sublimetext.com/3
 [The Silver Searcher]: https://github.com/ggreer/the_silver_searcher
 [Virtualenv]: https://virtualenv.pypa.io/en/latest/
 [Virtualenvwrapper]: http://virtualenvwrapper.readthedocs.org/en/latest/#
 [Zsh]: http://www.zsh.org/
-
 It should take less than 15 minutes to install (depends on your machine and
 internet connection).
 
@@ -235,18 +225,22 @@ curl --remote-name https://raw.githubusercontent.com/18F/laptop/master/Brewfile.
 
 It lets you install the following tools and apps:
 
+* [VSCode] - Microsoft's open source text editor
 * [Atom] - GitHub's open source text editor
+* [Sublime Text 3] for coding all the things
+* [Vim] for those who prefer the command line
 * [Exuberant Ctags] for indexing files for vim tab completion
 * [Firefox] for testing your website on a browser other than Chrome
 * [iTerm2] - an awesome replacement for the OS X Terminal
 * [reattach-to-user-namespace] to allow copy and paste from Tmux
 * [Tmux] for saving project state and switching between projects
-* [Vim] for those who prefer the command line
 * [Spectacle] - automatic window manipulation
 
 [.laptop.local]: https://github.com/18F/laptop/blob/master/.laptop.local
 [Brewfile.local]: https://github.com/18F/laptop/blob/master/Brewfile.local
+[VSCode]: https://code.visualstudio.com/
 [Atom]: https://atom.io/
+[Sublime Text 3]: http://www.sublimetext.com/3
 [Exuberant Ctags]: http://ctags.sourceforge.net/
 [Firefox]: https://www.mozilla.org/en-US/firefox/new/
 [iTerm2]: http://iterm2.com/
@@ -261,33 +255,23 @@ See the `mac` script for examples.
 Laptop functions such as `fancy_echo` and `gem_install_or_update` can be used
 in your `~/.laptop.local`.
 
-How to manage background services (Redis, Postgres, MySQL)
+What about background services (Redis, Postgres, MySQL, etc.)?
 ----------------------------------------------------------
-The script does not automatically launch these services after installation
-because you might not need or want them to be running. With Homebrew Services,
-starting, stopping, or restarting these services is as easy as:
+The script does not automatically install services like databases because you
+may not need any particular one, or you may need specific versions, not just
+the latest.  For services, we recommend using Docker.  For example, you can
+use the [`docker run`] command to start a service in a container and make the
+container's port available to your local machine:
 
-```
-brew services start|stop|restart [name of service]
-```
-
-For example:
-
-```
-brew services start redis
+```shell
+docker run -p 5432 postgres:10.6
 ```
 
-To see a list of all installed services:
+You can also use [Docker Compose] to define your app's containers and their
+relationships, cutting out the need to manually setup each service.
 
-```
-brew services list
-```
-
-To start all services at once:
-
-```
-brew services start --all
-```
+[Docker Compose]: https://docs.docker.com/compose/
+[docker run]: https://docs.docker.com/engine/reference/run/#expose-incoming-ports
 
 How to switch your shell back to bash from zsh (or vice versa)
 --------------------------------------------------------------
