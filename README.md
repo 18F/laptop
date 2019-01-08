@@ -259,7 +259,7 @@ What about background services (Redis, Postgres, MySQL, etc.)?
 ----------------------------------------------------------
 The script does not automatically install services like databases because you
 may not need any particular one, or you may need specific versions, not just
-the latest.  For services, we recommend using Docker.  For example, you can
+the latest.  For services, we recommend using [Docker].  For example, you can
 use the [`docker run`] command to start a service in a container and make the
 container's port available to your local machine:
 
