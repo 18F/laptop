@@ -153,6 +153,7 @@ if ! xcode-select -p > /dev/null ; then
   clt_label=`/usr/sbin/softwareupdate -l | grep -B 1 -E "Command Line (Developer|Tools)" | awk -F"*" '/^ +\\*/ {print $2}' | sed 's/^ *//' | tail -n1 | xargs`
   sudo /usr/sbin/softwareupdate -i "$clt_label"
   sudo /bin/rm -f  "$clt_placeholder"
+  sudo /usr/bin/xcode-select --reset
 fi
 
 # Remove brew-cask since it is now installed as part of brew tap caskroom/cask.
