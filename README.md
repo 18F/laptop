@@ -64,6 +64,13 @@ curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | b
 ```
 Note that the script may ask you to enter your password. This is the same password that you use to log in to your computer.
 
+> git-seekret requires git 2.9.1 or higher.  Some versions of Ubuntu ship with an older version.  To update your git before installing git-seekret:
+> 
+> ```
+> sudo add-apt-repository ppa:git-core/ppa
+> sudo apt-get update
+> ```
+
 **git-seekret will install global git hooks into ~/.git-support/hooks.   To restore pre-existing git hooks, it is recommended to save pre-existing hooks into a separate directory and to copy those hooks into ~/.git-support/hooks after git-seekret is installed.**
 
 Development
