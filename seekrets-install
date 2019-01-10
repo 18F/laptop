@@ -22,23 +22,44 @@ fancy_echo() {
   printf "\n$fmt\n" "$@"
 }
 
-toolversion() {
+toolminversion() {
     # shellcheck disable=SC2039
-    local prog="$1" operator="$2" value="$3" version
+    local prog="$1" value="$2" version
 
     version=$($prog --version | awk '{print $NF; exit}')
 
     awk -v v1="$version" -v v2="$value" 'BEGIN {
         split(v1, a, /\./); split(v2, b, /\./);
-        if (a[2] == b[2]) {
-          exit (a[3] '"${operator}"' b[3]) ? 0 : 1
+
+        if (a[1] < b[1]) {
+          # major version is lower
+          exit 1;
         }
-        else if (a[1] == b[1]) {
-          exit (a[2] '"${operator}"' b[2]) ? 0 : 1
+        if (a[1] > b[1]) {
+          # major version is higher
+          exit 0;
         }
-        else {
-          exit (a[1] '"${operator}"' b[1]) ? 0 : 1
+
+        # major versions match
+
+        if (a[2] < b[2]) {
+          # minor version is lower
+          exit 2;
         }
+        if (a[2] > b[2]) {
+          # minor version is higher
+          exit 0;
+        }
+
+        # minor versions match
+
+        if(a[3] < b[3]) {
+          #patch version is lower
+          exit 3;
+        }
+
+        # patch version is higher or matches
+        exit 0;
     }'
 }
 
@@ -59,7 +80,7 @@ get_platform() {
 
 set -e
 
-if toolversion git '>=' 2.9.1; then
+if toolminversion git 2.9.1; then
   fancy_echo "Installing Seekret"
   WORK_DIR=$( mktemp -d -t "$( basename "$(pwd)XXXXX" )" )
   pushd "${WORK_DIR}" > /dev/null

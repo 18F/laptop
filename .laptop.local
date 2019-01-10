@@ -2,6 +2,10 @@
 
 fancy_echo "Running your customizations from ~/.laptop.local ..."
 
+# Install oh-my-zsh, a bunch of configurations for zsh that make it
+# a bunch more useful
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
 if [ -f "$HOME/Brewfile.local" ]; then
   if brew bundle --file="$HOME/Brewfile.local"; then
     fancy_echo "All items in Brewfile.local were installed successfully."

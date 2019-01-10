@@ -11,3 +11,7 @@ brew 'tmux'
 brew 'reattach-to-user-namespace'
 
 brew 'go'
+
+# Install GNU coreutils and have them mask the macOS versions.  See
+# https://github.com/18F/laptop/issues/36 for more info.
+# brew install coreutils --default-names
