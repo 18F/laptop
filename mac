@@ -191,7 +191,17 @@ if ! brew_is_installed "node"; then
     export NVM_DIR="$HOME/.nvm"
     # shellcheck source=/dev/null
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install node --lts
+
+    # nvm is a bash script itself, some commands of which may fail WITHOUT
+    # causing the whole operation to fail. To accomdate that, disable exit on
+    # any nonzero exit code while nvm runs.
+    set +e
+
+    nvm install --lts
+
+    # Turn it back on when nvm is done, since the rest of this script may have
+    # been written assuming this behavior.
+    set -e
   else
     fancy_echo 'version manager detected.  Skipping...'
   fi
