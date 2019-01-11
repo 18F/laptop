@@ -76,11 +76,22 @@ case "$SHELL" in
       echo -n "Press ${bold}y${normal} to switch to zsh, ${bold}n${normal} to keep bash: "
       read -r -n 1 response
       if [ "$response" = "y" ]; then
-        fancy_echo "=== Getting ready to change your shell to zsh. Please enter your password to continue. ==="
-        echo "=== Note that there won't be visual feedback when you type your password. Type it slowly and press return. ==="
-        echo "=== Press control-c to cancel ==="
         create_zshrc_and_set_it_as_shell_file
-        chsh -s "$(which zsh)"
+        if grep "$(which zsh)" > /dev/null 2>&1 < /etc/shells; then
+          fancy_echo "=== Getting ready to change your shell to zsh. Please enter your password to continue. ==="
+          echo "=== Note that there won't be visual feedback when you type your password. Type it slowly and press return. ==="
+          echo "=== Press control-c to cancel ==="
+          chsh -s "$(which zsh)"
+        else
+          printf "\n\n"
+          echo "Can't switch shells automatically in this case.  The path to zsh isn't in"
+          echo "the list of allowed shells.  To manually switch to zsh, enter the following"
+          echo "two lines into your terminal (in another tab, or when this script is done):"
+          echo ""
+          echo "sudo echo \"\$(which zh)\" >> /etc/shells"
+          echo "chsh -s \"\$(which zs)\""
+          sleep 3
+        fi
       else
         fancy_echo "Shell will not be changed."
       fi
