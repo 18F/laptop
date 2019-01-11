@@ -191,7 +191,7 @@ if ! brew_is_installed "node"; then
     export NVM_DIR="$HOME/.nvm"
     # shellcheck source=/dev/null
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install node --lts
+    nvm install --lts
   else
     fancy_echo 'version manager detected.  Skipping...'
   fi
