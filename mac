@@ -44,8 +44,8 @@ append_to_posix_shell_file() {
 
 create_and_set_shell_file() {
   shell_file="$1"
-  if [ ! -f $shell_file ]; then
-    touch $shell_file
+  if [ ! -f "$shell_file" ]; then
+    touch "$shell_file"
   fi
 }
 
