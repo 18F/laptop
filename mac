@@ -205,6 +205,7 @@ fi
 # shellcheck disable=SC2016
 case "$SHELL" in
   */fish) :
+    mkdir -p "$HOME/.config/fish/functions"
     hub alias fish > "$HOME/.config/fish/functions/git.fish"
     ;;
   *) :
@@ -216,39 +217,37 @@ fancy_echo 'Checking on Node.js installation...'
 
 case "$SHELL" in
   */fish) :
-    fancy_echo "Skipping node installation."
     fancy_echo "We recommend following the steps at https://github.com/FabioAntunes/fish-nvm to install nvm in fish"
     ;;
-  *) :
-    if ! brew_is_installed "node"; then
-      if command -v n > /dev/null; then
-        fancy_echo "We recommend using \`nvm\` and not \`n\`."
-        fancy_echo "See https://pages.18f.gov/frontend/#install-npm"
-      elif ! command -v nvm > /dev/null; then
-        fancy_echo 'Installing nvm and lts Node.js and npm...'
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
-        export NVM_DIR="$HOME/.nvm"
-        # shellcheck source=/dev/null
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        # nvm is a bash script itself, some commands of which may fail WITHOUT
-        # causing the whole operation to fail. To accomdate that, disable exit on
-        # any nonzero exit code while nvm runs.
-        set +e
-
-        nvm install --lts
-
-        # Turn it back on when nvm is done, since the rest of this script may have
-        # been written assuming this behavior.
-        set -e
-      else
-        fancy_echo 'version manager detected.  Skipping...'
-      fi
-    else
-      brew bundle --file=- <<EOF
-      brew 'node'
-EOF
-    fi
 esac
+if ! brew_is_installed "node"; then
+  if command -v n > /dev/null; then
+    fancy_echo "We recommend using \`nvm\` and not \`n\`."
+    fancy_echo "See https://pages.18f.gov/frontend/#install-npm"
+  elif ! command -v nvm > /dev/null; then
+    fancy_echo 'Installing nvm and lts Node.js and npm...'
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    # shellcheck source=/dev/null
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    # nvm is a bash script itself, some commands of which may fail WITHOUT
+    # causing the whole operation to fail. To accomdate that, disable exit on
+    # any nonzero exit code while nvm runs.
+    set +e
+
+    nvm install --lts
+
+    # Turn it back on when nvm is done, since the rest of this script may have
+    # been written assuming this behavior.
+    set -e
+  else
+    fancy_echo 'version manager detected.  Skipping...'
+  fi
+else
+  brew bundle --file=- <<EOF
+  brew 'node'
+EOF
+fi
 
 fancy_echo '...Finished Node.js installation checks.'
 
@@ -317,7 +316,7 @@ EOF
     if ! rbenv versions | ag "$latest_ruby" > /dev/null; then
       rbenv install "$latest_ruby"
       rbenv global "$latest_ruby"
-      rbenv rehash
+      eval "$(rbenv init - bash)"
     fi
     ;;
   *) :
