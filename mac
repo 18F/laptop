@@ -311,6 +311,14 @@ case "$SHELL" in
     brew 'rbenv'
 EOF
     append_to_file "$shell_file" "status --is-interactive; and source (rbenv init -|psub)"
+    # rbenv currently doesn't have a convenience version to use, e.g., "latest",
+    # so we check for the latest version against Homebrew instead.
+    latest_ruby="$(brew info ruby | egrep -o "\d+\.\d+\.\d+" | head -1)"
+    if ! rbenv versions | ag "$latest_ruby" > /dev/null; then
+      rbenv install "$latest_ruby"
+      rbenv global "$latest_ruby"
+      rbenv rehash
+    fi
     ;;
   *) :
     if command -v rbenv >/dev/null || command -v rvm >/dev/null; then
