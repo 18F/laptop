@@ -82,7 +82,7 @@ set -e
 
 if toolminversion git 2.9.1; then
   fancy_echo "Installing Seekret"
-  WORK_DIR=$( mktemp -d -t "$( basename "$(pwd)XXXXX" )" )
+  WORK_DIR=$( mktemp -d -t "$( basename "$(pwd)XXXXXX" )" )
   pushd "${WORK_DIR}" > /dev/null
   git init > /dev/null
   get_platform

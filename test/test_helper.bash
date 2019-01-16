@@ -1,6 +1,22 @@
 #!/usr/bin/env bats
+
 REPO_PATH=$(mktemp -d "${BATS_TMPDIR}/gittest.XXXXXX")
 LOCAL_SEEKRETS="$(dirname $BATS_TEST_DIRNAME)/seekret-rules"
+
+if ! command -v jot > /dev/null; then
+  # jot should be available already on macos. For ubuntu, no.
+  (
+    echo "jot is not installed. Try installing it." >&2
+    echo ""
+    echo "    $ apt-get install athena-jot" >&2
+    echo ""
+  ) >&2
+
+  # Not sure if exit is right here, but we definitely want to fail the build if
+  # the command is not installed. Otherwise tests will fail without any hints
+  # as to what the issue is.
+  exit 1
+fi
 
 setupGitRepo() {
     git init "${REPO_PATH}"
