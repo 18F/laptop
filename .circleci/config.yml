@@ -8,14 +8,29 @@ jobs:
       - run: shellcheck mac
       - run: shellcheck seekrets-install
 
-  test:
+  test-ubuntu:
+    machine: yes
+    steps:
+      - checkout
+      - run: |
+          sudo apt-get update
+          sudo apt-get install athena-jot
+      - run: cat seekrets-install | bash -
+      - run: bats test/seekrets.bats
+
+  test-macos:
     macos:
       xcode: "10.1"
     steps:
       - checkout
-      - run: docker pull bats/bats
+      - run:
+          name: install bats
+          command: |
+            git clone https://github.com/bats-core/bats-core.git /tmp/bats
+            cd /tmp/bats
+            sudo ./install.sh /usr/local
       - run: cat seekrets-install | bash -
-      - run: docker run -it bats/bats:latest test/seekrets.bats
+      - run: bats test/seekrets.bats
 
 
 workflows:
@@ -23,4 +38,6 @@ workflows:
   commit:
     jobs:
       - lint
-      - test
+      - test-ubuntu
+      # TODO waiting on purchase approval to enable macos builds
+      #- test-macos

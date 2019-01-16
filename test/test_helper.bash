@@ -1,4 +1,8 @@
 #!/usr/bin/env bats
+set -o errexit
+set -o pipefail
+set -o nounset
+
 REPO_PATH=$(mktemp -d "${BATS_TMPDIR}/gittest.XXXXXX")
 LOCAL_SEEKRETS="$(dirname $BATS_TEST_DIRNAME)/seekret-rules"
 
