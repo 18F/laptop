@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  lint:
+    docker:
+      - image: koalaman/shellcheck-alpine
+    steps:
+      - checkout
+      - run: shellcheck mac
+      - run: shellcheck seekrets-install
+
+  test:
+    macos:
+      xcode: "10.1"
+    steps:
+      - checkout
+      - run: docker pull bats/bats
+      - run: cat seekrets-install | bash -
+      - run: docker run -it bats/bats:latest test/seekrets.bats
+
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - lint
+      - test
