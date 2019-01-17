@@ -31,15 +31,8 @@ append_to_file() {
   fi
 }
 
-append_to_posix_shell_file() {
-  case "$SHELL" in
-    */fish) :
-      fancy_echo "Not appending %s to config.fish" "$1"
-      ;;
-    *)
-      append_to_file "$shell_file" "$1"
-      ;;
-  esac
+append_to_shell_file() {
+  append_to_file "$shell_file" "$1"
 }
 
 create_and_set_shell_file() {
@@ -151,10 +144,17 @@ switch_to_latest_ruby() {
   chruby "ruby-$(latest_installed_ruby)"
 }
 
-append_to_file "$shell_file" "alias laptop='bash <(curl -s https://raw.githubusercontent.com/18F/laptop/master/laptop)'"
+append_to_shell_file "alias laptop='bash <(curl -s https://raw.githubusercontent.com/18F/laptop/master/laptop)'"
 
 # shellcheck disable=SC2016
-append_to_posix_shell_file 'export PATH="$HOME/.bin:$PATH"'
+case "$SHELL" in
+  */fish) :
+    append_to_shell_file 'set -xg PATH $HOME/.bin $PATH'
+    ;;
+  *) :
+    append_to_shell_file 'export PATH="$HOME/.bin:$PATH"'
+    ;;
+esac
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
@@ -162,7 +162,14 @@ if ! command -v brew >/dev/null; then
       'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
 
     # shellcheck disable=SC2016
-    append_to_posix_shell_file 'export PATH="/usr/local/bin:$PATH"'
+    case "$SHELL" in
+      */fish) :
+        # noop, fish ships with /usr/local/bin in a good spot in the path
+        ;;
+      *) :
+        append_to_shell_file 'export PATH="/usr/local/bin:$PATH"'
+        ;;
+    esac
 else
   fancy_echo "Homebrew already installed. Skipping ..."
 fi
@@ -209,7 +216,7 @@ case "$SHELL" in
     hub alias fish > "$HOME/.config/fish/functions/git.fish"
     ;;
   *) :
-    append_to_posix_shell_file 'eval "$(hub alias -s)"'
+    append_to_shell_file 'eval "$(hub alias -s)"'
     ;;
 esac
 
@@ -261,14 +268,14 @@ if ! brew_is_installed "python3"; then
 EOF
   case "$SHELL" in
     */fish) :
-      append_to_file "$shell_file" "status --is-interactive; and source (pyenv init -|psub)"
-      append_to_file "$shell_file" "status --is-interactive; and source (pyenv virtualenv-init -|psub)"
+      append_to_shell_file "status --is-interactive; and source (pyenv init -|psub)"
+      append_to_shell_file "status --is-interactive; and source (pyenv virtualenv-init -|psub)"
       ;;
     *) :
       # shellcheck disable=SC2016
-      append_to_posix_shell_file 'if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi'
+      append_to_shell_file 'if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi'
       # shellcheck disable=SC2016
-      append_to_posix_shell_file 'if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi'
+      append_to_shell_file 'if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi'
   esac
 
   # pyenv currently doesn't have a convenience version to use, e.g., "latest",
@@ -288,11 +295,18 @@ fi
 
 if ! brew_is_installed "pyenv-virtualenvwrapper"; then
   if ! pip3 list | ag "virtualenvwrapper" > /dev/null; then
-    fancy_echo 'Installing virtualenvwrapper...'
-    pip3 install virtualenvwrapper
-    append_to_posix_shell_file 'export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3'
-    append_to_posix_shell_file 'export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv'
-    append_to_posix_shell_file 'source /usr/local/bin/virtualenvwrapper.sh'
+    case "$SHELL" in
+      */fish) :
+        fancy_echo "virtualenvwrapper is not compatible with fish"
+        ;;
+      *) :
+        fancy_echo 'Installing virtualenvwrapper...'
+        pip3 install virtualenvwrapper
+        append_to_shell_file 'export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3'
+        append_to_shell_file 'export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv'
+        append_to_shell_file 'source /usr/local/bin/virtualenvwrapper.sh'
+        ;;
+    esac
   fi
 fi
 
@@ -309,7 +323,7 @@ case "$SHELL" in
     brew bundle --file=- <<EOF
     brew 'rbenv'
 EOF
-    append_to_file "$shell_file" "status --is-interactive; and source (rbenv init -|psub)"
+    append_to_shell_file "status --is-interactive; and source (rbenv init -|psub)"
     # rbenv currently doesn't have a convenience version to use, e.g., "latest",
     # so we check for the latest version against Homebrew instead.
     latest_ruby="$(brew info ruby | egrep -o "\d+\.\d+\.\d+" | head -1)"
@@ -331,12 +345,12 @@ EOF
         brew 'ruby-install'
 EOF
 
-        append_to_posix_shell_file 'source /usr/local/share/chruby/chruby.sh'
-        append_to_posix_shell_file 'source /usr/local/share/chruby/auto.sh'
+        append_to_shell_file 'source /usr/local/share/chruby/chruby.sh'
+        append_to_shell_file 'source /usr/local/share/chruby/auto.sh'
 
         ruby-install ruby
 
-        append_to_posix_shell_file "chruby ruby-$(latest_installed_ruby)"
+        append_to_shell_file "chruby ruby-$(latest_installed_ruby)"
 
         switch_to_latest_ruby
       else
