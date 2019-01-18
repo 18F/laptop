@@ -144,14 +144,17 @@ switch_to_latest_ruby() {
   chruby "ruby-$(latest_installed_ruby)"
 }
 
-append_to_shell_file "alias laptop='bash <(curl -s https://raw.githubusercontent.com/18F/laptop/master/laptop)'"
 
-# shellcheck disable=SC2016
+laptop_script_url="https://raw.githubusercontent.com/18F/laptop/master/laptop"
 case "$SHELL" in
   */fish) :
+    append_to_shell_file "alias laptop='bash (curl -s $laptop_script_url|psub)'"
+    # shellcheck disable=SC2016
     append_to_shell_file 'set -xg PATH $HOME/.bin $PATH'
     ;;
   *) :
+    append_to_shell_file "alias laptop='bash <(curl -s $laptop_script_url)'"
+    # shellcheck disable=SC2016
     append_to_shell_file 'export PATH="$HOME/.bin:$PATH"'
     ;;
 esac
@@ -161,12 +164,12 @@ if ! command -v brew >/dev/null; then
     curl -fsS \
       'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
 
-    # shellcheck disable=SC2016
     case "$SHELL" in
       */fish) :
         # noop, fish ships with /usr/local/bin in a good spot in the path
         ;;
       *) :
+        # shellcheck disable=SC2016
         append_to_shell_file 'export PATH="/usr/local/bin:$PATH"'
         ;;
     esac
@@ -209,13 +212,13 @@ else
   echo "in which case, you can ignore these errors."
 fi
 
-# shellcheck disable=SC2016
 case "$SHELL" in
   */fish) :
     mkdir -p "$HOME/.config/fish/functions"
     hub alias fish > "$HOME/.config/fish/functions/git.fish"
     ;;
   *) :
+    # shellcheck disable=SC2016
     append_to_shell_file 'eval "$(hub alias -s)"'
     ;;
 esac
@@ -326,7 +329,7 @@ EOF
     append_to_shell_file "status --is-interactive; and source (rbenv init -|psub)"
     # rbenv currently doesn't have a convenience version to use, e.g., "latest",
     # so we check for the latest version against Homebrew instead.
-    latest_ruby="$(brew info ruby | egrep -o "\d+\.\d+\.\d+" | head -1)"
+    latest_ruby="$(brew info ruby | grep -E -o "\d+\.\d+\.\d+" | head -1)"
     if ! rbenv versions | ag "$latest_ruby" > /dev/null; then
       rbenv install "$latest_ruby"
       rbenv global "$latest_ruby"
