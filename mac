@@ -144,14 +144,16 @@ switch_to_latest_ruby() {
   chruby "ruby-$(latest_installed_ruby)"
 }
 
-append_to_shell_file "alias laptop='bash <(curl -s https://raw.githubusercontent.com/18F/laptop/master/laptop)'"
 
 # shellcheck disable=SC2016
+laptop_script_url="https://raw.githubusercontent.com/18F/laptop/master/laptop"
 case "$SHELL" in
   */fish) :
+    append_to_shell_file "alias laptop='bash (curl -s $laptop_script_url|psub)'"
     append_to_shell_file 'set -xg PATH $HOME/.bin $PATH'
     ;;
   *) :
+    append_to_shell_file "alias laptop='bash <(curl -s $laptop_script_url)'"
     append_to_shell_file 'export PATH="$HOME/.bin:$PATH"'
     ;;
 esac
