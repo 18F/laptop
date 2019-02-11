@@ -20,7 +20,7 @@ jobs:
 
   test-macos:
     macos:
-      xcode: "10.1"
+      xcode: "10.1.0"
     steps:
       - checkout
       - run:
@@ -39,5 +39,4 @@ workflows:
     jobs:
       - lint
       - test-ubuntu
-      # TODO waiting on purchase approval to enable macos builds
-      #- test-macos
+      - test-macos
