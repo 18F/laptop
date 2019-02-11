@@ -8,7 +8,7 @@ jobs:
       - run: shellcheck mac
       - run: shellcheck seekrets-install
 
-  test-ubuntu:
+  test-seekrets-ubuntu:
     machine: yes
     steps:
       - checkout
@@ -18,7 +18,7 @@ jobs:
       - run: cat seekrets-install | bash -
       - run: bats test/seekrets.bats
 
-  test-macos:
+  test-seekrets-macos:
     macos:
       xcode: "10.1.0"
     steps:
@@ -32,11 +32,25 @@ jobs:
       - run: cat seekrets-install | bash -
       - run: bats test/seekrets.bats
 
+  test-laptop:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - checkout
+      - run:
+          name: install bats
+          command: |
+            git clone https://github.com/bats-core/bats-core.git /tmp/bats
+            cd /tmp/bats
+            sudo ./install.sh /usr/local
+      - run: bash ./mac
+
 
 workflows:
   version: 2
   commit:
     jobs:
       - lint
-      - test-ubuntu
-      - test-macos
+      - test-seekrets-ubuntu
+      - test-seekrets-macos
+      - test-laptop
