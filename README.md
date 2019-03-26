@@ -194,7 +194,7 @@ What it sets up
 [git-seekret]: https://github.com/18F/git-seekret
 [GitHub Desktop]: https://desktop.github.com/
 [Homebrew]: http://brew.sh/
-[Homebrew Cask]: http://caskroom.io/
+[Homebrew Cask]: https://github.com/Homebrew/homebrew-cask
 [Homebrew Services]: https://github.com/Homebrew/homebrew-services
 [hub]: https://github.com/github/hub
 [n]: https://github.com/tj/n
