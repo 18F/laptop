@@ -15,6 +15,5 @@ brew 'cf-cli'
 cask 'chromedriver'
 cask 'cloudapp'
 cask 'docker'
-cask 'github'
 cask 'slack'
 
