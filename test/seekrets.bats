@@ -13,7 +13,7 @@
 #
 #     * homebrew method
 #
-#              brew install bats
+#              brew install bats-core
 #
 # Running Tests:
 #
