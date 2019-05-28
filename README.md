@@ -126,16 +126,6 @@ git seekret check -c 0 # check for secrets within commit history
 git seekret check -s # check for secrets within staged files
 ```
 
-**Don't forget to add the rule to `SEEKRET_DEFAULT_RULES` if your PR for a new rule is accepted**
-
-```shell
-SEEKRET_DEFAULT_RULES=" # <= default ruleset if installed via curl
- aws.rule
- newrelic.rule
- mandrill.rule
- new.rule"
-```
-
 Debugging
 ---------
 
@@ -192,9 +182,8 @@ What it sets up
 [Cloud Foundry CLI]: https://github.com/cloudfoundry/cli
 [Docker]: https://www.docker.com/
 [git-seekret]: https://github.com/18F/git-seekret
-[GitHub Desktop]: https://desktop.github.com/
 [Homebrew]: http://brew.sh/
-[Homebrew Cask]: http://caskroom.io/
+[Homebrew Cask]: https://github.com/Homebrew/homebrew-cask
 [Homebrew Services]: https://github.com/Homebrew/homebrew-services
 [hub]: https://github.com/github/hub
 [n]: https://github.com/tj/n

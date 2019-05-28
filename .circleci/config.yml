@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  lint:
+    docker:
+      - image: koalaman/shellcheck-alpine
+    steps:
+      - checkout
+      - run: shellcheck mac
+      - run: shellcheck seekrets-install
+
+  test-seekrets-ubuntu:
+    machine: yes
+    steps:
+      - checkout
+      - run: |
+          sudo apt-get update
+          sudo apt-get install athena-jot
+      - run: cat seekrets-install | bash -
+      - run: bats test/seekrets.bats
+
+  test-seekrets-macos:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - checkout
+      - run:
+          name: install bats
+          command: brew install bats-core
+      - run: 
+          name: install seekrets
+          command: cat seekrets-install | bash -
+      - run: bats test/seekrets.bats
+
+  test-laptop:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - checkout
+      - run:
+          name: install bats
+          command: |
+            git clone https://github.com/bats-core/bats-core.git /tmp/bats
+            cd /tmp/bats
+            sudo ./install.sh /usr/local
+      - run: bash ./mac
+
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - lint
+      - test-seekrets-ubuntu
+      - test-seekrets-macos
+      - test-laptop

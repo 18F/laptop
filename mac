@@ -24,8 +24,6 @@ append_to_file() {
     else
       file="$HOME/.zshrc"
     fi
-  elif [ "$file" = "$HOME/.bash_profile" ]; then
-    file="$HOME/.bash_profile"
   fi
 
   if ! grep -qs "^$text$" "$file"; then
@@ -33,20 +31,27 @@ append_to_file() {
   fi
 }
 
-create_zshrc_and_set_it_as_shell_file() {
-  if [ ! -f "$HOME/.zshrc" ]; then
-    touch "$HOME/.zshrc"
-  fi
+append_to_shell_file() {
+  append_to_file "$shell_file" "$1"
+}
 
-  shell_file="$HOME/.zshrc"
+create_and_set_shell_file() {
+  shell_file="$1"
+  if [ ! -f "$shell_file" ]; then
+    touch "$shell_file"
+  fi
+}
+
+create_zshrc_and_set_it_as_shell_file() {
+  create_and_set_shell_file "$HOME/.zshrc"
+}
+
+create_fishconfig_and_set_it_as_shell_file() {
+  create_and_set_shell_file "$HOME/.config/fish/config.fish"
 }
 
 create_bash_profile_and_set_it_as_shell_file() {
-  if [ ! -f "$HOME/.bash_profile" ]; then
-    touch "$HOME/.bash_profile"
-  fi
-
-  shell_file="$HOME/.bash_profile"
+  create_and_set_shell_file "$HOME/.bash_profile"
 }
 
 # shellcheck disable=SC2154
@@ -59,6 +64,9 @@ if [ ! -d "$HOME/.bin/" ]; then
 fi
 
 case "$SHELL" in
+  */fish) :
+    create_fishconfig_and_set_it_as_shell_file
+    ;;
   */zsh) :
     create_zshrc_and_set_it_as_shell_file
     ;;
@@ -76,11 +84,22 @@ case "$SHELL" in
       echo -n "Press ${bold}y${normal} to switch to zsh, ${bold}n${normal} to keep bash: "
       read -r -n 1 response
       if [ "$response" = "y" ]; then
-        fancy_echo "=== Getting ready to change your shell to zsh. Please enter your password to continue. ==="
-        echo "=== Note that there won't be visual feedback when you type your password. Type it slowly and press return. ==="
-        echo "=== Press control-c to cancel ==="
         create_zshrc_and_set_it_as_shell_file
-        chsh -s "$(which zsh)"
+        if grep "$(command -v zsh)" > /dev/null 2>&1 < /etc/shells; then
+          fancy_echo "=== Getting ready to change your shell to zsh. Please enter your password to continue. ==="
+          echo "=== Note that there won't be visual feedback when you type your password. Type it slowly and press return. ==="
+          echo "=== Press control-c to cancel ==="
+          chsh -s "$(command -v zsh)"
+        else
+          printf "\n\n"
+          echo "Can't switch shells automatically in this case.  The path to zsh isn't in"
+          echo "the list of allowed shells.  To manually switch to zsh, enter the following"
+          echo "two lines into your terminal (in another tab, or when this script is done):"
+          echo ""
+          echo "sudo echo \"\$(command -v zh)\" >> /etc/shells"
+          echo "chsh -s \"\$(command -v zs)\""
+          sleep 3
+        fi
       else
         fancy_echo "Shell will not be changed."
       fi
@@ -112,11 +131,11 @@ app_is_installed() {
   # shellcheck disable=SC2039
   local app_name
   app_name=$(echo "$1" | cut -d'-' -f1)
-  find /Applications -iname "$app_name*" -maxdepth 1 | egrep '.*' > /dev/null
+  find /Applications -iname "$app_name*" -maxdepth 1 | grep -v -q ''
 }
 
 latest_installed_ruby() {
-  find "$HOME/.rubies" -maxdepth 1 -name 'ruby-*' | tail -n1 | egrep -o '\d+\.\d+\.\d+'
+  find "$HOME/.rubies" -maxdepth 1 -name 'ruby-*' | tail -n1 | grep -E -o '\d+\.\d+\.\d+'
 }
 
 switch_to_latest_ruby() {
@@ -125,18 +144,35 @@ switch_to_latest_ruby() {
   chruby "ruby-$(latest_installed_ruby)"
 }
 
-append_to_file "$shell_file" "alias laptop='bash <(curl -s https://raw.githubusercontent.com/18F/laptop/master/laptop)'"
 
-# shellcheck disable=SC2016
-append_to_file "$shell_file" 'export PATH="$HOME/.bin:$PATH"'
+laptop_script_url="https://raw.githubusercontent.com/18F/laptop/master/laptop"
+case "$SHELL" in
+  */fish) :
+    append_to_shell_file "alias laptop='bash (curl -s $laptop_script_url|psub)'"
+    # shellcheck disable=SC2016
+    append_to_shell_file 'set -xg PATH $HOME/.bin $PATH'
+    ;;
+  *) :
+    append_to_shell_file "alias laptop='bash <(curl -s $laptop_script_url)'"
+    # shellcheck disable=SC2016
+    append_to_shell_file 'export PATH="$HOME/.bin:$PATH"'
+    ;;
+esac
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
     curl -fsS \
       'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
 
-    # shellcheck disable=SC2016
-    append_to_file "$shell_file" 'export PATH="/usr/local/bin:$PATH"'
+    case "$SHELL" in
+      */fish) :
+        # noop, fish ships with /usr/local/bin in a good spot in the path
+        ;;
+      *) :
+        # shellcheck disable=SC2016
+        append_to_shell_file 'export PATH="/usr/local/bin:$PATH"'
+        ;;
+    esac
 else
   fancy_echo "Homebrew already installed. Skipping ..."
 fi
@@ -191,11 +227,24 @@ else
   echo "in which case, you can ignore these errors."
 fi
 
-# shellcheck disable=SC2016
-append_to_file "$shell_file" 'eval "$(hub alias -s)"'
+case "$SHELL" in
+  */fish) :
+    mkdir -p "$HOME/.config/fish/functions"
+    hub alias fish > "$HOME/.config/fish/functions/git.fish"
+    ;;
+  *) :
+    # shellcheck disable=SC2016
+    append_to_shell_file 'eval "$(hub alias -s)"'
+    ;;
+esac
 
 fancy_echo 'Checking on Node.js installation...'
 
+case "$SHELL" in
+  */fish) :
+    fancy_echo "We recommend following the steps at https://github.com/FabioAntunes/fish-nvm to install nvm in fish"
+    ;;
+esac
 if ! brew_is_installed "node"; then
   if command -v n > /dev/null; then
     fancy_echo "We recommend using \`nvm\` and not \`n\`."
@@ -206,7 +255,6 @@ if ! brew_is_installed "node"; then
     export NVM_DIR="$HOME/.nvm"
     # shellcheck source=/dev/null
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
     # nvm is a bash script itself, some commands of which may fail WITHOUT
     # causing the whole operation to fail. To accomdate that, disable exit on
     # any nonzero exit code while nvm runs.
@@ -228,7 +276,6 @@ fi
 
 fancy_echo '...Finished Node.js installation checks.'
 
-
 fancy_echo 'Checking on Python installation...'
 
 if ! brew_is_installed "python3"; then
@@ -237,14 +284,21 @@ if ! brew_is_installed "python3"; then
   brew 'pyenv-virtualenv'
   brew 'pyenv-virtualenvwrapper'
 EOF
-  # shellcheck disable=SC2016
-  append_to_file "$shell_file" 'if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi'
-  # shellcheck disable=SC2016
-  append_to_file "$shell_file" 'if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi'
+  case "$SHELL" in
+    */fish) :
+      append_to_shell_file "status --is-interactive; and source (pyenv init -|psub)"
+      append_to_shell_file "status --is-interactive; and source (pyenv virtualenv-init -|psub)"
+      ;;
+    *) :
+      # shellcheck disable=SC2016
+      append_to_shell_file 'if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi'
+      # shellcheck disable=SC2016
+      append_to_shell_file 'if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi'
+  esac
 
   # pyenv currently doesn't have a convenience version to use, e.g., "latest",
   # so we check for the latest version against Homebrew instead.
-  latest_python_3="$(brew info python3 | egrep -o "3\.\d+\.\d+" | head -1)"
+  latest_python_3="$(brew info python3 | grep -E -o "3\.\d+\.\d+" | head -1)"
 
   if ! pyenv versions | ag "$latest_python_3" > /dev/null; then
     pyenv install "$latest_python_3"
@@ -259,11 +313,18 @@ fi
 
 if ! brew_is_installed "pyenv-virtualenvwrapper"; then
   if ! pip3 list | ag "virtualenvwrapper" > /dev/null; then
-    fancy_echo 'Installing virtualenvwrapper...'
-    pip3 install virtualenvwrapper
-    append_to_file "$shell_file" 'export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3'
-    append_to_file "$shell_file" 'export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv'
-    append_to_file "$shell_file" 'source /usr/local/bin/virtualenvwrapper.sh'
+    case "$SHELL" in
+      */fish) :
+        fancy_echo "virtualenvwrapper is not compatible with fish"
+        ;;
+      *) :
+        fancy_echo 'Installing virtualenvwrapper...'
+        pip3 install virtualenvwrapper
+        append_to_shell_file 'export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3'
+        append_to_shell_file 'export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv'
+        append_to_shell_file 'source /usr/local/bin/virtualenvwrapper.sh'
+        ;;
+    esac
   fi
 fi
 
@@ -274,44 +335,62 @@ fancy_echo 'Checking on Ruby installation...'
 
 append_to_file "$HOME/.gemrc" 'gem: --no-document'
 
-if command -v rbenv >/dev/null || command -v rvm >/dev/null; then
-  fancy_echo 'We recommend chruby and ruby-install over RVM or rbenv'
-else
-  if ! brew_is_installed "chruby"; then
-    fancy_echo 'Installing chruby, ruby-install, and the latest Ruby...'
-
+case "$SHELL" in
+  */fish) :
+    fancy_echo 'Installing rbenv...'
     brew bundle --file=- <<EOF
-    brew 'chruby'
-    brew 'ruby-install'
+    brew 'rbenv'
 EOF
-
-    append_to_file "$shell_file" 'source /usr/local/share/chruby/chruby.sh'
-    append_to_file "$shell_file" 'source /usr/local/share/chruby/auto.sh'
-
-    ruby-install ruby
-
-    append_to_file "$shell_file" "chruby ruby-$(latest_installed_ruby)"
-
-    switch_to_latest_ruby
-  else
-    brew bundle --file=- <<EOF
-    brew 'chruby'
-    brew 'ruby-install'
-EOF
-    fancy_echo 'Checking if a newer version of Ruby is available...'
-    switch_to_latest_ruby
-
-    ruby-install --latest > /dev/null
-    latest_stable_ruby="$(cat < "$HOME/.cache/ruby-install/ruby/stable.txt" | tail -n1)"
-
-    if ! [ "$latest_stable_ruby" = "$(latest_installed_ruby)" ]; then
-      fancy_echo "Installing latest stable Ruby version: $latest_stable_ruby"
-      ruby-install ruby
-    else
-      fancy_echo 'You have the latest version of Ruby'
+    append_to_shell_file "status --is-interactive; and source (rbenv init -|psub)"
+    # rbenv currently doesn't have a convenience version to use, e.g., "latest",
+    # so we check for the latest version against Homebrew instead.
+    latest_ruby="$(brew info ruby | grep -E -o "\d+\.\d+\.\d+" | head -1)"
+    if ! rbenv versions | ag "$latest_ruby" > /dev/null; then
+      rbenv install "$latest_ruby"
+      rbenv global "$latest_ruby"
+      eval "$(rbenv init - bash)"
     fi
-  fi
-fi
+    ;;
+  *) :
+    if command -v rbenv >/dev/null || command -v rvm >/dev/null; then
+      fancy_echo 'We recommend chruby and ruby-install over RVM or rbenv'
+    else
+      if ! brew_is_installed "chruby"; then
+        fancy_echo 'Installing chruby, ruby-install, and the latest Ruby...'
+
+        brew bundle --file=- <<EOF
+        brew 'chruby'
+        brew 'ruby-install'
+EOF
+
+        append_to_shell_file 'source /usr/local/share/chruby/chruby.sh'
+        append_to_shell_file 'source /usr/local/share/chruby/auto.sh'
+
+        ruby-install ruby
+
+        append_to_shell_file "chruby ruby-$(latest_installed_ruby)"
+
+        switch_to_latest_ruby
+      else
+        brew bundle --file=- <<EOF
+        brew 'chruby'
+        brew 'ruby-install'
+EOF
+        fancy_echo 'Checking if a newer version of Ruby is available...'
+        switch_to_latest_ruby
+
+        ruby-install --latest > /dev/null
+        latest_stable_ruby="$(cat < "$HOME/.cache/ruby-install/ruby/stable.txt" | tail -n1)"
+
+        if ! [ "$latest_stable_ruby" = "$(latest_installed_ruby)" ]; then
+          fancy_echo "Installing latest stable Ruby version: $latest_stable_ruby"
+          ruby-install ruby
+        else
+          fancy_echo 'You have the latest version of Ruby'
+        fi
+      fi
+    fi
+esac
 
 fancy_echo 'Updating Rubygems...'
 gem update --system

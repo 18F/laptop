@@ -2,18 +2,6 @@
 
 SCRIPTPATH=$( cd "$(dirname "$0")" ; pwd -P )
 
-# Add new baseline rules here
-#rsa-private.rule
-SEEKRET_DEFAULT_RULES="
-aws.rule
-newrelic.rule
-mandrill.rule
-slack.rule"
-
-if [ -d "${SCRIPTPATH}/seekret-rules" ]; then
-  SEEKRET_DEFAULT_RULES=$( ls "${SCRIPTPATH}/seekret-rules" )
-fi
-
 fancy_echo() {
   # shellcheck disable=SC2039
   local fmt="$1"; shift
@@ -82,7 +70,7 @@ set -e
 
 if toolminversion git 2.9.1; then
   fancy_echo "Installing Seekret"
-  WORK_DIR=$( mktemp -d -t "$( basename "$(pwd)XXXXX" )" )
+  WORK_DIR=$( mktemp -d -t "$( basename "$(pwd)XXXXXX" )" )
   pushd "${WORK_DIR}" > /dev/null
   git init > /dev/null
   get_platform
@@ -106,7 +94,14 @@ if toolminversion git 2.9.1; then
   mkdir -p "${SEEKRET_RULES_PATH}"
   # Download rules
   SEEKRET_RULES_URL="https://raw.githubusercontent.com/18F/laptop/master/seekret-rules"
-  SEEKRET_RULES="${SEEKRET_RULES:=$SEEKRET_DEFAULT_RULES}"
+  # get list of rules from Github API; pull out just download_url; then get just the filename
+  SEEKRET_RULES=$(curl -s https://api.github.com/repos/18F/laptop/contents/seekret-rules | grep download_url | sed -e 's/.*: "\([^"]*\)".*/\1/' | sed -e 's/.*\/seekret-rules\/\(.*\)/\1/')
+
+  # if rules are local, use those instead
+  if [ -d "${SCRIPTPATH}/seekret-rules" ]; then
+   SEEKRET_RULES=$( ls "${SCRIPTPATH}/seekret-rules" )
+  fi
+
   for rule in ${SEEKRET_RULES}
   do
       printf "\t%s: " "$rule"
@@ -118,6 +113,7 @@ if toolminversion git 2.9.1; then
       fi
       printf "done\n"
   done
+
   fancy_echo "Configuring Seekret"
   mkdir -p "${HOME}/.git-support/hooks"
   git config --global core.hooksPath "${HOME}/.git-support/hooks"
