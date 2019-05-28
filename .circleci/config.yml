@@ -25,11 +25,10 @@ jobs:
       - checkout
       - run:
           name: install bats
-          command: |
-            git clone https://github.com/bats-core/bats-core.git /tmp/bats
-            cd /tmp/bats
-            sudo ./install.sh /usr/local
-      - run: cat seekrets-install | bash -
+          command: brew install bats-core
+      - run: 
+          name: install seekrets
+          command: cat seekrets-install | bash -
       - run: bats test/seekrets.bats
 
   test-laptop:

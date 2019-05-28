@@ -192,7 +192,6 @@ What it sets up
 [Cloud Foundry CLI]: https://github.com/cloudfoundry/cli
 [Docker]: https://www.docker.com/
 [git-seekret]: https://github.com/18F/git-seekret
-[GitHub Desktop]: https://desktop.github.com/
 [Homebrew]: http://brew.sh/
 [Homebrew Cask]: https://github.com/Homebrew/homebrew-cask
 [Homebrew Services]: https://github.com/Homebrew/homebrew-services
