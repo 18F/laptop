@@ -156,7 +156,7 @@ What it sets up
 ---------------
 
 * [ChromeDriver] for headless website testing
-* [chruby] for managing [Ruby] versions
+* [chruby] for managing [Ruby] versions (or, when using a fish shell, [rbenv])
 * [CloudApp] for sharing screenshots and making an animated GIF from a video
 * [Cloud Foundry CLI] for command line access to 18F's Cloud Foundry-based application platform
 * [Docker] for all your containerization needs
@@ -191,6 +191,7 @@ What it sets up
 [NPM]: https://www.npmjs.org/
 [Python]: https://www.python.org/
 [pyenv]: https://github.com/yyuu/pyenv/
+[rbenv]: https://github.com/rbenv/rbenv
 [Ruby]: https://www.ruby-lang.org/en/
 [ruby-install]: https://github.com/postmodern/ruby-install
 [Slack]: https://slack.com/
