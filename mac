@@ -328,6 +328,8 @@ fancy_echo 'Checking on Ruby installation...'
 append_to_file "$HOME/.gemrc" 'gem: --no-document'
 
 case "$SHELL" in
+  # chruby is recommended by the org, but it doesn't work in fish, so in a
+  # fish shell, use rbenv
   */fish) :
     fancy_echo 'Installing rbenv...'
     brew bundle --file=- <<EOF
@@ -343,6 +345,8 @@ EOF
       eval "$(rbenv init - bash)"
     fi
     ;;
+
+  # For all other shells, install chruby as long as rbenv is not installed
   *) :
     if command -v rbenv >/dev/null || command -v rvm >/dev/null; then
       fancy_echo 'We recommend chruby and ruby-install over RVM or rbenv'
