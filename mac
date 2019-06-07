@@ -127,13 +127,6 @@ gem_install_or_update() {
   fi
 }
 
-app_is_installed() {
-  # shellcheck disable=SC2039
-  local app_name
-  app_name=$(echo "$1" | cut -d'-' -f1)
-  find /Applications -iname "$app_name*" -maxdepth 1 | grep -v -q ''
-}
-
 latest_installed_ruby() {
   find "$HOME/.rubies" -maxdepth 1 -name 'ruby-*' | tail -n1 | grep -E -o '\d+\.\d+\.\d+'
 }
@@ -398,13 +391,6 @@ number_of_cores=$(sysctl -n hw.ncpu)
 bundle config --global jobs $((number_of_cores - 1))
 
 fancy_echo '...Finished Ruby installation checks.'
-
-if app_is_installed 'GitHub'; then
-  fancy_echo "It looks like you've already configured your GitHub SSH keys."
-  fancy_echo "If not, you can do it by signing in to the GitHub app on your Mac."
-elif [ ! -f "$HOME/.ssh/github_rsa.pub" ]; then
-  open ~/Applications/GitHub\ Desktop.app
-fi
 
 curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | sh -
 
