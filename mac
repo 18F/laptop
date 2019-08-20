@@ -154,18 +154,17 @@ esac
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
-    curl -fsS \
-      'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-    case "$SHELL" in
-      */fish) :
-        # noop, fish ships with /usr/local/bin in a good spot in the path
-        ;;
-      *) :
-        # shellcheck disable=SC2016
-        append_to_shell_file 'export PATH="/usr/local/bin:$PATH"'
-        ;;
-    esac
+  case "$SHELL" in
+    */fish) :
+      # noop, fish ships with /usr/local/bin in a good spot in the path
+      ;;
+    *) :
+      # shellcheck disable=SC2016
+      append_to_shell_file 'export PATH="/usr/local/bin:$PATH"'
+      ;;
+  esac
 else
   fancy_echo "Homebrew already installed. Skipping ..."
 fi
