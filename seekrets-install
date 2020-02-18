@@ -119,6 +119,7 @@ if toolminversion git 2.9.1; then
   git config --global core.hooksPath "${HOME}/.git-support/hooks"
   git seekret --global config --init
   # Activate all installed rules
+  git config --global gitseekret.rulespath $SEEKRET_RULES_PATH
   git seekret --global rules --enable-all
   git seekret --global hook --enable-all
 

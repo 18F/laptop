@@ -1,5 +1,6 @@
 #!/usr/bin/env bats
 
+# Usage: `export LOCAL_AUDIT="anything"` to use any rules in place locally.
 REPO_PATH=$(mktemp -d "${BATS_TMPDIR}/gittest.XXXXXX")
 LOCAL_SEEKRETS="$(dirname $BATS_TEST_DIRNAME)/seekret-rules"
 
@@ -20,6 +21,9 @@ fi
 
 setupGitRepo() {
     git init "${REPO_PATH}"
+}
+
+setupLocalGitSeekrets() {
     git config --local gitseekret.rulespath "$LOCAL_SEEKRETS"
     git config --global gitseekret.rulespath "$LOCAL_SEEKRETS"
     (cd "${REPO_PATH}" && \
@@ -242,6 +246,9 @@ addFileWithSlackAPIToken() {
 
 setup() {
     setupGitRepo
+    if [ -z "$LOCAL_AUDIT" ]; then
+      setupLocalGitSeekrets
+    fi
 }
 
 teardown() {
