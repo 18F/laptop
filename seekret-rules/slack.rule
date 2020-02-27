@@ -1,2 +1,5 @@
 api_token:
   match: (\"|')?(SLACK|Slack|slack)?_?(API|Api|api)?_?(TOKEN|Token|token)?_?(\"|')?\s*(:|=>|=)?\s*(\"|')?xox[a-z]-\d{11}-\d{12}-\d{12}-[a-z\d]{32}(\"|')?
+
+webhook_url:
+  match: (\"|')?(SLACK|Slack|slack)?_?(WEBHOOK|Webhook|webhook)?_?(URL|Url|url)?_?(\"|')?\s*(:|=>|=)?\s*(\"|')?xox[a-z]-\d{11}-\d{12}-\d{12}-[a-z\d]{32}(\"|')?
