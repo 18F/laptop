@@ -13,7 +13,6 @@ tap 'cloudfoundry/homebrew-tap'
 brew 'cf-cli'
 
 cask 'chromedriver'
-cask 'cloudapp'
 cask 'docker'
 cask 'slack'
 
