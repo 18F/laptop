@@ -277,6 +277,12 @@ EOF
   # pyenv currently doesn't have a convenience version to use, e.g., "latest",
   # so we check for the latest version against Homebrew instead.
   latest_python_3="$(brew info python3 | grep -E -o "3\.\d+\.\d+" | head -1)"
+  # in the event that pyenv doesn't have the latest version from homebrew,
+  # allow overriding with an environment variable
+  # shellcheck disable=SC2153
+  if [ -n "$LATEST_PYTHON_3" ]; then
+    latest_python_3=${LATEST_PYTHON_3}
+  fi
 
   if ! pyenv versions | grep "$latest_python_3" > /dev/null; then
     # Starting with macOS 10.14 (Mojave), the header files for system libraries
@@ -285,7 +291,7 @@ EOF
     brew install zlib
     export LDFLAGS="-L/usr/local/opt/zlib/lib"
     export CPPFLAGS="-I/usr/local/opt/zlib/include"
-    pyenv install "$latest_python_3"
+    pyenv install "$latest_python_3" || fancy_echo "pyenv install of $latest_python_3 failed. Try \"export LATEST_PYTHON_3=3.8.3\" or some other version"
     pyenv global "$latest_python_3"
     pyenv rehash
   fi
