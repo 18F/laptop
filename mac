@@ -278,7 +278,7 @@ EOF
   # so we check for the latest version against Homebrew instead.
   latest_python_3="$(brew info python3 | grep -E -o "3\.\d+\.\d+" | head -1)"
 
-  if ! pyenv versions | ag "$latest_python_3" > /dev/null; then
+  if ! pyenv versions | grep "$latest_python_3" > /dev/null; then
     # Starting with macOS 10.14 (Mojave), the header files for system libraries
     # have been moved. Rather than hack the header paths based on OS version,
     # just install zlib with brew and build against that directly for now.
