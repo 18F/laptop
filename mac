@@ -320,22 +320,8 @@ fancy_echo 'Checking on Ruby installation...'
 append_to_file "$HOME/.gemrc" 'gem: --no-document'
 
 case "$SHELL" in
-  # chruby is recommended by the org, but it doesn't work in fish, so in a
-  # fish shell, use rbenv
   */fish) :
-    fancy_echo 'Installing rbenv...'
-    brew bundle --file=- <<EOF
-    brew 'rbenv'
-EOF
-    append_to_shell_file "status --is-interactive; and source (rbenv init -|psub)"
-    # rbenv currently doesn't have a convenience version to use, e.g., "latest",
-    # so we check for the latest version against Homebrew instead.
-    latest_ruby="$(brew info ruby | grep -E -o "\d+\.\d+\.\d+" | head -1)"
-    if ! rbenv versions | ag "$latest_ruby" > /dev/null; then
-      rbenv install "$latest_ruby"
-      rbenv global "$latest_ruby"
-      eval "$(rbenv init - bash)"
-    fi
+    fancy_echo "We recommend following the steps at https://github.com/JeanMertz/chruby-fish to install chruby in fish"
     ;;
 
   # For all other shells, install chruby as long as rbenv is not installed
