@@ -1,3 +1,5 @@
+*This code has been depricated* but you can use tools like [cloud.gov caulking](https://github.com/cloud-gov/caulking) to help keep you from checking secrets into your git history.
+
 Laptop
 ======
 [![Build Status](https://circleci.com/gh/18F/laptop.svg)](https://circleci.com/gh/18F/laptop)
@@ -58,6 +60,9 @@ at your convenience by typing `laptop` and hitting `return` in your Terminal.
 [video]: https://github.com/18F/laptop/wiki/Detailed-installation-instructions-with-video
 
 ### Want to install just git-seekret?
+
+*This code has been depricated* but you can use tools like [cloud.gov caulking](https://github.com/cloud-gov/caulking) to help keep you from checking secrets into your git history.
+
 In your terminal window, copy and paste the following line, and press `return`:
 ```sh
 curl -s https://raw.githubusercontent.com/18F/laptop/master/seekrets-install | bash -
