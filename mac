@@ -1,22 +1,36 @@
 #!/bin/bash
 
+###################
+### by "unknown"
+### update 6/10/2022 Paul Borowicz
+###################
+
+##DEBUG lines (uncomment next 2 lines)
+#set -x 
+#trap read debug
+
 # Welcome to the 18F laptop script!
 # Be prepared to turn your laptop (or desktop)
 # into an awesome development machine.
 
+#script should run from home
+cd ~/
+
+# function to improve readabliity
 fancy_echo() {
   # shellcheck disable=SC2039
   local fmt="$1"; shift
-
   # shellcheck disable=SC2059
   printf "\n$fmt\n" "$@"
 }
 
+# function to append to file
 append_to_file() {
   # shellcheck disable=SC2039
   local file="$1"
   # shellcheck disable=SC2039
   local text="$2"
+
 
   if [ "$file" = "$HOME/.zshrc" ]; then
     if [ -w "$HOME/.zshrc.local" ]; then
@@ -31,10 +45,12 @@ append_to_file() {
   fi
 }
 
+# function to append to a specified file
 append_to_shell_file() {
   append_to_file "$shell_file" "$1"
 }
 
+# function to create a file if it does not exist
 create_and_set_shell_file() {
   shell_file="$1"
   if [ ! -f "$shell_file" ]; then
@@ -42,14 +58,17 @@ create_and_set_shell_file() {
   fi
 }
 
+# function to create .zshrc for zsh shelle
 create_zshrc_and_set_it_as_shell_file() {
   create_and_set_shell_file "$HOME/.zshrc"
 }
 
+# function to create .fishrc for fish shell
 create_fishconfig_and_set_it_as_shell_file() {
   create_and_set_shell_file "$HOME/.config/fish/config.fish"
 }
 
+# function to create .bashrc for bash shell
 create_bash_profile_and_set_it_as_shell_file() {
   create_and_set_shell_file "$HOME/.bash_profile"
 }
@@ -57,12 +76,15 @@ create_bash_profile_and_set_it_as_shell_file() {
 # shellcheck disable=SC2154
 trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
 
+# exit immeditly if a pipeline
 set -e
 
+# make .bin in home directory if it does not exist
 if [ ! -d "$HOME/.bin/" ]; then
   mkdir "$HOME/.bin"
 fi
 
+#check if shell is fish, zsh, bash, defaults to bash if not fish or zsh but complains vociferously
 case "$SHELL" in
   */fish) :
     create_fishconfig_and_set_it_as_shell_file
@@ -109,14 +131,17 @@ case "$SHELL" in
     ;;
 esac
 
+#function to check if specific brew package is installed
 brew_is_installed() {
   brew list -1 | grep -Fqx "$1"
 }
 
+# function to check if specific homebrew tap is installed
 tap_is_installed() {
   brew tap | grep -Fqx "$1"
 }
 
+# function to check gems an install or update if necessary
 gem_install_or_update() {
   if gem list "$1" | grep "^$1 ("; then
     fancy_echo "Updating %s ..." "$1"
@@ -127,18 +152,22 @@ gem_install_or_update() {
   fi
 }
 
+# function to find latest ruby version installed
 latest_installed_ruby() {
   find "$HOME/.rubies" -maxdepth 1 -name 'ruby-*' | tail -n1 | grep -E -o '\d+\.\d+\.\d+'
 }
 
+#function to switch to latest ruby version - REPLACE with rbenv
 switch_to_latest_ruby() {
   # shellcheck disable=SC1091
   . /usr/local/share/chruby/chruby.sh
   chruby "ruby-$(latest_installed_ruby)"
 }
 
-
+# define location of laptop script
 laptop_script_url="https://raw.githubusercontent.com/18F/laptop/master/laptop"
+
+# case statement to add laptop script to shell rc file
 case "$SHELL" in
   */fish) :
     append_to_shell_file "alias laptop='bash (curl -s $laptop_script_url|psub)'"
@@ -152,10 +181,12 @@ case "$SHELL" in
     ;;
 esac
 
+# check for homebrew and install if necessary
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
+# fix bash for shells other then fish
   case "$SHELL" in
     */fish) :
       # noop, fish ships with /usr/local/bin in a good spot in the path
@@ -179,9 +210,11 @@ if tap_is_installed 'caskroom/versions'; then
   brew untap caskroom/versions
 fi
 
+# update homebrew
 fancy_echo "Updating Homebrew..."
 brew update
 
+# Verify homebrew is good
 fancy_echo "Verifying the Homebrew installation..."
 if brew doctor; then
   fancy_echo "Your Homebrew installation is good to go."
@@ -191,10 +224,12 @@ else
   echo "Otherwise, review the Homebrew messages to see if any action is needed."
 fi
 
+# remove cloudfoundry-cli
 if brew_is_installed 'cloudfoundry-cli'; then
   brew uninstall --force cloudfoundry-cli
 fi
 
+# verify everything is installed
 fancy_echo "Installing formulas and casks from the Brewfile ..."
 if brew bundle --file="$HOME/Brewfile"; then
   fancy_echo "All formulas and casks were installed successfully."
@@ -203,6 +238,7 @@ else
   echo "This is usually due to one of the Mac apps being already installed,"
   echo "in which case, you can ignore these errors."
 fi
+
 
 case "$SHELL" in
   */fish) :
@@ -222,13 +258,17 @@ case "$SHELL" in
     fancy_echo "We recommend following the steps at https://github.com/FabioAntunes/fish-nvm to install nvm in fish"
     ;;
 esac
+
+# check nvm installed with homebrew and install if not
 if ! brew_is_installed "node"; then
   if command -v n > /dev/null; then
     fancy_echo "We recommend using \`nvm\` and not \`n\`."
     fancy_echo "See https://pages.18f.gov/frontend/#install-npm"
   elif ! command -v nvm > /dev/null; then
     fancy_echo 'Installing nvm and lts Node.js and npm...'
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+    # install NVM
+    # see git repo https://github.com/nvm-sh/nvm/
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
     # shellcheck source=/dev/null
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -255,6 +295,7 @@ fancy_echo '...Finished Node.js installation checks.'
 
 fancy_echo 'Checking on Python installation...'
 
+# verify python3 installed and install if not
 if ! brew_is_installed "python3"; then
   brew bundle --file=- <<EOF
   brew 'zlib'
@@ -365,6 +406,11 @@ EOF
       fi
     fi
 esac
+
+## Install rbenv 2.7
+rbenv init
+rbenv install 2.7
+rbenv alias 2.7 2.7.0
 
 fancy_echo 'Updating Rubygems...'
 gem update --system
